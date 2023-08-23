@@ -86,7 +86,7 @@ function Question(props) {
           </div>
         </div>
         <div>
-          <h2 className="font-semibold my-2">Explanation</h2>
+          <h2 className="font-semibold my-2 mt-3">Explanation</h2>
           <ReactMarkdown remarkPlugins={[remarkGfm]}>
             {explanation}
           </ReactMarkdown>
