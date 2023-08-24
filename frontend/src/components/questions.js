@@ -19,7 +19,7 @@ function Question(props) {
   } = props;
 
   return (
-    <div className="bg-[#0d0d0d] text-[#B5A996] w-5/12 flex h-screen">
+    <div className="bg-[#161616] text-[#B5A996] w-5/12 flex h-full overflow-auto">
       <div className="pl-5 flex-1 overflow-y-scroll max-h-screen p-4">
         <div className="text-2xl uppercase text-[#B6AA97] font-semibold">
           <h1>{objective}</h1>
