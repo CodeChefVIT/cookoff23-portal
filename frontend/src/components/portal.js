@@ -15,7 +15,7 @@ export default function Portal() {
               <button
                 key={index}
                 onClick={() => handleClick(index)}
-                className={`bg-black text-[#CCCCCC] 2xl:w-5 lg:w-6 hover:bg-[#161616] active:bg-[#161616]`}
+                className={`bg-[#0D0D0D] text-[#CCCCCC] 2xl:w-5 lg:w-6 hover:bg-[#161616]`}
                 style={{
                   background: clickedButton === index && "#161616",
                   height: `${(1 / length) * 100}%`,
