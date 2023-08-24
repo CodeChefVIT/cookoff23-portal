@@ -112,8 +112,8 @@ const TextEditor = () => {
       <div className="h-[80%] flex justify-center items-center bg-[#0d0d0d] relative">
         <Editor
           className=""
-          height="80%"
-          width="90%"
+          height="90%"
+          width="95%"
           theme="vs-dark"
           path={file.name}
           defaultLanguage={file.language}
