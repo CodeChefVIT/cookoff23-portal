@@ -1,10 +1,12 @@
 import Question from "@/components/questions";
 import questionData from "../../Dummy_Data";
+import Navbar from "@/components/Navbar";
 
 export default function Home() {
   return (
     <>
       <main>
+        <Navbar />
         <Question
           objective={questionData.objective}
           points={questionData.points}
