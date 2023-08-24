@@ -19,15 +19,15 @@ function Question(props) {
   } = props;
 
   return (
-    <div className="bg-[#0d0d0d] text-[#B5A996] w-[100%] flex h-screen">
+    <div className="bg-[#161616] text-[#B5A996] w-5/12 flex h-full overflow-auto">
       <div className="pl-5 flex-1 overflow-y-scroll max-h-screen p-4">
-        <div className="text-2xl uppercase text-[#B6AA97] font-semibold">
+        <div className="text-2xl uppercase text-[#B6AA97] font-semibold" id="Heading">
           <h1>{objective}</h1>
         </div>
-        <div className="bg-[#EDEDED] w-fit text-black rounded px-2 my-2 font-semibold">
+        <div className="bg-[#EDEDED] w-fit text-black rounded px-2 my-2 font-semibold" id="points">
           {points}
         </div>
-        <div className="text-[#EB5939] font-semibold py-3 text-lg">Problem</div>
+        <div className="text-[#EB5939] font-semibold py-3 text-lg" id="problem">Problem</div>
         <div className="break-normal pr-2">
           <ReactMarkdown remarkPlugins={[remarkGfm]}>{task}</ReactMarkdown>
         </div>

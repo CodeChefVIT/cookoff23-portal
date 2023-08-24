@@ -8,10 +8,10 @@
   src: url("./../../public/ProximaNovaFont.otf")
 }
 
-body,
-h1 {
+h1, #heading, #problem, #points {
   font-family: 'proxima nova';
 }
+
 
 ::-webkit-scrollbar {
   width: 0.4rem;
@@ -34,17 +34,6 @@ h1 {
 @font-face {
   font-family: 'ITC Avant Garde Gothic Demi';
   src: url('./../../public/itc_avant_garde_gothic_demi.ttf');
-}
-
-button,
-p,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: 'ITC Avant Garde Gothic Demi';
 }
 
 body {

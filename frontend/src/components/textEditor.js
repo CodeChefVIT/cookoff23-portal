@@ -36,7 +36,7 @@ const TextEditor = () => {
     setSelectedOption(option);
   };
   return (
-    <div className="h-screen">
+    <div className="h-screen w-7/12">
       <div className="h-[48px] p-3 bg-[#0d0d0d]">
         <div className="max-w-[330px] mx-auto">
           <div className="flex items-center justify-between">
@@ -112,8 +112,8 @@ const TextEditor = () => {
       <div className="h-[80%] flex justify-center items-center bg-[#0d0d0d] relative">
         <Editor
           className=""
-          height="80%"
-          width="90%"
+          height="90%"
+          width="95%"
           theme="vs-dark"
           path={file.name}
           defaultLanguage={file.language}

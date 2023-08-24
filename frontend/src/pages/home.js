@@ -43,6 +43,7 @@ function App() {
           >
             <Image
               src={hovercook}
+              alt="hoverCook"
               quality={100}
               onMouseEnter={() => {
                 setIsHovered(true);
@@ -53,7 +54,7 @@ function App() {
             />
           </motion.div>
           <div className={styles.body}>
-            <Image src={cookoff} quality={100} />
+            <Image src={cookoff} quality={100} alt="cookoff"/>
           </div>
         </motion.main>
       ) : (
@@ -63,7 +64,7 @@ function App() {
           className="flex justify-center items-center flex-col mt-36 mx-32"
         >
           <div className="flex w-[310px] mb-10">
-            <Image src={logo} quality={100} />
+            <Image src={logo} quality={100} alt="logo"/>
           </div>
           <motion.button
             className="flex uppercase text-[#878787] text-2xl hover:text-[24px] px-[89px] py-[20px] border-[4px] border-[#878787] rounded-[50px] hover:bg-[#878787] hover:text-black"
