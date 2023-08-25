@@ -118,7 +118,7 @@ const TextEditor = ({ questionId }) => {
                       className="cursor-pointer group border-t"
                       onClick={() => handleOptionClick(option)}
                     >
-                      <button
+                      <p
                         onClick={() => setFileName(option)}
                         className={`block p-2 border-transparent border-l-4 group-hover:border-blue-600 ${
                           option === selectedOption
@@ -127,7 +127,7 @@ const TextEditor = ({ questionId }) => {
                         }`}
                       >
                         {option}
-                      </button>
+                      </p>
                     </div>
                   ))}
                 </div>
@@ -155,7 +155,10 @@ const TextEditor = ({ questionId }) => {
         >
           run code
         </button>
-        <button className="w-28 h-9 mr-2 rounded bg-[#eb5939] hover:bg-red-500">
+        <button
+          className="w-28 h-9 mr-2 rounded bg-[#eb5939] hover:bg-red-500"
+          onClick={getEditorValue}
+        >
           Submit code
         </button>
       </div>
