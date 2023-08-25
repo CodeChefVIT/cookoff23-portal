@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Editor } from "@monaco-editor/react";
 
-const TextEditor = () => {
+const TextEditor = ({ questionId }) => {
   const files = {
     "script.py": {
       name: "Python",
@@ -27,14 +27,41 @@ const TextEditor = () => {
   };
 
   const [fileName, setFileName] = useState("script.py");
+  const editorRef = useRef(null);
   const file = files[fileName];
   const [showMore, setShowMore] = useState(false);
   const [selectedOption, setSelectedOption] = useState("Javascript");
   const options = ["script.java", "script.c", "script.c++", "script.py"];
 
+  useEffect(() => {
+    const existingCodeData = JSON.parse(localStorage.getItem("codeData")) || {};
+    const savedCode = existingCodeData[questionId] || "";
+
+    if (editorRef.current) {
+      editorRef.current.setValue(savedCode);
+    }
+  }, [questionId]);
+
   const handleOptionClick = (option) => {
     setSelectedOption(option);
   };
+
+  const handleEditorDidMount = (Editor, monaco) => {
+    editorRef.current = Editor;
+  };
+  const getEditorValue = () => {
+    const codeValue = editorRef.current.getValue();
+
+    const existingCodeData = JSON.parse(localStorage.getItem("codeData")) || {};
+    const updatedCodeData = {
+      ...existingCodeData,
+      [questionId]: codeValue,
+    };
+    localStorage.setItem("codeData", JSON.stringify(updatedCodeData));
+
+    // alert(`Code for question ${questionId} stored in local storage.`);
+  };
+
   return (
     <div className="h-screen w-7/12">
       <div className="h-[48px] p-3 bg-[#0d0d0d]">
@@ -91,7 +118,7 @@ const TextEditor = () => {
                       className="cursor-pointer group border-t"
                       onClick={() => handleOptionClick(option)}
                     >
-                      <button
+                      <p
                         onClick={() => setFileName(option)}
                         className={`block p-2 border-transparent border-l-4 group-hover:border-blue-600 ${
                           option === selectedOption
@@ -100,7 +127,7 @@ const TextEditor = () => {
                         }`}
                       >
                         {option}
-                      </button>
+                      </p>
                     </div>
                   ))}
                 </div>
@@ -115,16 +142,23 @@ const TextEditor = () => {
           height="90%"
           width="95%"
           theme="vs-dark"
+          onMount={handleEditorDidMount}
           path={file.name}
           defaultLanguage={file.language}
           defaultValue={file.value}
         />
       </div>
       <div className="h-[13.5%] flex justify-end bg-[#0d0d0d]">
-        <button className="w-28 h-9 mr-4 rounded bg-[#eb5939] hover:bg-red-500">
+        <button
+          className="w-28 h-9 mr-4 rounded bg-[#eb5939] hover:bg-red-500"
+          onClick={getEditorValue}
+        >
           run code
         </button>
-        <button className="w-28 h-9 mr-2 rounded bg-[#eb5939] hover:bg-red-500">
+        <button
+          className="w-28 h-9 mr-2 rounded bg-[#eb5939] hover:bg-red-500"
+          onClick={getEditorValue}
+        >
           Submit code
         </button>
       </div>

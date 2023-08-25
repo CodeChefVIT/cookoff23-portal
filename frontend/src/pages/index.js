@@ -1,7 +1,7 @@
 import Navbar from "@/components/Navbar";
 import TextEditor from "../components/textEditor";
 import Portal from "@/components/portal";
-import { ResizableBox } from "react-resizable";
+// import { ResizableBox } from "react-resizable";
 
 export default function Home() {
   return (
@@ -9,7 +9,6 @@ export default function Home() {
       <main>
         <Navbar />
         <Portal />
-        
       </main>
     </>
   );

@@ -39,7 +39,7 @@ export default function Portal() {
         sampleOutput2={questionData[clickedButton].sampleOutput[1]}
         explanation={questionData[clickedButton].explanation}
       />
-      <TextEditor />
+      <TextEditor questionId={clickedButton} />
     </div>
   );
 }
