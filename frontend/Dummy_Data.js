@@ -139,7 +139,7 @@ Solution.cpp:18:1: error: no return statement in function returning non-void
 ^
 
 cc1plus: some warnings being treated as errors`,
-exitStatus: "1"},{error: false},{error: true,
+exitStatus: "1"},{error: false},{error: false,
 compileMessage: `Solution.cpp: In function 'int simpleArraySum
 (std::vector<int
 
