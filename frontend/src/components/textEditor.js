@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Editor } from "@monaco-editor/react";
 
-const TextEditor = ({ questionId }) => {
+const TextEditor = ({ questionId, setRunTestCases }) => {
   const files = {
     "script.py": {
       name: "Python",
@@ -61,9 +61,12 @@ const TextEditor = ({ questionId }) => {
 
     // alert(`Code for question ${questionId} stored in local storage.`);
   };
-
+  const handleClick = () => {
+    getEditorValue();
+    setRunTestCases(true);
+  };
   return (
-    <div className="h-screen w-7/12">
+    <div className="h-screen w-full">
       <div className="h-[48px] p-3 bg-[#0d0d0d]">
         <div className="max-w-[330px] mx-auto">
           <div className="flex items-center justify-between">
@@ -151,13 +154,13 @@ const TextEditor = ({ questionId }) => {
       <div className="h-[13.5%] flex justify-end bg-[#0d0d0d]">
         <button
           className="w-28 h-9 mr-4 rounded bg-[#eb5939] hover:bg-red-500"
-          onClick={getEditorValue}
+          onClick={handleClick}
         >
           run code
         </button>
         <button
           className="w-28 h-9 mr-2 rounded bg-[#eb5939] hover:bg-red-500"
-          onClick={getEditorValue}
+          onClick={handleClick}
         >
           Submit code
         </button>

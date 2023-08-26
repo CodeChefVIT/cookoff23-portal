@@ -8,7 +8,11 @@
   src: url("./../../public/ProximaNovaFont.otf")
 }
 
-h1, #heading, #problem, #points {
+h1,
+#heading,
+#problem,
+#points,
+#font_proxima {
   font-family: 'proxima nova';
 }
 
@@ -38,4 +42,18 @@ h1, #heading, #problem, #points {
 
 body {
   background-color: #0D0D0D;
+  overflow: hidden;
+}
+
+#font_ITC {
+  font-family: 'ITC Avant Garde Gothic Demi';
+}
+
+@font-face {
+  font-family: 'Cascadia';
+  src: url('./../../public/Cascadia.ttf');
+}
+
+#cascadia {
+  font-family: 'Cascadia';
 }
