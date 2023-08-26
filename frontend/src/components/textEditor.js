@@ -1,7 +1,14 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Editor } from "@monaco-editor/react";
 
-const TextEditor = ({ questionId, setRunTestCases }) => {
+const TextEditor = ({
+  questionId,
+  setRunTestCases,
+  setQuestionRun,
+  setQuestionSubmit,
+  questionRun,
+  questionSubmit,
+}) => {
   const files = {
     "script.py": {
       name: "Python",
@@ -91,14 +98,38 @@ const TextEditor = ({ questionId, setRunTestCases }) => {
 
     // alert(`Code for question ${questionId} stored in local storage.`);
   };
-  const handleClick = () => {
+  const handleClickRun = () => {
     getEditorValue();
     setRunTestCases(true);
+    if (questionSubmit.has(questionId)) {
+      setQuestionRun((prev) => new Set(prev.add(questionId)));
+      setQuestionSubmit((prev) => {
+        const newSet = new Set(prev); // Create a new Set to avoid mutating the previous Set
+        newSet.delete(questionId); // Remove the specified questionId from the new Set
+        return newSet; // Return the updated Set
+      });
+    } else {
+      setQuestionRun((prev) => new Set(prev.add(questionId)));
+    }
+  };
+
+  const handleClickSubmit = () => {
+    getEditorValue();
+    if (questionRun.has(questionId)) {
+      setQuestionSubmit((prev) => new Set(prev.add(questionId)));
+      setQuestionRun((prev) => {
+        const newSet = new Set(prev); // Create a new Set to avoid mutating the previous Set
+        newSet.delete(questionId); // Remove the specified questionId from the new Set
+        return newSet; // Return the updated Set
+      });
+    } else {
+      setQuestionSubmit((prev) => new Set(prev.add(questionId)));
+    }
   };
   return (
     <div className="h-screen w-full">
       <div className="h-[48px] p-2 bg-[#0d0d0d]">
-        <div className="max-w-[270px] mx-auto">
+        <div className="max-w-[270px] ml-3">
           <div className="flex items-center justify-between">
             <label htmlFor="select" className="text-lg py-2 text-[#B5A996]">
               Language
@@ -187,16 +218,16 @@ const TextEditor = ({ questionId, setRunTestCases }) => {
           onChange={handleEditorChange}
         />
       </div>
-      <div className="h-[13.5%] flex justify-end bg-[#0d0d0d]">
+      <div className="h-[13.5%] flex justify-end bg-[#0d0d0d] mr-3">
         <button
           className="w-28 h-9 mr-4 rounded bg-[#242424] text-white hover:bg-[#1a1919]"
-          onClick={handleClick}
+          onClick={handleClickRun}
         >
           run code
         </button>
         <button
           className="w-28 h-9 mr-2 rounded text-white bg-[#eb5939] hover:bg-red-500"
-          onClick={handleClick}
+          onClick={handleClickSubmit}
         >
           Submit code
         </button>

@@ -5,7 +5,7 @@ import profile from "../assets/profile-icon.svg";
 const Navbar = () => {
   return (
     <>
-      <div className="flex justify-between items-center h-[115px]">
+      <div className="flex justify-between items-center h-[105px]">
         <div className="flex w-[60px] mx-5">
           <button>
             <Image src={menu} quality={100} alt="Hamburger" />

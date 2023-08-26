@@ -8,10 +8,11 @@ import greenhiddenEye from "../assets/greenhiddenEye.svg";
 import lock from "../assets/lock.svg";
 import { testcasesdata } from "../../Dummy_Data";
 import { useState } from "react";
+import { useEffect } from "react";
 
 const TestCase = ({ clickedButton }) => {
   const [testCaseIndex, setTestCaseIndex] = useState(0);
-  const [testCaseClicked, SetTestCaseClicked] = useState(0);
+  const [testCaseClicked, setTestCaseClicked] = useState(0);
 
   const totalTestCases = testcasesdata[clickedButton].testcases.length;
 
@@ -27,10 +28,16 @@ const TestCase = ({ clickedButton }) => {
     (testcase) => testcase.hidden === true
   ).length;
 
+  useEffect(() => {
+    // Reset testCaseClicked with a minimal delay
+    setTestCaseClicked(0);
+    setTestCaseIndex(0);
+    // Clean up the timer if component unmounts
+  }, [clickedButton]);
+
   return (
     <>
-      
-      <div id="font_proxima" className="mb-10">
+      <div id="font_proxima" className="mb-12">
         <div className="flex justify-between items-center h-[100px] mx-5 mb-4 bg-[#1f1f1f]">
           {failedTestCases / totalTestCases === 0 ? (
             <div className="text-[28px] text-[#1BA94C] font-extrabold mx-6">
@@ -62,7 +69,7 @@ const TestCase = ({ clickedButton }) => {
                         className="flex items-center px-[30px] py-4 text-[20px] font-bold w-full hover:bg-[#161616]"
                         onClick={() => {
                           setTestCaseIndex(index);
-                          SetTestCaseClicked(index);
+                          setTestCaseClicked(index);
                         }}
                         style={{
                           background: testCaseClicked === index && "#161616",
@@ -83,7 +90,7 @@ const TestCase = ({ clickedButton }) => {
                         className="flex items-center px-[30px] py-4 text-[20px] font-bold w-full hover:bg-[#161616]"
                         onClick={() => {
                           setTestCaseIndex(index);
-                          SetTestCaseClicked(index);
+                          setTestCaseClicked(index);
                         }}
                         style={{
                           background: testCaseClicked === index && "#161616",
@@ -105,7 +112,7 @@ const TestCase = ({ clickedButton }) => {
                       className="flex items-center px-[30px] py-4 text-[20px] font-bold w-full hover:bg-[#161616]"
                       onClick={() => {
                         setTestCaseIndex(index);
-                        SetTestCaseClicked(index);
+                        setTestCaseClicked(index);
                       }}
                       style={{
                         background: testCaseClicked === index && "#161616",
@@ -126,7 +133,7 @@ const TestCase = ({ clickedButton }) => {
                       className="flex items-center px-[30px] py-4 text-[20px] font-bold w-full hover:bg-[#161616]"
                       onClick={() => {
                         setTestCaseIndex(index);
-                        SetTestCaseClicked(index);
+                        setTestCaseClicked(index);
                       }}
                       style={{
                         background: testCaseClicked === index && "#161616",
@@ -147,64 +154,72 @@ const TestCase = ({ clickedButton }) => {
               ))}
             </div>
           </div>
-          <div className="w-[70%]">
-            <div className="mx-10">
-              <div className="mt-[20px] mb-[4px] font-bold text-lg text-[#C1BBB3]">
-                Compile Message
+          {testcasesdata[clickedButton].testcases[testCaseIndex]
+            ?.compileMessage === undefined ? (
+            <div>Loadinng...</div>
+          ) : (
+            <div className="w-[70%]">
+              <div className="mx-10">
+                <div className="mt-[20px] mb-[4px] font-bold text-lg text-[#C1BBB3]">
+                  Compile Message
+                </div>
+                <div
+                  id="cascadia"
+                  className="bg-[#0d0d0d] text-white py-5 px-7"
+                >
+                  {
+                    testcasesdata[clickedButton].testcases[testCaseIndex]
+                      .compileMessage
+                  }
+                </div>
               </div>
-              <div id="cascadia" className="bg-[#0d0d0d] text-white py-5 px-7">
-                {
-                  testcasesdata[clickedButton].testcases[testCaseIndex]
-                    .compileMessage
-                }
-              </div>
+              {testcasesdata[clickedButton].testcases[testCaseIndex].hidden && (
+                <div className="flex justify-center align-middle mt-[110px] ml-5">
+                  <div className="">
+                    <Image src={lock} quality={100} alt="locked" />
+                  </div>
+                  <div className="text-[#99948E] text-[28px] font-bold mx-5 ">
+                    Hidden Test Case
+                  </div>
+                </div>
+              )}
+              {!testcasesdata[clickedButton].testcases[testCaseIndex]
+                .hidden && (
+                <div>
+                  <div className="mx-10">
+                    <div className="mt-[20px] mb-[4px] font-bold text-lg text-[#C1BBB3]">
+                      Input
+                    </div>
+                    <div
+                      id="cascadia"
+                      className="bg-[#0d0d0d] text-white py-5 px-7"
+                    >
+                      {
+                        testcasesdata[clickedButton].testcases[testCaseIndex]
+                          .input
+                      }
+                    </div>
+                  </div>
+                  <div className="mx-10">
+                    <div className="mt-[20px] mb-[4px] font-bold text-lg text-[#C1BBB3]">
+                      Output
+                    </div>
+                    <div
+                      id="cascadia"
+                      className="bg-[#0d0d0d] text-white py-5 px-7"
+                    >
+                      {
+                        testcasesdata[clickedButton].testcases[testCaseIndex]
+                          .output
+                      }
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
-            {testcasesdata[clickedButton].testcases[testCaseIndex].hidden && (
-              <div className="flex justify-center align-middle mt-[110px] ml-5">
-                <div className="">
-                  <Image src={lock} quality={100} alt="locked" />
-                </div>
-                <div className="text-[#99948E] text-[28px] font-bold mx-5 ">
-                  Hidden Test Case
-                </div>
-              </div>
-            )}
-            {!testcasesdata[clickedButton].testcases[testCaseIndex].hidden && (
-              <div>
-                <div className="mx-10">
-                  <div className="mt-[20px] mb-[4px] font-bold text-lg text-[#C1BBB3]">
-                    Input
-                  </div>
-                  <div
-                    id="cascadia"
-                    className="bg-[#0d0d0d] text-white py-5 px-7"
-                  >
-                    {
-                      testcasesdata[clickedButton].testcases[testCaseIndex]
-                        .input
-                    }
-                  </div>
-                </div>
-                <div className="mx-10">
-                  <div className="mt-[20px] mb-[4px] font-bold text-lg text-[#C1BBB3]">
-                    Output
-                  </div>
-                  <div
-                    id="cascadia"
-                    className="bg-[#0d0d0d] text-white py-5 px-7"
-                  >
-                    {
-                      testcasesdata[clickedButton].testcases[testCaseIndex]
-                        .output
-                    }
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
+          )}
         </div>
       </div>
-      
     </>
   );
 };
