@@ -19,10 +19,20 @@ const TextEditor = ({ questionId, setRunTestCases }) => {
       language: "c",
       value: "#include <stdio.h>\nint main(){\n\n}",
     },
-    "script.c++": {
-      name: "C++",
-      language: "c++",
-      value: "",
+    "script.cpp": {
+      name: "Cpp",
+      language: "cpp",
+      value: "#include<iostream>\nclass Solution {\n\n}",
+    },
+    "script.js": {
+      name: "JS",
+      language: "javascript",
+      value: "function processData(input){\n\n}",
+    },
+    "script.rs": {
+      name: "Rust",
+      language: "rust",
+      value: "impl Solution{\n\n}",
     },
   };
 
@@ -30,8 +40,15 @@ const TextEditor = ({ questionId, setRunTestCases }) => {
   const editorRef = useRef(null);
   const file = files[fileName];
   const [showMore, setShowMore] = useState(false);
-  const [selectedOption, setSelectedOption] = useState("Javascript");
-  const options = ["script.java", "script.c", "script.c++", "script.py"];
+  const [selectedOption, setSelectedOption] = useState("script.py");
+  const options = [
+    "script.java",
+    "script.c",
+    "script.cpp",
+    "script.py",
+    "script.js",
+    "script.rs",
+  ];
 
   useEffect(() => {
     const existingCodeData = JSON.parse(localStorage.getItem("codeData")) || {};
@@ -114,6 +131,10 @@ const TextEditor = ({ questionId, setRunTestCases }) => {
                 <div
                   className="absolute rounded shadow bg-[#0d0d0d] overflow-hidden hidden peer-checked:flex 
               flex-col w-full mt-1 border border-gray-200 z-10"
+                  style={{
+                    maxHeight: "120px",
+                    overflowY: "auto",
+                  }}
                 >
                   {options.map((option, index) => (
                     <div
