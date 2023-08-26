@@ -19,8 +19,10 @@
     align-items: start;
     justify-content: center;
     position: absolute;
+    -webkit-mask-image: url(../assets/circle.svg);
     mask-image: url(../assets/circle.svg);
     background: #EB5939;
+    -webkit-mask-repeat: no-repeat;
     mask-repeat: no-repeat;
     color: black;
 }

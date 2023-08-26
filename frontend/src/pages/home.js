@@ -74,7 +74,7 @@ function App() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1 }}
-            className="flex justify-center items-start "
+            className="flex justify-center items-start"
           >
             <div>
               <form className="w-[350px]" onSubmit={handleSubmit}>

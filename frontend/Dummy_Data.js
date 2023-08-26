@@ -124,6 +124,38 @@ When we sum the floating-point numbers 4.0 and 2.0, we get 6.0. When we subtract
   },
 ];
 
+  export const compilationError = [{error: false,
+compileMessage: `Solution.cpp: In function 'int simpleArraySum
+(std::vector<int
+
+
+>)':
+
+Solution.cpp:18:1: error: no return statement in function returning non-void 
+[-Werror=return-type]
+
+}
+
+^
+
+cc1plus: some warnings being treated as errors`,
+exitStatus: "1"},{error: false},{error: true,
+compileMessage: `Solution.cpp: In function 'int simpleArraySum
+(std::vector<int
+
+
+>)':
+
+Solution.cpp:18:1: error: no return statement in function returning non-void 
+[-Werror=return-type]
+
+}
+
+^
+
+cc1plus: some warnings being treated as errors`,
+exitStatus: "1"}]
+
 export default questionData;
 
 const testcasesdata = [
@@ -136,18 +168,21 @@ const testcasesdata = [
         output: [6],
         hidden: false,
         status: "pass",
+        compileMessage: "hello world"
       },
       {
         input: [1, 3, 4],
         output: [7],
         hidden: false,
         status: "pass",
+        compileMessage: "hello world 2" 
       },
       {
         input: [3, 3],
         output: [6],
         hidden: true,
         status: "fail",
+        compileMessage: "hello world 3"
       },
     ],
   },
@@ -157,21 +192,24 @@ const testcasesdata = [
     testcases: [
       {
         input: "radar",
-        output: true,
+        output: "true",
         hidden: false,
         status: "pass",
+        compileMessage: "hello world"
       },
       {
         input: "apple",
-        output: false,
+        output: "false",
         hidden: true,
         status: "pass",
+        compileMessage: "hello world 2"
       },
       {
         input: "nice",
-        output: false,
+        output: "false",
         hidden: true,
         status: "pass",
+        compileMessage: "hello world 3"
       },
     ],
   },
@@ -184,12 +222,14 @@ const testcasesdata = [
         output: ["1", "2", "Fizz", "Buzz"],
         hidden: false,
         status: "pass",
+        compileMessage: "hello world"
       },
       {
         input: 15,
         output: ["1", "2", "Fizz", "13", "14", "FizzBuzz"],
         hidden: true,
         status: "fail",
+        compileMessage: "hello world"
       },
     ],
   },

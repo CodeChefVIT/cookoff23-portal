@@ -1,6 +1,6 @@
 import Question from "@/components/questions";
 import { useState } from "react";
-import questionData from "../../Dummy_Data";
+import questionData, { compilationError } from "../../Dummy_Data";
 import EditorWindow from "./EditorWindow";
 
 export default function Portal() {
@@ -20,7 +20,7 @@ export default function Portal() {
             className={`bg-[#0D0D0D] text-[#b7ab98] text-2xl 2xl:w-8 lg:w-6 hover:bg-[#161616] `}
             style={{
               background: clickedButton === index && "#161616",
-              height: `${(1 / length) * 100}%`,
+              height: `${(1 / length) * 94}%`,
             }}
           >
             {index + 1}
@@ -40,7 +40,13 @@ export default function Portal() {
         sampleOutput2={questionData[clickedButton].sampleOutput[1]}
         explanation={questionData[clickedButton].explanation}
       />
-      <EditorWindow questionId={clickedButton} clickedButton={clickedButton} />
+      <EditorWindow
+        questionId={clickedButton}
+        clickedButton={clickedButton}
+        error={compilationError[clickedButton].error}
+        message={compilationError[clickedButton].compileMessage}
+        exitStatus={compilationError[clickedButton].exitStatus}
+      />
     </div>
   );
 }
