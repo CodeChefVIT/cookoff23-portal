@@ -19,7 +19,7 @@ function Question(props) {
   } = props;
 
   return (
-    <div className="bg-[#161616] text-[#B5A996] w-[40%] h-[85vh] overflow-auto">
+    <div className="bg-[#161616] text-[#B5A996] w-[40%] h-[83vh] overflow-auto">
       <div className="pl-5 flex-1 overflow-y-scroll p-4">
         <div
           className="text-2xl uppercase text-[#B6AA97] font-semibold"

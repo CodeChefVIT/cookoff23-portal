@@ -20,10 +20,20 @@ const TextEditor = ({ questionId, setRunTestCases, setQuestionRun }) => {
       language: "c",
       value: "#include <stdio.h>\nint main(){\n\n}",
     },
-    "script.c++": {
-      name: "C++",
-      language: "c++",
-      value: "",
+    "script.cpp": {
+      name: "Cpp",
+      language: "cpp",
+      value: "#include<iostream>\nclass Solution {\n\n}",
+    },
+    "script.js": {
+      name: "JS",
+      language: "javascript",
+      value: "function processData(input){\n\n}",
+    },
+    "script.rs": {
+      name: "Rust",
+      language: "rust",
+      value: "impl Solution{\n\n}",
     },
   };
 
@@ -31,9 +41,15 @@ const TextEditor = ({ questionId, setRunTestCases, setQuestionRun }) => {
   const editorRef = useRef(null);
   const file = files[fileName];
   const [showMore, setShowMore] = useState(false);
-  const [selectedOption, setSelectedOption] = useState("Javascript");
-  const options = ["script.java", "script.c", "script.c++", "script.py"];
-  const controls = useAnimation();
+  const [selectedOption, setSelectedOption] = useState("script.py");
+  const options = [
+    "script.java",
+    "script.c",
+    "script.cpp",
+    "script.py",
+    "script.js",
+    "script.rs",
+  ];
 
   useEffect(() => {
     const existingCodeData = JSON.parse(localStorage.getItem("codeData")) || {};
@@ -70,20 +86,20 @@ const TextEditor = ({ questionId, setRunTestCases, setQuestionRun }) => {
   };
   return (
     <div className="h-screen w-full">
-      <div className="h-[48px] p-3 bg-[#0d0d0d]">
-        <div className="max-w-[330px] mx-auto">
+      <div className="h-[48px] p-2 bg-[#0d0d0d]">
+        <div className="max-w-[270px] ml-3">
           <div className="flex items-center justify-between">
             <label htmlFor="select" className="text-lg py-2 text-[#B5A996]">
-              Language:
+              Language
             </label>
 
             <div className="relative">
-              <div className="h-8 w-40 bg-white flex border border-gray-200 rounded items-center">
+              <div className="h-8 w-40 bg-[#0d0d0d] flex border border-gray-200 rounded items-center">
                 <input
                   value={selectedOption}
                   name="select"
                   id="select"
-                  className="px-4 appearance-none outline-none text-gray-800 w-full"
+                  className="px-2  appearance-none bg-[#0d0d0d] outline-none text-white w-full"
                   readOnly
                 />
 
@@ -115,8 +131,12 @@ const TextEditor = ({ questionId, setRunTestCases, setQuestionRun }) => {
               />
               {showMore && (
                 <div
-                  className="absolute rounded shadow bg-white overflow-hidden hidden peer-checked:flex 
+                  className="absolute rounded shadow bg-[#0d0d0d] overflow-hidden hidden peer-checked:flex 
               flex-col w-full mt-1 border border-gray-200 z-10"
+                  style={{
+                    maxHeight: "120px",
+                    overflowY: "auto",
+                  }}
                 >
                   {options.map((option, index) => (
                     <div
@@ -126,10 +146,10 @@ const TextEditor = ({ questionId, setRunTestCases, setQuestionRun }) => {
                     >
                       <p
                         onClick={() => setFileName(option)}
-                        className={`block p-2 border-transparent border-l-4 group-hover:border-blue-600 ${
+                        className={`block p-2 border-transparent text-white border-l-4 group-hover:border-[#eb5939] ${
                           option === selectedOption
-                            ? "border-blue-600 bg-gray-100"
-                            : "group-hover:bg-gray-100"
+                            ? "border-[#eb5939] bg-bg-[#0d0d0d]"
+                            : "group-hover:bg-[#1b1b1b]"
                         }`}
                       >
                         {option}
@@ -154,15 +174,15 @@ const TextEditor = ({ questionId, setRunTestCases, setQuestionRun }) => {
           defaultValue={file.value}
         />
       </div>
-      <div className="h-[13.5%] flex justify-end bg-[#0d0d0d]">
+      <div className="h-[13.5%] flex justify-end bg-[#0d0d0d] mr-3 my-2">
         <button
-          className="w-28 h-9 mr-4 rounded bg-[#eb5939] hover:bg-red-500"
+          className="w-28 h-9 mr-4 rounded bg-[#242424] text-white hover:bg-[#1a1919]"
           onClick={handleClick}
         >
           run code
         </button>
         <button
-          className="w-28 h-9 mr-2 rounded bg-[#eb5939] hover:bg-red-500"
+          className="w-28 h-9 mr-2 rounded text-white bg-[#eb5939] hover:bg-red-500"
           onClick={handleClick}
         >
           Submit code

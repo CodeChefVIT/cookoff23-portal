@@ -29,9 +29,9 @@ const TestCase = ({ clickedButton }) => {
 
   return (
     <>
-      (
+      
       <div id="font_proxima" className="mb-10">
-        <div className="flex justify-between items-center h-[100px] mx-5 my-4 bg-[#1f1f1f]">
+        <div className="flex justify-between items-center h-[100px] mx-5 mb-4 bg-[#1f1f1f]">
           {failedTestCases / totalTestCases === 0 ? (
             <div className="text-[28px] text-[#1BA94C] font-extrabold mx-6">
               All Test Cases Passed !
@@ -51,7 +51,7 @@ const TestCase = ({ clickedButton }) => {
             </button>
           </div>
         </div>
-        <div className="flex h-[530px] bg-[#161616] mx-5">
+        <div className="flex h-[400px] bg-[#161616] mx-5">
           <div className="w-[30%] bg-[#1f1f1f]">
             <div>
               {testcasesdata[clickedButton].testcases.map((testcase, index) => (
@@ -160,7 +160,7 @@ const TestCase = ({ clickedButton }) => {
               </div>
             </div>
             {testcasesdata[clickedButton].testcases[testCaseIndex].hidden && (
-              <div className="flex justify-center mt-[150px]">
+              <div className="flex justify-center align-middle mt-[110px] ml-5">
                 <div className="">
                   <Image src={lock} quality={100} alt="locked" />
                 </div>
@@ -204,7 +204,7 @@ const TestCase = ({ clickedButton }) => {
           </div>
         </div>
       </div>
-      )
+      
     </>
   );
 };

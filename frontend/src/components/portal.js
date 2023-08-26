@@ -20,7 +20,7 @@ export default function Portal() {
             className={`bg-[#0D0D0D] text-[#b7ab98] text-2xl 2xl:w-8 lg:w-6 hover:bg-[#161616] `}
             style={{
               background: clickedButton === index && "#161616",
-              height: `${(1 / length) * 93}%`,
+              height: `${(1 / length) * 94}%`,
             }}
           >
             {index + 1}
