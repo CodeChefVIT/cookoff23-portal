@@ -39,6 +39,7 @@ const TextEditor = ({ questionId, setRunTestCases }) => {
   const [fileName, setFileName] = useState("script.py");
   const editorRef = useRef(null);
   const file = files[fileName];
+  const [codeValue, setCodeValue] = useState(file.value);
   const [showMore, setShowMore] = useState(false);
   const [selectedOption, setSelectedOption] = useState("script.py");
   const options = [
@@ -49,6 +50,18 @@ const TextEditor = ({ questionId, setRunTestCases }) => {
     "script.js",
     "script.rs",
   ];
+
+  const handleEditorChange = (value, event) => {
+    setCodeValue(value);
+
+    // Save code value to local storage
+    const existingCodeData = JSON.parse(localStorage.getItem("codeData")) || {};
+    const updatedCodeData = {
+      ...existingCodeData,
+      [questionId]: value,
+    };
+    localStorage.setItem("codeData", JSON.stringify(updatedCodeData));
+  };
 
   useEffect(() => {
     const existingCodeData = JSON.parse(localStorage.getItem("codeData")) || {};
@@ -132,7 +145,7 @@ const TextEditor = ({ questionId, setRunTestCases }) => {
             {showMore && (
               <div
                 className="absolute rounded shadow bg-[#0d0d0d] overflow-hidden hidden peer-checked:flex 
-              flex-col w-full mt-1 border border-gray-200 z-10"
+                flex-col w-full mt-1 border border-gray-200 z-10"
                 style={{
                   maxHeight: "120px",
                   overflowY: "auto",
@@ -169,6 +182,8 @@ const TextEditor = ({ questionId, setRunTestCases }) => {
           path={file.name}
           defaultLanguage={file.language}
           defaultValue={file.value}
+          value={codeValue} // Use the codeValue from state
+          onChange={handleEditorChange}
         />
       </div>
       <div className="flex justify-end bg-[#0d0d0d] mr-3" id="font_proxima">
