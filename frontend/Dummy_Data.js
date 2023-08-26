@@ -1,4 +1,5 @@
-const questionData = [{
+const questionData = [
+  {
     objective: "hello World",
     points: "10 points",
     task: `Synchronization is one of the biggest features of StackEdit. It enables you to synchronize any file in your workspace with other files stored in your **Google Drive**, your **Dropbox** and your **GitHub** accounts. This allows you to keep writing on other devices, collaborate with people you share the file with, integrate easily into your workflow... The synchronization mechanism takes place every minute in the background, downloading, merging, and uploading file modifications.
@@ -38,7 +39,8 @@ The third line prints the sentence, sen.`,
     explanation: `
 When we sum the integers 10  and 4 , we get the integer 14. When we subtract the second number 4 from the first number 10, we get  as their difference.
 When we sum the floating-point numbers 4.0 and 2.0, we get 6.0. When we subtract the second number 2.0 from the first number 4.0, we get 2.0 as their difference.`,
-  },{
+  },
+  {
     objective: "hello World #2",
     points: "15 points",
     task: `Synchronization is one of the biggest features of StackEdit. It enables you to synchronize any file in your workspace with other files stored in your **Google Drive**, your **Dropbox** and your **GitHub** accounts. This allows you to keep writing on other devices, collaborate with people you share the file with, integrate easily into your workflow... The synchronization mechanism takes place every minute in the background, downloading, merging, and uploading file modifications.
@@ -78,7 +80,8 @@ The third line prints the sentence, sen.`,
     explanation: `
 When we sum the integers 10  and 4 , we get the integer 14. When we subtract the second number 4 from the first number 10, we get  as their difference.
 When we sum the floating-point numbers 4.0 and 2.0, we get 6.0. When we subtract the second number 2.0 from the first number 4.0, we get 2.0 as their difference.`,
-  },{
+  },
+  {
     objective: "hello World #3",
     points: "20 points",
     task: `Synchronization is one of the biggest features of StackEdit. It enables you to synchronize any file in your workspace with other files stored in your **Google Drive**, your **Dropbox** and your **GitHub** accounts. This allows you to keep writing on other devices, collaborate with people you share the file with, integrate easily into your workflow... The synchronization mechanism takes place every minute in the background, downloading, merging, and uploading file modifications.
@@ -118,10 +121,10 @@ The third line prints the sentence, sen.`,
     explanation: `
 When we sum the integers 10  and 4 , we get the integer 14. When we subtract the second number 4 from the first number 10, we get  as their difference.
 When we sum the floating-point numbers 4.0 and 2.0, we get 6.0. When we subtract the second number 2.0 from the first number 4.0, we get 2.0 as their difference.`,
-  }];
+  },
+];
 
-
-  export const compilationError = [{error: true,
+  export const compilationError = [{error: false,
 compileMessage: `Solution.cpp: In function 'int simpleArraySum
 (std::vector<int
 
@@ -154,3 +157,82 @@ cc1plus: some warnings being treated as errors`,
 exitStatus: "1"}]
 
 export default questionData;
+
+const testcasesdata = [
+  {
+    question_id: 1,
+
+    testcases: [
+      {
+        input: [3, 2, 4],
+        output: [6],
+        hidden: false,
+        status: "pass",
+        compileMessage: "hello world"
+      },
+      {
+        input: [1, 3, 4],
+        output: [7],
+        hidden: false,
+        status: "pass",
+        compileMessage: "hello world 2" 
+      },
+      {
+        input: [3, 3],
+        output: [6],
+        hidden: true,
+        status: "fail",
+        compileMessage: "hello world 3"
+      },
+    ],
+  },
+  {
+    question_id: 2,
+
+    testcases: [
+      {
+        input: "radar",
+        output: "true",
+        hidden: false,
+        status: "pass",
+        compileMessage: "hello world"
+      },
+      {
+        input: "apple",
+        output: "false",
+        hidden: true,
+        status: "pass",
+        compileMessage: "hello world 2"
+      },
+      {
+        input: "nice",
+        output: "false",
+        hidden: true,
+        status: "pass",
+        compileMessage: "hello world 3"
+      },
+    ],
+  },
+  {
+    question_id: 3,
+
+    testcases: [
+      {
+        input: 4,
+        output: ["1", "2", "Fizz", "Buzz"],
+        hidden: false,
+        status: "pass",
+        compileMessage: "hello world"
+      },
+      {
+        input: 15,
+        output: ["1", "2", "Fizz", "13", "14", "FizzBuzz"],
+        hidden: true,
+        status: "fail",
+        compileMessage: "hello world"
+      },
+    ],
+  },
+];
+
+export { testcasesdata };

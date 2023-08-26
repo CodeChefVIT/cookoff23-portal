@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Editor } from "@monaco-editor/react";
-import CompilationError from "./compError";
+import { motion, useAnimation } from 'framer-motion';
 
-function TextEditor(props){
-  const {error, message, exitStatus} = props;
+const TextEditor = ({ questionId, setRunTestCases, setQuestionRun }) => {
   const files = {
     "script.py": {
       name: "Python",
@@ -29,16 +28,48 @@ function TextEditor(props){
   };
 
   const [fileName, setFileName] = useState("script.py");
+  const editorRef = useRef(null);
   const file = files[fileName];
   const [showMore, setShowMore] = useState(false);
   const [selectedOption, setSelectedOption] = useState("Javascript");
   const options = ["script.java", "script.c", "script.c++", "script.py"];
+  const controls = useAnimation();
+
+  useEffect(() => {
+    const existingCodeData = JSON.parse(localStorage.getItem("codeData")) || {};
+    const savedCode = existingCodeData[questionId] || "";
+
+    if (editorRef.current) {
+      editorRef.current.setValue(savedCode);
+    }
+  }, [questionId]);
 
   const handleOptionClick = (option) => {
     setSelectedOption(option);
   };
+
+  const handleEditorDidMount = (Editor, monaco) => {
+    editorRef.current = Editor;
+  };
+  const getEditorValue = () => {
+    const codeValue = editorRef.current.getValue();
+
+    const existingCodeData = JSON.parse(localStorage.getItem("codeData")) || {};
+    const updatedCodeData = {
+      ...existingCodeData,
+      [questionId]: codeValue,
+    };
+    localStorage.setItem("codeData", JSON.stringify(updatedCodeData));
+
+    // alert(`Code for question ${questionId} stored in local storage.`);
+  };
+  const handleClick = () => {
+    getEditorValue();
+    setRunTestCases(true);
+    setQuestionRun(prevSet => new Set([...prevSet, questionId]));
+  };
   return (
-    <div className="h-screen w-7/12 flex-1 overflow-y-scroll max-h-screen">
+    <div className="h-screen w-full">
       <div className="h-[48px] p-3 bg-[#0d0d0d]">
         <div className="max-w-[330px] mx-auto">
           <div className="flex items-center justify-between">
@@ -93,7 +124,7 @@ function TextEditor(props){
                       className="cursor-pointer group border-t"
                       onClick={() => handleOptionClick(option)}
                     >
-                      <button
+                      <p
                         onClick={() => setFileName(option)}
                         className={`block p-2 border-transparent border-l-4 group-hover:border-blue-600 ${
                           option === selectedOption
@@ -102,7 +133,7 @@ function TextEditor(props){
                         }`}
                       >
                         {option}
-                      </button>
+                      </p>
                     </div>
                   ))}
                 </div>
@@ -117,26 +148,25 @@ function TextEditor(props){
           height="90%"
           width="95%"
           theme="vs-dark"
+          onMount={handleEditorDidMount}
           path={file.name}
           defaultLanguage={file.language}
           defaultValue={file.value}
         />
       </div>
       <div className="h-[13.5%] flex justify-end bg-[#0d0d0d]">
-        <button className="w-28 h-9 mr-4 rounded bg-[#eb5939] hover:bg-red-500">
+        <button
+          className="w-28 h-9 mr-4 rounded bg-[#eb5939] hover:bg-red-500"
+          onClick={handleClick}
+        >
           run code
         </button>
-        <button className="w-28 h-9 mr-2 rounded bg-[#eb5939] hover:bg-red-500">
+        <button
+          className="w-28 h-9 mr-2 rounded bg-[#eb5939] hover:bg-red-500"
+          onClick={handleClick}
+        >
           Submit code
         </button>
-      </div>
-      <div className="h-fit px-5 pb-5">
-        {error && (
-          <CompilationError
-            message={message}
-            exitStatus={exitStatus}
-          />
-        )}
       </div>
     </div>
   );

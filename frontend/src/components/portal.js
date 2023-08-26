@@ -1,7 +1,7 @@
 import Question from "@/components/questions";
 import { useState } from "react";
 import questionData, { compilationError } from "../../Dummy_Data";
-import TextEditor from "./textEditor";
+import EditorWindow from "./EditorWindow";
 
 export default function Portal() {
   const length = questionData.length;
@@ -10,16 +10,17 @@ export default function Portal() {
     setClickedButton(index);
   }
   return (
-    <div className="flex">
-      <div className="flex flex-col h-screen">
+    <div className="flex h-[86vh]">
+      <div className="flex flex-col overflow-auto">
         {questionData.map((question, index) => (
           <button
             key={index}
+            id="font_ITC"
             onClick={() => handleClick(index)}
-            className={`bg-[#0D0D0D] text-[#CCCCCC] 2xl:w-5 lg:w-6 hover:bg-[#161616]`}
+            className={`bg-[#0D0D0D] text-[#b7ab98] text-2xl 2xl:w-8 lg:w-6 hover:bg-[#161616] `}
             style={{
               background: clickedButton === index && "#161616",
-              height: `${(1 / length) * 100}%`,
+              height: `${(1 / length) * 93}%`,
             }}
           >
             {index + 1}
@@ -39,8 +40,10 @@ export default function Portal() {
         sampleOutput2={questionData[clickedButton].sampleOutput[1]}
         explanation={questionData[clickedButton].explanation}
       />
-
-      <TextEditor error={compilationError[clickedButton].error}
+      <EditorWindow
+        questionId={clickedButton}
+        clickedButton={clickedButton}
+        error={compilationError[clickedButton].error}
         message={compilationError[clickedButton].compileMessage}
         exitStatus={compilationError[clickedButton].exitStatus}
       />
