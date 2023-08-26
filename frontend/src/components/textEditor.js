@@ -1,8 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Editor } from "@monaco-editor/react";
-import { motion, useAnimation } from 'framer-motion';
 
-const TextEditor = ({ questionId, setRunTestCases, setQuestionRun }) => {
+const TextEditor = ({ questionId, setRunTestCases }) => {
   const files = {
     "script.py": {
       name: "Python",
@@ -40,6 +39,7 @@ const TextEditor = ({ questionId, setRunTestCases, setQuestionRun }) => {
   const [fileName, setFileName] = useState("script.py");
   const editorRef = useRef(null);
   const file = files[fileName];
+  const [codeValue, setCodeValue] = useState(file.value);
   const [showMore, setShowMore] = useState(false);
   const [selectedOption, setSelectedOption] = useState("script.py");
   const options = [
@@ -50,6 +50,18 @@ const TextEditor = ({ questionId, setRunTestCases, setQuestionRun }) => {
     "script.js",
     "script.rs",
   ];
+
+  const handleEditorChange = (value, event) => {
+    setCodeValue(value);
+
+    // Save code value to local storage
+    const existingCodeData = JSON.parse(localStorage.getItem("codeData")) || {};
+    const updatedCodeData = {
+      ...existingCodeData,
+      [questionId]: value,
+    };
+    localStorage.setItem("codeData", JSON.stringify(updatedCodeData));
+  };
 
   useEffect(() => {
     const existingCodeData = JSON.parse(localStorage.getItem("codeData")) || {};
@@ -82,12 +94,11 @@ const TextEditor = ({ questionId, setRunTestCases, setQuestionRun }) => {
   const handleClick = () => {
     getEditorValue();
     setRunTestCases(true);
-    setQuestionRun(prevSet => new Set([...prevSet, questionId]));
   };
   return (
     <div className="h-screen w-full">
       <div className="h-[48px] p-2 bg-[#0d0d0d]">
-        <div className="max-w-[270px] ml-3">
+        <div className="max-w-[270px] mx-auto">
           <div className="flex items-center justify-between">
             <label htmlFor="select" className="text-lg py-2 text-[#B5A996]">
               Language
@@ -172,9 +183,11 @@ const TextEditor = ({ questionId, setRunTestCases, setQuestionRun }) => {
           path={file.name}
           defaultLanguage={file.language}
           defaultValue={file.value}
+          value={codeValue} // Use the codeValue from state
+          onChange={handleEditorChange}
         />
       </div>
-      <div className="h-[13.5%] flex justify-end bg-[#0d0d0d] mr-3 my-2">
+      <div className="h-[13.5%] flex justify-end bg-[#0d0d0d]">
         <button
           className="w-28 h-9 mr-4 rounded bg-[#242424] text-white hover:bg-[#1a1919]"
           onClick={handleClick}
