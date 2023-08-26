@@ -1,6 +1,6 @@
 import Question from "@/components/questions";
 import { useState } from "react";
-import questionData from "../../Dummy_Data";
+import questionData, { compilationError } from "../../Dummy_Data";
 import TextEditor from "./textEditor";
 
 export default function Portal() {
@@ -39,7 +39,11 @@ export default function Portal() {
         sampleOutput2={questionData[clickedButton].sampleOutput[1]}
         explanation={questionData[clickedButton].explanation}
       />
-      <TextEditor />
+
+      <TextEditor error={compilationError[clickedButton].error}
+        message={compilationError[clickedButton].compileMessage}
+        exitStatus={compilationError[clickedButton].exitStatus}
+      />
     </div>
   );
 }

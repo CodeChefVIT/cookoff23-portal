@@ -120,4 +120,37 @@ When we sum the integers 10  and 4 , we get the integer 14. When we subtract the
 When we sum the floating-point numbers 4.0 and 2.0, we get 6.0. When we subtract the second number 2.0 from the first number 4.0, we get 2.0 as their difference.`,
   }];
 
+
+  export const compilationError = [{error: true,
+compileMessage: `Solution.cpp: In function 'int simpleArraySum
+(std::vector<int
+
+
+>)':
+
+Solution.cpp:18:1: error: no return statement in function returning non-void 
+[-Werror=return-type]
+
+}
+
+^
+
+cc1plus: some warnings being treated as errors`,
+exitStatus: "1"},{error: false},{error: true,
+compileMessage: `Solution.cpp: In function 'int simpleArraySum
+(std::vector<int
+
+
+>)':
+
+Solution.cpp:18:1: error: no return statement in function returning non-void 
+[-Werror=return-type]
+
+}
+
+^
+
+cc1plus: some warnings being treated as errors`,
+exitStatus: "1"}]
+
 export default questionData;

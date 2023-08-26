@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { Editor } from "@monaco-editor/react";
+import CompilationError from "./compError";
 
-const TextEditor = () => {
+function TextEditor(props){
+  const {error, message, exitStatus} = props;
   const files = {
     "script.py": {
       name: "Python",
@@ -36,7 +38,7 @@ const TextEditor = () => {
     setSelectedOption(option);
   };
   return (
-    <div className="h-screen w-7/12">
+    <div className="h-screen w-7/12 flex-1 overflow-y-scroll max-h-screen">
       <div className="h-[48px] p-3 bg-[#0d0d0d]">
         <div className="max-w-[330px] mx-auto">
           <div className="flex items-center justify-between">
@@ -127,6 +129,14 @@ const TextEditor = () => {
         <button className="w-28 h-9 mr-2 rounded bg-[#eb5939] hover:bg-red-500">
           Submit code
         </button>
+      </div>
+      <div className="h-fit px-5 pb-5">
+        {error && (
+          <CompilationError
+            message={message}
+            exitStatus={exitStatus}
+          />
+        )}
       </div>
     </div>
   );
