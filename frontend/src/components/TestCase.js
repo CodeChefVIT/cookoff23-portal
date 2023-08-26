@@ -37,7 +37,7 @@ const TestCase = ({ clickedButton }) => {
 
   return (
     <>
-      <div id="font_proxima" className="mb-10">
+      <div id="font_proxima" className="mb-12">
         <div className="flex justify-between items-center h-[100px] mx-5 mb-4 bg-[#1f1f1f]">
           {failedTestCases / totalTestCases === 0 ? (
             <div className="text-[28px] text-[#1BA94C] font-extrabold mx-6">

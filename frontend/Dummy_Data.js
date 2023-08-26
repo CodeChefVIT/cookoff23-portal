@@ -168,21 +168,24 @@ const testcasesdata = [
         output: [6],
         hidden: false,
         status: "pass",
-        compileMessage: "hello world"
+        compileMessage: "hello world",
+        expectedOutput: [6],
       },
       {
         input: [1, 3, 4],
         output: [7],
         hidden: false,
         status: "pass",
-        compileMessage: "hello world 2" 
+        compileMessage: "hello world 2",
+        expectedOutput: [7],
       },
       {
         input: [3, 3],
         output: [6],
         hidden: true,
         status: "fail",
-        compileMessage: "hello world 3"
+        compileMessage: "hello world 3",
+        expectedOutput: [7],
       },
     ],
   },
@@ -195,21 +198,24 @@ const testcasesdata = [
         output: "true",
         hidden: false,
         status: "pass",
-        compileMessage: "hello world"
+        compileMessage: "hello world",
+        expectedOutput: "true",
       },
       {
         input: "apple",
         output: "false",
         hidden: true,
         status: "pass",
-        compileMessage: "hello world 2"
+        compileMessage: "hello world 2",
+        expectedOutput: "false",
       },
       {
         input: "nice",
         output: "false",
         hidden: true,
         status: "pass",
-        compileMessage: "hello world 3"
+        compileMessage: "hello world 3",
+        expectedOutput: "false",
       },
     ],
   },
@@ -222,14 +228,16 @@ const testcasesdata = [
         output: ["1", "2", "Fizz", "Buzz"],
         hidden: false,
         status: "pass",
-        compileMessage: "hello world"
+        compileMessage: "hello world",
+        expectedOutput: ["1", "2", "Fizz", "Buzz"],
       },
       {
         input: 15,
         output: ["1", "2", "Fizz", "13", "14", "FizzBuzz"],
         hidden: true,
         status: "fail",
-        compileMessage: "hello world"
+        compileMessage: "hello world",
+        expectedOutput: ["1", "2", "Fizz", "13", "14"],
       },
     ],
   },
