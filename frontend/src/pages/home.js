@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import hovercook from "../assets/hover-cookoff.svg";
 import cookoff from "../assets/cookoff.svg";
-import logo from "../assets/logo.svg";
+import logo from "../assets/Logo.svg";
 import Image from "next/image";
 import { redirect } from "next/navigation";
 
