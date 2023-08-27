@@ -1,11 +1,12 @@
 import useMousePosition from "../utils/useMousePosition";
 import styles from "./home.module.css";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import hovercook from "../assets/hover-cookoff.svg";
 import cookoff from "../assets/cookoff.svg";
 import logo from "../assets/logo.svg";
 import Image from "next/image";
+import { redirect } from "next/navigation";
 
 function App() {
   const [isHovered, setIsHovered] = useState(false);
@@ -18,6 +19,10 @@ function App() {
       setisClicked(true);
     }, 300);
   };
+
+  setTimeout(() => {
+    redirect("/login");
+  }, 3000);
 
   return (
     <div className={styles.master}>
