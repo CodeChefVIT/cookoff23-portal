@@ -1,8 +1,16 @@
 import Navbar from "@/components/Navbar";
 import Image from "next/image";
-import tickIcon from "../assets/TickIcon.svg";
+import tickIcon from "../../assets/TickIcon.svg";
+import { useRouter } from "next/router";
 
 const TestComplete = () => {
+  const router = useRouter();
+  
+  function returnToDashboard() {
+    const user = router.query.user;
+    const fullPath = `/${user}`;
+    router.push(fullPath);
+  }
   return (
     <>
       <Navbar />
@@ -24,6 +32,7 @@ const TestComplete = () => {
           <button
             className="text-[#D9D9D9] text-lg hover:text-[20px] ease-in-out duration-100 font-semibold  ring-2 ring-[#D9D9D9] py-0.5 px-5 rounded-full ring-offset-8 hover:ring-offset-[10px]
          ring-offset-[#0D0D0D]"
+            onClick={returnToDashboard}
           >
             Back to Dashboard
           </button>
