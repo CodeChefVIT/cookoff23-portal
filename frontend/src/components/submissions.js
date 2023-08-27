@@ -1,20 +1,20 @@
 import { testcasesdata } from "../../Dummy_Data";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import lock from "../assets/lock.svg";
 
 function SubmitCode(props) {
   const { clickedButton } = props;
+  const containerRef = useRef(null);
   const [testCaseClicked, setTestCaseClicked] = useState(0);
 
   useEffect(() => {
-    // Reset testCaseClicked with a minimal delay
     setTestCaseClicked(0);
-    // Clean up the timer if component unmounts
+    containerRef.current.scrollIntoView();
   }, [clickedButton]);
   return (
     <>
-      <div id="font_proxima" className="mb-12">
+      <div id="font_proxima" className="mb-8" ref={containerRef}>
         <div className="h-[450px] bg-[#161616] mx-5 pl-5 pt-5">
           <div className="flex gap-10 items-center">
             <h1 className="text-[#1ba94c] text-2xl font-semibold">

@@ -7,12 +7,15 @@ import greenopenEye from "../assets/greenopenEye.svg";
 import greenhiddenEye from "../assets/greenhiddenEye.svg";
 import lock from "../assets/lock.svg";
 import { testcasesdata } from "../../Dummy_Data";
-import { useState } from "react";
-import { useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 const TestCase = ({ clickedButton }) => {
+  const containerRef = useRef(null);
+  const customTestCaseRef = useRef(null);
+  const [customInput, setCustomInput] = useState("");
   const [testCaseIndex, setTestCaseIndex] = useState(0);
   const [testCaseClicked, setTestCaseClicked] = useState(0);
+  const [customTestCase, setCustomTestCase] = useState(null);
 
   const totalTestCases = testcasesdata[clickedButton].testcases.length;
 
@@ -32,12 +35,21 @@ const TestCase = ({ clickedButton }) => {
     // Reset testCaseClicked with a minimal delay
     setTestCaseClicked(0);
     setTestCaseIndex(0);
+    setCustomTestCase(null);
+    containerRef.current.scrollIntoView();
     // Clean up the timer if component unmounts
   }, [clickedButton]);
 
+  function handleSubmit(event){
+    event.preventDefault();
+    console.log(customInput, clickedButton);
+    setCustomInput("");
+    console.log(customInput);
+  }
+
   return (
     <>
-      <div id="font_proxima" className="mb-6 mt-20">
+      <div id="font_proxima" className="mb-10" ref={containerRef}>
         <div className="flex justify-between items-center min-h-[100px] mx-5 mb-4 bg-[#1f1f1f]">
           {failedTestCases / totalTestCases === 0 ? (
             <div className="text-[28px] text-[#1BA94C] font-extrabold mx-6">
@@ -52,11 +64,11 @@ const TestCase = ({ clickedButton }) => {
             </div>
           )}
 
-          <div className="mx-6">
+          {/* <div className="mx-6">
             <button className="text-white font-bold bg-[#1BA94C] rounded-[4px] px-[36px] py-[10px]">
               NEXT PROBLEM
             </button>
-          </div>
+          </div> */}
         </div>
         <div className="flex h-[400px] bg-[#161616] mx-5">
           <div className="w-[30%] bg-[#1f1f1f]">
@@ -70,6 +82,7 @@ const TestCase = ({ clickedButton }) => {
                         onClick={() => {
                           setTestCaseIndex(index);
                           setTestCaseClicked(index);
+                          setCustomTestCase(null);
                         }}
                         style={{
                           background: testCaseClicked === index && "#161616",
@@ -91,6 +104,7 @@ const TestCase = ({ clickedButton }) => {
                         onClick={() => {
                           setTestCaseIndex(index);
                           setTestCaseClicked(index);
+                          setCustomTestCase(null);
                         }}
                         style={{
                           background: testCaseClicked === index && "#161616",
@@ -113,6 +127,7 @@ const TestCase = ({ clickedButton }) => {
                       onClick={() => {
                         setTestCaseIndex(index);
                         setTestCaseClicked(index);
+                        setCustomTestCase(null);
                       }}
                       style={{
                         background: testCaseClicked === index && "#161616",
@@ -134,6 +149,7 @@ const TestCase = ({ clickedButton }) => {
                       onClick={() => {
                         setTestCaseIndex(index);
                         setTestCaseClicked(index);
+                        setCustomTestCase(null);
                       }}
                       style={{
                         background: testCaseClicked === index && "#161616",
@@ -152,11 +168,49 @@ const TestCase = ({ clickedButton }) => {
                   )}
                 </div>
               ))}
+              <button
+                className="flex items-center px-[30px] py-4 text-[20px] font-bold w-full hover:bg-[#161616]"
+                onClick={() => {
+                  setCustomTestCase(clickedButton);
+                  setTestCaseClicked(null);
+                }}
+                style={{
+                  background: customTestCase === clickedButton && "#161616",
+                }}
+                // style={{
+                //   background: testCaseClicked === index && "#161616",
+                // }}
+              >
+                <div className="text-[#C1BBB3] mx-1">Custom Test Case</div>
+              </button>
             </div>
           </div>
           {testcasesdata[clickedButton].testcases[testCaseIndex]
             ?.compileMessage === undefined ? (
             <div>Loadinng...</div>
+          ) : testCaseClicked === null && customTestCase === clickedButton ? (
+            <div className="w-[70%]">
+              <div className="mx-10">
+                <form onSubmit={handleSubmit}>
+                  <div className="mt-[20px] mb-[4px] font-bold text-lg text-[#C1BBB3]">
+                    Enter Custom Test Case
+                  </div>
+                  <textarea
+                    placeholder="Type Custom Input Here..."
+                    id="cascadia"
+                    className="text-white w-full py-2 px-5 ml-1 bg-[#2C2C2C] placeholder:opacity-50 placeholder-[#878787] resize-none"
+                    htmlFor="input"
+                    onChange={(e) => setCustomInput(e.target.value)}
+                    value={customInput}
+                  >
+                    
+                  </textarea>
+                  <button className="text-white font-bold bg-[#1BA94C] rounded-[4px] px-[36px] py-[6px] mt-2" type="submit">
+                    Submit
+                  </button>
+                </form>
+              </div>
+            </div>
           ) : (
             <div className="w-[70%]">
               <div className="mx-10">

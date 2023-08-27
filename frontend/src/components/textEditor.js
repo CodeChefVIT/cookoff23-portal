@@ -58,7 +58,7 @@ const TextEditor = ({
     "script.rs",
   ];
 
-  const [isChecked, setIsChecked] = useState(false);
+  // const [isChecked, setIsChecked] = useState(false);
 
   const handleCheckboxChange = () => {
     setIsChecked(!isChecked);
@@ -110,9 +110,9 @@ const TextEditor = ({
     if (questionSubmit.has(questionId)) {
       setQuestionRun((prev) => new Set(prev.add(questionId)));
       setQuestionSubmit((prev) => {
-        const newSet = new Set(prev);
-        newSet.delete(questionId);
-        return newSet;
+        const newSet = new Set(prev); // Create a new Set to avoid mutating the previous Set
+        newSet.delete(questionId); // Remove the specified questionId from the new Set
+        return newSet; // Return the updated Set
       });
     } else {
       setQuestionRun((prev) => new Set(prev.add(questionId)));
@@ -124,9 +124,9 @@ const TextEditor = ({
     if (questionRun.has(questionId)) {
       setQuestionSubmit((prev) => new Set(prev.add(questionId)));
       setQuestionRun((prev) => {
-        const newSet = new Set(prev);
-        newSet.delete(questionId);
-        return newSet;
+        const newSet = new Set(prev); // Create a new Set to avoid mutating the previous Set
+        newSet.delete(questionId); // Remove the specified questionId from the new Set
+        return newSet; // Return the updated Set
       });
     } else {
       setQuestionSubmit((prev) => new Set(prev.add(questionId)));
@@ -134,7 +134,7 @@ const TextEditor = ({
   };
 
   return (
-    <div className="h-[90vh] w-full">
+    <div className="h-[90vh] w-full mb-7">
       <div className="h-[48px] p-2 bg-[#0d0d0d]">
         <div className="max-w-[270px] ml-3">
           <div className="flex items-center justify-between">
@@ -211,33 +211,48 @@ const TextEditor = ({
           </div>
         </div>
       </div>
-      <div className="h-[80%] flex justify-center items-center bg-[#0d0d0d] relative">
-        <Editor
-          className=""
-          height="90%"
-          width="95%"
-          theme="vs-dark"
-          onMount={handleEditorDidMount}
-          path={file.name}
-          defaultLanguage={file.language}
-          defaultValue={file.value}
-          value={codeValue} // Use the codeValue from state
-          onChange={handleEditorChange}
-        />
-      </div>
-      <div className="h-[13.5%] flex justify-end bg-[#0d0d0d] mr-3">
-        <button
-          className="w-28 h-9 mr-4 rounded bg-[#242424] text-white hover:bg-[#1a1919]"
-          onClick={handleClickRun}
-        >
-          run code
-        </button>
-        <button
-          className="w-28 h-9 mr-2 rounded text-white bg-[#eb5939] hover:bg-red-500"
-          onClick={handleClickSubmit}
-        >
-          Submit code
-        </button>
+
+      <Editor
+        className="px-5 my-5"
+        height="80%"
+        width="100%"
+        theme="vs-dark"
+        onMount={handleEditorDidMount}
+        path={file.name}
+        defaultLanguage={file.language}
+        defaultValue={file.value}
+        value={codeValue} // Use the codeValue from state
+        onChange={handleEditorChange}
+      />
+      <div className="bg-[#0d0d0d] relative mt-4">
+        <div id="heading" className="flex justify-end items-center">
+          <div className="flex font-bold text-[16px]">
+            <button
+              className="px-14 py-2 mx-5 rounded bg-[#242424] text-white hover:bg-[#1a1919]"
+              onClick={handleClickRun}
+            >
+              Run Code
+            </button>
+            <button
+              className="px-14 py-2 mr-5 rounded text-white bg-[#eb5939] hover:bg-red-500"
+              onClick={handleClickSubmit}
+            >
+              Submit Code
+            </button>
+          </div>
+        </div>
+        {/* {isChecked && (
+          <div className="bg-[#0d0d0d] flex p-4 mt-1 my-2">
+            <textarea
+              placeholder="Type Custom Input Here..."
+              id="cascadia"
+              className="text-white w-full py-2 px-5 ml-1 bg-[#2C2C2C] placeholder:opacity-50 placeholder-[#878787] resize-none"
+              htmlFor="input"
+            >
+              {}
+            </textarea>
+          </div>
+        )} */}
       </div>
     </div>
   );
