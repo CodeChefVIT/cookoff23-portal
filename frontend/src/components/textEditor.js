@@ -104,9 +104,9 @@ const TextEditor = ({
     if (questionSubmit.has(questionId)) {
       setQuestionRun((prev) => new Set(prev.add(questionId)));
       setQuestionSubmit((prev) => {
-        const newSet = new Set(prev); // Create a new Set to avoid mutating the previous Set
-        newSet.delete(questionId); // Remove the specified questionId from the new Set
-        return newSet; // Return the updated Set
+        const newSet = new Set(prev);
+        newSet.delete(questionId);
+        return newSet;
       });
     } else {
       setQuestionRun((prev) => new Set(prev.add(questionId)));
@@ -118,9 +118,9 @@ const TextEditor = ({
     if (questionRun.has(questionId)) {
       setQuestionSubmit((prev) => new Set(prev.add(questionId)));
       setQuestionRun((prev) => {
-        const newSet = new Set(prev); // Create a new Set to avoid mutating the previous Set
-        newSet.delete(questionId); // Remove the specified questionId from the new Set
-        return newSet; // Return the updated Set
+        const newSet = new Set(prev);
+        newSet.delete(questionId);
+        return newSet;
       });
     } else {
       setQuestionSubmit((prev) => new Set(prev.add(questionId)));
@@ -214,7 +214,7 @@ const TextEditor = ({
           path={file.name}
           defaultLanguage={file.language}
           defaultValue={file.value}
-          value={codeValue} // Use the codeValue from state
+          value={codeValue}
           onChange={handleEditorChange}
         />
       </div>
