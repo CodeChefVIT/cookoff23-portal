@@ -1,7 +1,7 @@
 import { easeInOut, motion } from "framer-motion";
 import { useState } from "react";
 
-const login = () => {
+const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -65,4 +65,4 @@ const login = () => {
     </div>
   );
 };
-export default login;
+export default Login;
