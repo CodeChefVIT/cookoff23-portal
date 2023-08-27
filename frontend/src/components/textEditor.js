@@ -58,6 +58,12 @@ const TextEditor = ({
     "script.rs",
   ];
 
+  const [isChecked, setIsChecked] = useState(false);
+
+  const handleCheckboxChange = () => {
+    setIsChecked(!isChecked);
+  };
+
   const handleEditorChange = (value, event) => {
     setCodeValue(value);
 
@@ -126,8 +132,9 @@ const TextEditor = ({
       setQuestionSubmit((prev) => new Set(prev.add(questionId)));
     }
   };
+
   return (
-    <div className="h-screen w-full">
+    <div className="h-[90vh] w-full">
       <div className="h-[48px] p-2 bg-[#0d0d0d]">
         <div className="max-w-[270px] ml-3">
           <div className="flex items-center justify-between">
@@ -214,7 +221,7 @@ const TextEditor = ({
           path={file.name}
           defaultLanguage={file.language}
           defaultValue={file.value}
-          value={codeValue}
+          value={codeValue} // Use the codeValue from state
           onChange={handleEditorChange}
         />
       </div>
