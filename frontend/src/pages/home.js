@@ -1,11 +1,12 @@
 import useMousePosition from "../utils/useMousePosition";
 import styles from "./home.module.css";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import hovercook from "../assets/hover-cookoff.svg";
 import cookoff from "../assets/cookoff.svg";
 import logo from "../assets/logo.svg";
 import Image from "next/image";
+import { redirect } from "next/navigation";
 
 function App() {
   const [isHovered, setIsHovered] = useState(false);
@@ -19,99 +20,43 @@ function App() {
     }, 300);
   };
 
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-
-  const handleUsernameChange = (event) => {
-    setUsername(event.target.value);
-  };
-
-  const handlePasswordChange = (event) => {
-    setPassword(event.target.value);
-  };
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    console.log("Username:", username);
-    console.log("Password:", password);
-  };
+  setTimeout(() => {
+    redirect("/login");
+  }, 3000);
 
   return (
     <div className={styles.master}>
       {isClicked ? (
-        <>
-          <motion.main
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1 }}
-            className={styles.main}
-          >
-            <motion.div
-              className={styles.mask}
-              animate={{
-                WebkitMaskPosition: `${x - size / 2}px ${y - size / 2}px`,
-                WebkitMaskSize: `${size}px`,
-              }}
-              transition={{ type: "tween", ease: "backOut", duration: 0.4 }}
-            >
-              <Image
-                src={hovercook}
-                alt="hoverCook"
-                quality={100}
-                onMouseEnter={() => {
-                  setIsHovered(true);
-                }}
-                onMouseLeave={() => {
-                  setIsHovered(false);
-                }}
-              />
-            </motion.div>
-            <div className={styles.body}>
-              <Image src={cookoff} quality={100} alt="cookoff" />
-            </div>
-          </motion.main>
+        <motion.main
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1 }}
+          className={styles.main}
+        >
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1 }}
-            className="flex justify-center items-start"
+            className={styles.mask}
+            animate={{
+              WebkitMaskPosition: `${x - size / 2}px ${y - size / 2}px`,
+              WebkitMaskSize: `${size}px`,
+            }}
+            transition={{ type: "tween", ease: "backOut", duration: 0.4 }}
           >
-            <div>
-              <form className="w-[350px]" onSubmit={handleSubmit}>
-                <div className="mb-[40px]">
-                  <input
-                    className="w-full py-[18px] px-[33px] text-[#D9D9D999] bg-[#1F1F1F] rounded-[25px] text-[22px] font-semibold"
-                    id="username"
-                    type="text"
-                    placeholder="Username"
-                    value={username}
-                    onChange={handleUsernameChange}
-                    required
-                  />
-                </div>
-                <div className="mb-6">
-                  <input
-                    className="w-full py-[18px] px-[33px] text-[#D9D9D999] bg-[#1F1F1F] rounded-[25px] text-[22px] font-semibold"
-                    id="password"
-                    type="password"
-                    placeholder="Password"
-                    value={password}
-                    onChange={handlePasswordChange}
-                    required
-                  />
-                </div>
-                <div className="flex items-center justify-center">
-                  <button
-                    className="uppercase text-[#D9D9D9] font-semibold py-[16px] px-[26px] text-[22px] border-[3px] border-[#D9D9D9] rounded-full hover:bg-[#D9D9D9] hover:text-black mt-5"
-                    type="submit"
-                  >
-                    Let&apos;s Get Cooking
-                  </button>
-                </div>
-              </form>
-            </div>
+            <Image
+              src={hovercook}
+              alt="hoverCook"
+              quality={100}
+              onMouseEnter={() => {
+                setIsHovered(true);
+              }}
+              onMouseLeave={() => {
+                setIsHovered(false);
+              }}
+            />
           </motion.div>
-        </>
+          <div className={styles.body}>
+            <Image src={cookoff} quality={100} alt="cookoff" />
+          </div>
+        </motion.main>
       ) : (
         <motion.div
           initial={{ opacity: 0 }}

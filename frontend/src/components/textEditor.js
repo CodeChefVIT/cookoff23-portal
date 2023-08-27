@@ -58,6 +58,12 @@ const TextEditor = ({
     "script.rs",
   ];
 
+  const [isChecked, setIsChecked] = useState(false);
+
+  const handleCheckboxChange = () => {
+    setIsChecked(!isChecked);
+  };
+
   const handleEditorChange = (value, event) => {
     setCodeValue(value);
 
@@ -126,8 +132,9 @@ const TextEditor = ({
       setQuestionSubmit((prev) => new Set(prev.add(questionId)));
     }
   };
+
   return (
-    <div className="h-screen w-full">
+    <div className="h-[90vh] w-full">
       <div className="h-[48px] p-2 bg-[#0d0d0d]">
         <div className="max-w-[270px] ml-3">
           <div className="flex items-center justify-between">
@@ -204,33 +211,64 @@ const TextEditor = ({
           </div>
         </div>
       </div>
-      <div className="h-[80%] flex justify-center items-center bg-[#0d0d0d] relative">
-        <Editor
-          className=""
-          height="90%"
-          width="95%"
-          theme="vs-dark"
-          onMount={handleEditorDidMount}
-          path={file.name}
-          defaultLanguage={file.language}
-          defaultValue={file.value}
-          value={codeValue} // Use the codeValue from state
-          onChange={handleEditorChange}
-        />
-      </div>
-      <div className="h-[13.5%] flex justify-end bg-[#0d0d0d] mr-3">
-        <button
-          className="w-28 h-9 mr-4 rounded bg-[#242424] text-white hover:bg-[#1a1919]"
-          onClick={handleClickRun}
-        >
-          run code
-        </button>
-        <button
-          className="w-28 h-9 mr-2 rounded text-white bg-[#eb5939] hover:bg-red-500"
-          onClick={handleClickSubmit}
-        >
-          Submit code
-        </button>
+
+      <Editor
+        className="px-5 my-5"
+        height="80%"
+        width="100%"
+        theme="vs-dark"
+        onMount={handleEditorDidMount}
+        path={file.name}
+        defaultLanguage={file.language}
+        defaultValue={file.value}
+        value={codeValue} // Use the codeValue from state
+        onChange={handleEditorChange}
+      />
+      <div className="bg-[#0d0d0d] mr-3 relative">
+        <div id="heading" className="flex justify-between items-center ">
+          <div class="mb-[0.125rem] block min-h-[1.5rem] pl-[1.5rem] mx-5">
+            <input
+              class="relative float-left -ml-[1.5rem] mr-[6px] mt-[0.15rem] h-[1.125rem] w-[1.125rem] appearance-none rounded-[0.25rem] border-[0.125rem] border-solid border-neutral-300 outline-none before:pointer-events-none before:absolute before:h-[0.875rem] before:w-[0.875rem] before:scale-0 before:rounded-full before:bg-transparent before:opacity-0 before:shadow-[0px_0px_0px_13px_transparent] before:content-[''] checked:border-primary checked:bg-primary checked:before:opacity-[0.16] checked:after:absolute checked:after:-mt-px checked:after:ml-[0.25rem] checked:after:block checked:after:h-[0.8125rem] checked:after:w-[0.375rem] checked:after:rotate-45 checked:after:border-[0.125rem] checked:after:border-l-0 checked:after:border-t-0 checked:after:border-solid checked:after:border-white checked:after:bg-transparent checked:after:content-[''] hover:cursor-pointer hover:before:opacity-[0.04] hover:before:shadow-[0px_0px_0px_13px_rgba(0,0,0,0.6)] focus:shadow-none focus:transition-[border-color_0.2s] focus:before:scale-100 focus:before:opacity-[0.12] focus:before:shadow-[0px_0px_0px_13px_rgba(0,0,0,0.6)] focus:before:transition-[box-shadow_0.2s,transform_0.2s] focus:after:absolute focus:after:z-[1] focus:after:block focus:after:h-[0.875rem] focus:after:w-[0.875rem] focus:after:rounded-[0.125rem] focus:after:content-[''] checked:focus:before:scale-100 checked:focus:before:shadow-[0px_0px_0px_13px_#3b71ca] checked:focus:before:transition-[box-shadow_0.2s,transform_0.2s] checked:focus:after:-mt-px checked:focus:after:ml-[0.25rem] checked:focus:after:h-[0.8125rem] checked:focus:after:w-[0.375rem] checked:focus:after:rotate-45 checked:focus:after:rounded-none checked:focus:after:border-[0.125rem] checked:focus:after:border-l-0 checked:focus:after:border-t-0 checked:focus:after:border-solid checked:focus:after:border-white checked:focus:after:bg-transparent dark:border-neutral-600 dark:checked:border-primary dark:checked:bg-primary dark:focus:before:shadow-[0px_0px_0px_13px_rgba(255,255,255,0.4)] dark:checked:focus:before:shadow-[0px_0px_0px_13px_#3b71ca]"
+              type="checkbox"
+              value=""
+              id="checkboxDefault"
+              onChange={handleCheckboxChange}
+            />
+            <label
+              class="inline-block pl-[0.15rem] hover:cursor-pointer text-[#B5A996]"
+              for="checkboxDefault"
+            >
+              Test Against Custom Input
+            </label>
+          </div>
+
+          <div className="flex font-bold text-[16px]">
+            <button
+              className="px-14 py-2 mx-5 rounded bg-[#242424] text-white hover:bg-[#1a1919]"
+              onClick={handleClickRun}
+            >
+              Run Code
+            </button>
+            <button
+              className="px-14 py-2 mr-5 rounded text-white bg-[#eb5939] hover:bg-red-500"
+              onClick={handleClickSubmit}
+            >
+              Submit Code
+            </button>
+          </div>
+        </div>
+        {isChecked && (
+          <div className="bg-[#0d0d0d] flex p-4 mt-1 my-2">
+            <textarea
+              placeholder="Type Custom Input Here..."
+              id="cascadia"
+              className="text-white w-full py-2 px-5 ml-1 bg-[#2C2C2C] placeholder:opacity-50 placeholder-[#878787]"
+              htmlFor="input"
+            >
+              {}
+            </textarea>
+          </div>
+        )}
       </div>
     </div>
   );
