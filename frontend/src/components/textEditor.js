@@ -145,7 +145,9 @@ const TextEditor = ({
             <div className="relative">
               <div className="h-8 w-40 bg-[#0d0d0d] flex border border-gray-200 rounded items-center">
                 <input
-                  value={selectedOption}
+                  value={selectedOption.substring(
+                    selectedOption.lastIndexOf(".") + 1
+                  )}
                   name="select"
                   id="select"
                   className="px-2  appearance-none bg-[#0d0d0d] outline-none text-white w-full"
