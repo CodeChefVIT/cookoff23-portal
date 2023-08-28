@@ -44,7 +44,7 @@ function EditorWindow(props) {
       {!props.error && questionSubmit.has(props.questionId) && (
         <SubmitCode clickedButton={props.clickedButton} />
       )}
-      {questionSubmit.size === questionData.length && (
+      {questionSubmit.size === questionData[0].qdata.length && (
         <div className="flex justify-end mr-5 mb-10">
           <button
             className="text-white font-bold bg-[#1BA94C] rounded-[4px] px-5 py-2"
