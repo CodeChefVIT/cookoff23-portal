@@ -192,21 +192,21 @@ const TestCase = ({ clickedButton }) => {
             <div className="w-[70%]">
               <div className="mx-10">
                 <form onSubmit={handleSubmit}>
-                  <div className="mt-[20px] mb-[4px] font-bold text-lg text-[#C1BBB3]">
+                  <div className="mt-[20px] mb-4 font-bold text-lg text-[#C1BBB3]">
                     Enter Custom Test Case
                   </div>
                   <textarea
                     placeholder="Type Custom Input Here..."
                     id="cascadia"
-                    className="text-white w-full py-2 px-5 ml-1 bg-[#2C2C2C] placeholder:opacity-50 placeholder-[#878787] resize-none"
+                    className="text-white w-full py-2 px-5 ml-1 bg-[#2C2C2C] placeholder:opacity-50 placeholder-[#878787] resize-none mb-2"
                     htmlFor="input"
                     onChange={(e) => setCustomInput(e.target.value)}
                     value={customInput}
                   >
                     
                   </textarea>
-                  <button className="text-white font-bold bg-[#1BA94C] rounded-[4px] px-[36px] py-[6px] mt-2" type="submit">
-                    Submit
+                  <button className="text-white font-bold bg-[#1BA94C] rounded-[4px] px-5 py-[6px] mt-2" type="submit">
+                    Run
                   </button>
                 </form>
               </div>

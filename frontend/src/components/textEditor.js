@@ -225,6 +225,9 @@ const TextEditor = ({
         defaultValue={file.value}
         value={codeValue}
         onChange={handleEditorChange}
+        options={{
+        scrollBeyondLastLine: false,
+      }}
       />
       <div className="bg-[#0d0d0d] relative mt-4">
         <div id="heading" className="flex justify-end items-center">
