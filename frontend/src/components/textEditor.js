@@ -48,7 +48,7 @@ const TextEditor = ({
   const file = files[fileName];
   const [codeValue, setCodeValue] = useState(file.value);
   const [showMore, setShowMore] = useState(false);
-  const [selectedOption, setSelectedOption] = useState("script.py");
+  const [selectedOption, setSelectedOption] = useState("py");
   const options = [
     "script.java",
     "script.c",
@@ -110,9 +110,9 @@ const TextEditor = ({
     if (questionSubmit.has(questionId)) {
       setQuestionRun((prev) => new Set(prev.add(questionId)));
       setQuestionSubmit((prev) => {
-        const newSet = new Set(prev); // Create a new Set to avoid mutating the previous Set
-        newSet.delete(questionId); // Remove the specified questionId from the new Set
-        return newSet; // Return the updated Set
+        const newSet = new Set(prev);
+        newSet.delete(questionId);
+        return newSet;
       });
     } else {
       setQuestionRun((prev) => new Set(prev.add(questionId)));
@@ -124,9 +124,9 @@ const TextEditor = ({
     if (questionRun.has(questionId)) {
       setQuestionSubmit((prev) => new Set(prev.add(questionId)));
       setQuestionRun((prev) => {
-        const newSet = new Set(prev); // Create a new Set to avoid mutating the previous Set
-        newSet.delete(questionId); // Remove the specified questionId from the new Set
-        return newSet; // Return the updated Set
+        const newSet = new Set(prev);
+        newSet.delete(questionId);
+        return newSet;
       });
     } else {
       setQuestionSubmit((prev) => new Set(prev.add(questionId)));
@@ -145,7 +145,9 @@ const TextEditor = ({
             <div className="relative">
               <div className="h-8 w-40 bg-[#0d0d0d] flex border border-gray-200 rounded items-center">
                 <input
-                  value={selectedOption}
+                  value={selectedOption.substring(
+                    selectedOption.lastIndexOf(".") + 1
+                  )}
                   name="select"
                   id="select"
                   className="px-2  appearance-none bg-[#0d0d0d] outline-none text-white w-full"
@@ -201,7 +203,7 @@ const TextEditor = ({
                             : "group-hover:bg-[#1b1b1b]"
                         }`}
                       >
-                        {option}
+                        {option.substring(option.lastIndexOf(".") + 1)}
                       </p>
                     </div>
                   ))}
@@ -221,7 +223,7 @@ const TextEditor = ({
         path={file.name}
         defaultLanguage={file.language}
         defaultValue={file.value}
-        value={codeValue} // Use the codeValue from state
+        value={codeValue}
         onChange={handleEditorChange}
         options={{
         scrollBeyondLastLine: false,
