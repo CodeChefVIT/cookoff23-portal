@@ -1,16 +1,19 @@
 import Navbar from "@/components/Navbar";
 import RoundWise from "@/components/roundWise";
+import CurrentProfile from "@/components/CurrentProfile";
 
 function Dashboard() {
-    return (
-      <>
-        <main>
-          <Navbar />
+  return (
+    <>
+      <main>
+        <Navbar />
+        <div className="flex">
+          <CurrentProfile />
           <RoundWise />
-        </main>
-      </>
-    );
-
+        </div>
+      </main>
+    </>
+  );
 }
 
 export default Dashboard;

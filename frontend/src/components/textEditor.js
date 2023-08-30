@@ -49,6 +49,7 @@ const TextEditor = ({
   const [codeValue, setCodeValue] = useState(file.value);
   const [showMore, setShowMore] = useState(false);
   const [selectedOption, setSelectedOption] = useState("py");
+
   const options = [
     "script.java",
     "script.c",
@@ -226,8 +227,8 @@ const TextEditor = ({
         value={codeValue}
         onChange={handleEditorChange}
         options={{
-        scrollBeyondLastLine: false,
-      }}
+          scrollBeyondLastLine: false,
+        }}
       />
       <div className="bg-[#0d0d0d] relative mt-4">
         <div id="heading" className="flex justify-end items-center">
