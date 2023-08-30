@@ -8,6 +8,7 @@ import greenhiddenEye from "../assets/greenhiddenEye.svg";
 import lock from "../assets/lock.svg";
 import { testcasesdata } from "../../Dummy_Data";
 import { useState, useEffect, useRef } from "react";
+import { customTestCaseData } from "../../Dummy_Data";
 
 const TestCase = ({ clickedButton }) => {
   const containerRef = useRef(null);
@@ -16,6 +17,7 @@ const TestCase = ({ clickedButton }) => {
   const [testCaseIndex, setTestCaseIndex] = useState(0);
   const [testCaseClicked, setTestCaseClicked] = useState(0);
   const [customTestCase, setCustomTestCase] = useState(null);
+  const [customTestCaseCorrect, setCustomTestCaseCorrect] = useState(null);
 
   const totalTestCases = testcasesdata[clickedButton].testcases.length;
 
@@ -32,24 +34,29 @@ const TestCase = ({ clickedButton }) => {
   ).length;
 
   useEffect(() => {
-    // Reset testCaseClicked with a minimal delay
     setTestCaseClicked(0);
     setTestCaseIndex(0);
     setCustomTestCase(null);
+    setCustomTestCaseCorrect(null);
     containerRef.current.scrollIntoView();
-    // Clean up the timer if component unmounts
   }, [clickedButton]);
 
-  function handleSubmit(event){
+  function handleSubmit(event) {
     event.preventDefault();
     console.log(customInput, clickedButton);
-    setCustomInput("");
-    console.log(customInput);
+    if (
+      customTestCaseData[clickedButton].expectedOutput ===
+      customTestCaseData[clickedButton].output
+    ) {
+      setCustomTestCaseCorrect(true);
+    } else {
+      setCustomTestCaseCorrect(false);
+    }
   }
 
   return (
     <>
-      <div id="font_proxima" className="mb-10" ref={containerRef}>
+      <div id="font_proxima" className="mb-5" ref={containerRef}>
         <div className="flex justify-between items-center min-h-[100px] mx-5 mb-4 bg-[#1f1f1f]">
           {failedTestCases / totalTestCases === 0 ? (
             <div className="text-[28px] text-[#1BA94C] font-extrabold mx-6">
@@ -189,26 +196,77 @@ const TestCase = ({ clickedButton }) => {
             ?.compileMessage === undefined ? (
             <div>Loadinng...</div>
           ) : testCaseClicked === null && customTestCase === clickedButton ? (
-            <div className="w-[70%]">
+            <div className="w-[70%] overflow-auto">
               <div className="mx-10">
-                <form onSubmit={handleSubmit}>
-                  <div className="mt-[20px] mb-4 font-bold text-lg text-[#C1BBB3]">
-                    Enter Custom Test Case
+                <div className="mt-[20px] mb-4 font-bold text-lg text-[#C1BBB3]">
+                  Enter Custom Test Case
+                </div>
+                <textarea
+                  placeholder="Type Custom Input Here..."
+                  id="cascadia"
+                  className="text-white w-full py-2 px-5 ml-1 bg-[#2C2C2C] placeholder:opacity-50 placeholder-[#878787] resize-none mb-2"
+                  htmlFor="input"
+                  onChange={(e) => setCustomInput(e.target.value)}
+                  value={customInput}
+                ></textarea>
+                <button
+                  className="text-white font-bold bg-[#1BA94C] rounded-[4px] px-5 py-[6px] mt-2"
+                  onClick={handleSubmit}
+                >
+                  Run
+                </button>
+                {customTestCaseCorrect === true && (
+                  <div className="mb-10">
+                    <div className="">
+                      <div className="mt-[20px] mb-[4px] font-bold text-lg text-[#1BA94C]">
+                        Output
+                      </div>
+                      <div
+                        id="cascadia"
+                        className="bg-[#0d0d0d] text-white py-5 px-7"
+                      >
+                        {customTestCaseData[clickedButton].output}
+                      </div>
+                    </div>
+                    <div className="">
+                      <div className="mt-[20px] mb-[4px] font-bold text-lg text-[#1BA94C]">
+                        Expected Output
+                      </div>
+                      <div
+                        id="cascadia"
+                        className="bg-[#0d0d0d] text-white py-5 px-7"
+                      >
+                        {customTestCaseData[clickedButton].expectedOutput}
+                      </div>
+                    </div>
                   </div>
-                  <textarea
-                    placeholder="Type Custom Input Here..."
-                    id="cascadia"
-                    className="text-white w-full py-2 px-5 ml-1 bg-[#2C2C2C] placeholder:opacity-50 placeholder-[#878787] resize-none mb-2"
-                    htmlFor="input"
-                    onChange={(e) => setCustomInput(e.target.value)}
-                    value={customInput}
-                  >
-                    
-                  </textarea>
-                  <button className="text-white font-bold bg-[#1BA94C] rounded-[4px] px-5 py-[6px] mt-2" type="submit">
-                    Run
-                  </button>
-                </form>
+                )}
+                {customTestCaseCorrect === false && (
+                  <div className="mb-10">
+                    <div className="">
+                      <div className="mt-[20px] mb-[4px] font-bold text-lg text-[#EB3939]">
+                        Output
+                      </div>
+                      <div
+                        id="cascadia"
+                        className="bg-[#0d0d0d] text-white py-5 px-7"
+                      >
+                        {customTestCaseData[clickedButton].output}
+                      </div>
+                    </div>
+                    <div className="">
+                      <div className="mt-[20px] mb-[4px] font-bold text-lg text-[#EB3939]">
+                        Expected Output
+                      </div>
+                      <div
+                        id="cascadia"
+                        className="bg-[#0d0d0d] text-white py-5 px-7"
+                      >
+                        {customTestCaseData[clickedButton].expectedOutput}
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           ) : (

@@ -10,7 +10,7 @@ export default function Portal() {
     setClickedButton(index);
   }
   return (
-    <div className="flex h-[86vh]">
+    <div className="flex h-[82vh]">
       <div className="flex flex-col">
         {questionData.map((question, index) => (
           <button

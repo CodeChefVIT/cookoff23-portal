@@ -5,6 +5,7 @@ import CompilationError from "./compError";
 import SubmitCode from "./submissions";
 import questionData from "../../Dummy_Data";
 import { useRouter } from "next/router";
+import Cookies from 'js-cookie';
 
 function EditorWindow(props) {
   const router = useRouter();
@@ -13,6 +14,7 @@ function EditorWindow(props) {
   const [questionSubmit, setQuestionSubmit] = useState(new Set());
 
   function submitQuestions() {
+    Cookies.remove('timerTime');
     const user = router.query.user;
     const fullPath = `/${user}/Testcomplete`;
     router.push(fullPath);
