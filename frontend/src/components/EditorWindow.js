@@ -1,22 +1,31 @@
 import TextEditor from "./textEditor";
 import TestCase from "./TestCase";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CompilationError from "./compError";
 import SubmitCode from "./submissions";
 import questionData from "../../Dummy_Data";
 import { useRouter } from "next/router";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
+import useTimerStore from "@/store/timeProvider";
 
 function EditorWindow(props) {
   const router = useRouter();
+  const initialTime = useTimerStore((state) => state.Time);
+  const user = router.query.user;
+  const fullPath = `/${user}/Testcomplete`;
   const [runTestCases, setRunTestCases] = useState(false);
   const [questionRun, setQuestionRun] = useState(new Set());
   const [questionSubmit, setQuestionSubmit] = useState(new Set());
 
+  useEffect(() => {
+    if (initialTime === 0) {
+      Cookies.remove("timerTime");
+      router.push(fullPath);
+    }
+  }, [initialTime]);
+
   function submitQuestions() {
-    Cookies.remove('timerTime');
-    const user = router.query.user;
-    const fullPath = `/${user}/Testcomplete`;
+    Cookies.remove("timerTime");
     router.push(fullPath);
   }
 

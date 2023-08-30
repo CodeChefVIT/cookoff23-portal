@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Editor } from "@monaco-editor/react";
+import useTimerStore from "@/store/timeProvider";
 
 const TextEditor = ({
   questionId,
@@ -43,6 +44,7 @@ const TextEditor = ({
     },
   };
 
+  // const initialTime = useTimerStore((state) => state.Time);
   const [fileName, setFileName] = useState("script.py");
   const editorRef = useRef(null);
   const file = files[fileName];
@@ -61,10 +63,6 @@ const TextEditor = ({
 
   // const [isChecked, setIsChecked] = useState(false);
 
-  const handleCheckboxChange = () => {
-    setIsChecked(!isChecked);
-  };
-
   const handleEditorChange = (value, event) => {
     setCodeValue(value);
 
@@ -76,6 +74,11 @@ const TextEditor = ({
     };
     localStorage.setItem("codeData", JSON.stringify(updatedCodeData));
   };
+
+  // useEffect(() => {
+  //   if (initialTime === 1) {
+  //   }
+  // }, [initialTime]);
 
   useEffect(() => {
     const existingCodeData = JSON.parse(localStorage.getItem("codeData")) || {};
@@ -102,6 +105,7 @@ const TextEditor = ({
       [questionId]: codeValue,
     };
     localStorage.setItem("codeData", JSON.stringify(updatedCodeData));
+    console.log(codeValue);
 
     // alert(`Code for question ${questionId} stored in local storage.`);
   };
