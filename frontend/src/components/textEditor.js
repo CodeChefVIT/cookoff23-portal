@@ -91,6 +91,7 @@ const TextEditor = ({
 
   const handleOptionClick = (option) => {
     setSelectedOption(option);
+    setShowMore(false);
   };
 
   const handleEditorDidMount = (Editor, monaco) => {
