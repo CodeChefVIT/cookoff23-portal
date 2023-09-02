@@ -45,6 +45,7 @@ const TextEditor = ({
   };
 
   // const initialTime = useTimerStore((state) => state.Time);
+  const [selectedLanguages, setSelectedLanguages] = useState({});
   const [fileName, setFileName] = useState("script.py");
   const editorRef = useRef(null);
   const file = files[fileName];
@@ -89,9 +90,22 @@ const TextEditor = ({
     }
   }, [questionId]);
 
+  useEffect(() => {
+    // Retrieve the selected language from state for the current question
+    const selectedLanguage = selectedLanguages[questionId];
+    if (selectedLanguage) {
+      setFileName(selectedLanguage);
+    }
+  }, [questionId, selectedLanguages]);
+
   const handleOptionClick = (option) => {
     setSelectedOption(option);
     setShowMore(false);
+
+    setSelectedLanguages((prevSelectedLanguages) => ({
+      ...prevSelectedLanguages,
+      [questionId]: option,
+    }));
   };
 
   const handleEditorDidMount = (Editor, monaco) => {
@@ -151,9 +165,7 @@ const TextEditor = ({
             <div className="relative">
               <div className="h-8 w-40 bg-[#0d0d0d] flex border border-gray-200 rounded items-center">
                 <input
-                  value={selectedOption.substring(
-                    selectedOption.lastIndexOf(".") + 1
-                  )}
+                  value={file.name}
                   name="select"
                   id="select"
                   className="px-2  appearance-none bg-[#0d0d0d] outline-none text-white w-full"
