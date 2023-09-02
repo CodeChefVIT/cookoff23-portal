@@ -8,7 +8,7 @@ const TestComplete = () => {
   
   function returnToDashboard() {
     const user = router.query.user;
-    const fullPath = `/${user}`;
+    const fullPath = `/user`;
     router.push(fullPath);
   }
   return (

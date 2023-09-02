@@ -1,36 +1,63 @@
 import { easeInOut, motion } from "framer-motion";
 import { useFormik } from "formik";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
+import useTokenStore from "@/store/tokenProvider";
+import axios from "axios";
 
 const validate = (values) => {
   const errors = {};
-  if (!values.username) {
-    errors.username = "Username Required";
-  } else if (values.username.length > 15) {
-    errors.username = "Must be 15 characters or less";
+  if (!values.email) {
+    errors.email = "email Required";
+    // } else if (values.email.length > 15) {
+    //   errors.email = "Must be 15 characters or less";
+    // }
   }
-
   if (!values.password) {
     errors.password = "Password Required";
-  } else if (!/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{5,}$/i.test(values.password)) {
-    errors.password = "Invalid Password";
   }
+  // } else if (!/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{5,}$/i.test(values.password)) {
+  //   errors.password = "Invalid Password";
+  // }
 
   return errors;
 };
 
 function Login() {
   const router = useRouter();
+  const access_token = useTokenStore((state) => state.access_token);
+  useEffect(() => {
+    if (access_token) {
+      router.push("/user");
+    }
+  }, [access_token, router]);
   const formik = useFormik({
     initialValues: {
-      username: "",
+      email: "",
       password: "",
     },
     validate,
     onSubmit: (values) => {
-      const fullPath = `/${values.username}`;
-      // alert(JSON.stringify(values, null, 2));
-      router.push(fullPath);
+      console.log(values);
+      try {
+        axios
+          .post("https://api-cookoff-prod.codechefvit.com/auth/login", values)
+          .then((response) => {
+            useTokenStore.setState({
+              access_token: response.data.accessToken,
+            });
+            localStorage.setItem("access_token", response.data.accessToken);
+            localStorage.setItem("refresh_token", response.data.refreshToken);
+          })
+          .then(() => {
+            console.log("login successful");
+            router.push("/user");
+          });
+      } catch {
+        (error) => {
+          console.log("Login failed: " + error);
+        };
+      }
     },
   });
 
@@ -47,13 +74,17 @@ function Login() {
             <div className="mb-[40px]">
               <input
                 className="w-full py-[18px] px-[33px] text-[#D9D9D999] bg-[#1F1F1F] rounded-[25px] text-[22px] font-semibold"
-                id="username"
+                id="email"
                 type="text"
-                placeholder="Username"
+                placeholder="email"
                 onChange={formik.handleChange}
-                value={formik.values.username}
+                value={formik.values.email}
               />
-              {formik.errors.username ? <div className="text-[#D9D9D999] mt-1 ml-2">{formik.errors.username}</div> : null}
+              {formik.errors.email ? (
+                <div className="text-[#D9D9D999] mt-1 ml-2">
+                  {formik.errors.email}
+                </div>
+              ) : null}
             </div>
             <div className="mb-6">
               <input
@@ -64,7 +95,11 @@ function Login() {
                 onChange={formik.handleChange}
                 value={formik.values.password}
               />
-              {formik.errors.password ? <div className="text-[#D9D9D999] mt-1 ml-2">{formik.errors.password}</div> : null}
+              {formik.errors.password ? (
+                <div className="text-[#D9D9D999] mt-1 ml-2">
+                  {formik.errors.password}
+                </div>
+              ) : null}
             </div>
             <div className="flex items-center justify-center">
               <button
@@ -79,5 +114,5 @@ function Login() {
       </motion.div>
     </div>
   );
-};
+}
 export default Login;

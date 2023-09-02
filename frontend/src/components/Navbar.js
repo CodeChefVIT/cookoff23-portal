@@ -1,17 +1,49 @@
 import Image from "next/image";
 import cookoff from "../assets/cook-head.svg";
-import menu from "../assets/menu-icon.svg";
 import profile from "../assets/profile-icon.svg";
-import Link from "next/link";
 import { useState, useEffect } from "react";
 import CountdownTimer from "./countdownTimer";
 import { useRouter } from "next/router";
+import useTokenStore from "@/store/tokenProvider";
+import axios from "axios";
+
 const Navbar = () => {
   const router = useRouter();
+
   const [isTestPortal, setIsTestPortal] = useState(false);
   useEffect(() => {
     setIsTestPortal(router.pathname.includes("testPortal"));
   }, [router.pathname]);
+
+  function handleLogout() {
+    const access_token = localStorage.getItem("access_token");
+    console.log(access_token);
+    try {
+      axios
+        .post(
+          "https://api-cookoff-prod.codechefvit.com/auth/logout",
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${access_token}`,
+            },
+          }
+        )
+        .then((response) => {
+          console.log(response);
+          useTokenStore.setState({ access_token: "" });
+          localStorage.removeItem("access_token");
+          localStorage.removeItem("refresh_token");
+        })
+        .then(() => {
+          router.push("/login");
+        });
+    } catch {
+      (error) => {
+        console.log("Logout failed: " + error);
+      };
+    }
+  }
   return (
     <>
       <div className="flex justify-between items-center h-[115px]">
@@ -29,11 +61,12 @@ const Navbar = () => {
           <Image src={cookoff} quality={100} alt="Cook-Off 8.0" />
         </div>
         <div className=" flex mx-5">
-          <Link href="/login">
-            <button className="text-[#C1BBB3] font-[700] px-[45px] py-[11px] mr-[30px] flex-shrink-0 border-none bg-[#1f1f1f] rounded-[25px]">
-              Logout
-            </button>
-          </Link>
+          <button
+            className="text-[#C1BBB3] font-[700] px-[45px] py-[11px] mr-[30px] flex-shrink-0 border-none bg-[#1f1f1f] rounded-[25px]"
+            onClick={handleLogout}
+          >
+            Logout
+          </button>
 
           <button>
             <Image src={profile} quality={100} alt="user" />

@@ -12,7 +12,7 @@ function EditorWindow(props) {
   const router = useRouter();
   const initialTime = useTimerStore((state) => state.Time);
   const user = router.query.user;
-  const fullPath = `/${user}/Testcomplete`;
+  const fullPath = `/user/Testcomplete`;
   const [runTestCases, setRunTestCases] = useState(false);
   const [questionRun, setQuestionRun] = useState(new Set());
   const [questionSubmit, setQuestionSubmit] = useState(new Set());
