@@ -51,7 +51,7 @@ const TextEditor = ({
   const file = files[fileName];
   const [codeValue, setCodeValue] = useState(file.value);
   const [showMore, setShowMore] = useState(false);
-  const [selectedOption, setSelectedOption] = useState("py");
+  const [selectedOption, setSelectedOption] = useState({});
 
   const options = [
     "script.java",
@@ -67,7 +67,6 @@ const TextEditor = ({
   const handleEditorChange = (value, event) => {
     setCodeValue(value);
 
-    // Save code value to local storage
     const existingCodeData = JSON.parse(localStorage.getItem("codeData")) || {};
     const updatedCodeData = {
       ...existingCodeData,
@@ -91,7 +90,6 @@ const TextEditor = ({
   }, [questionId]);
 
   useEffect(() => {
-    // Retrieve the selected language from state for the current question
     const selectedLanguage = selectedLanguages[questionId];
     if (selectedLanguage) {
       setFileName(selectedLanguage);
@@ -165,7 +163,7 @@ const TextEditor = ({
             <div className="relative">
               <div className="h-8 w-40 bg-[#0d0d0d] flex border border-gray-200 rounded items-center">
                 <input
-                  value={file.name}
+                  value={selectedLanguages[questionId] || "select"}
                   name="select"
                   id="select"
                   className="px-2  appearance-none bg-[#0d0d0d] outline-none text-white w-full"
