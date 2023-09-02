@@ -45,12 +45,13 @@ const TextEditor = ({
   };
 
   // const initialTime = useTimerStore((state) => state.Time);
+  const [selectedLanguages, setSelectedLanguages] = useState({});
   const [fileName, setFileName] = useState("script.py");
   const editorRef = useRef(null);
   const file = files[fileName];
   const [codeValue, setCodeValue] = useState(file.value);
   const [showMore, setShowMore] = useState(false);
-  const [selectedOption, setSelectedOption] = useState("py");
+  const [selectedOption, setSelectedOption] = useState({});
 
   const options = [
     "script.java",
@@ -66,7 +67,6 @@ const TextEditor = ({
   const handleEditorChange = (value, event) => {
     setCodeValue(value);
 
-    // Save code value to local storage
     const existingCodeData = JSON.parse(localStorage.getItem("codeData")) || {};
     const updatedCodeData = {
       ...existingCodeData,
@@ -89,9 +89,21 @@ const TextEditor = ({
     }
   }, [questionId]);
 
+  useEffect(() => {
+    const selectedLanguage = selectedLanguages[questionId];
+    if (selectedLanguage) {
+      setFileName(selectedLanguage);
+    }
+  }, [questionId, selectedLanguages]);
+
   const handleOptionClick = (option) => {
     setSelectedOption(option);
     setShowMore(false);
+
+    setSelectedLanguages((prevSelectedLanguages) => ({
+      ...prevSelectedLanguages,
+      [questionId]: option,
+    }));
   };
 
   const handleEditorDidMount = (Editor, monaco) => {
@@ -151,9 +163,7 @@ const TextEditor = ({
             <div className="relative">
               <div className="h-8 w-40 bg-[#0d0d0d] flex border border-gray-200 rounded items-center">
                 <input
-                  value={selectedOption.substring(
-                    selectedOption.lastIndexOf(".") + 1
-                  )}
+                  value={selectedLanguages[questionId] || "select"}
                   name="select"
                   id="select"
                   className="px-2  appearance-none bg-[#0d0d0d] outline-none text-white w-full"
