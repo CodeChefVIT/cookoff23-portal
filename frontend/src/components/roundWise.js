@@ -7,7 +7,7 @@ function RoundWise() {
   const router = useRouter();
   function startTest() {
     const user = router.query.user;
-    const fullPath = `/${user}/testPortal`;
+    const fullPath = `/user/testPortal`;
     router.push(fullPath);
   }
   return (
