@@ -28,6 +28,7 @@ function Login() {
   const router = useRouter();
   const access_token = useTokenStore((state) => state.access_token);
   useEffect(() => {
+    const access_token = localStorage.getItem("access_token");
     if (access_token) {
       router.push("/user");
     }
