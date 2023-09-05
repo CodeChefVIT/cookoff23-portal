@@ -1,14 +1,14 @@
 import { easeInOut, motion } from "framer-motion";
 import { useFormik } from "formik";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import useTokenStore from "@/store/tokenProvider";
 import axios from "axios";
 
 const validate = (values) => {
   const errors = {};
   if (!values.email) {
-    errors.email = "email Required";
+    errors.email = "Email Required";
     // } else if (values.email.length > 15) {
     //   errors.email = "Must be 15 characters or less";
     // }
@@ -24,6 +24,7 @@ const validate = (values) => {
 };
 
 function Login() {
+  const [error, setError] = useState(false);
   const router = useRouter();
   const access_token = useTokenStore((state) => state.access_token);
   useEffect(() => {
@@ -41,18 +42,34 @@ function Login() {
       console.log(values);
       try {
         axios
-          .post("https://api-cookoff-prod.codechefvit.com/auth/login", values)
+          .post("http://localhost:8080/auth/login", values)
           .then((response) => {
-            useTokenStore.setState({
-              access_token: response.data.accessToken,
-            });
-            localStorage.setItem("access_token", response.data.accessToken);
-            localStorage.setItem("refresh_token", response.data.refreshToken);
+            // useTokenStore.setState({
+            //   access_token: response.data.accessToken,
+            // });
+            // localStorage.setItem("access_token", response.data.accessToken);
+            // localStorage.setItem("refresh_token", response.data.refreshToken);
+            if (response.status === 200) {
+              // Login was successful
+
+              useTokenStore.setState({
+                access_token: response.data.accessToken,
+              });
+              localStorage.setItem("access_token", response.data.accessToken);
+              localStorage.setItem("refresh_token", response.data.refreshToken);
+              router.push("/user");
+            }
           })
-          .then(() => {
-            console.log("login successful");
-            router.push("/user");
+          .catch((error) => {
+            if (error.response && error.response.status === 400) {
+              setError(true);
+              console.log("Invalid credentials");
+            }
           });
+        // .then(() => {
+        //   console.log("login successful");
+        //   router.push("/user");
+        // });
       } catch {
         (error) => {
           console.log("Login failed: " + error);
@@ -70,6 +87,11 @@ function Login() {
         className="flex justify-center items-center h-screen"
       >
         <div>
+          {error && (
+            <div className="text-[#D9D9D999] mb-10 text-center">
+              Invalid credentials
+            </div>
+          )}
           <form className="w-[400px]" onSubmit={formik.handleSubmit}>
             <div className="mb-[40px]">
               <input

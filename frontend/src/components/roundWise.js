@@ -3,13 +3,14 @@ import eye from "./../assets/normaleye.svg";
 import Image from "next/image";
 import { useRouter } from "next/router";
 
-function RoundWise() {
+function RoundWise(props) {
+  const { round, score,qArr } = props;
   const router = useRouter();
   function startTest() {
-    const user = router.query.user;
     const fullPath = `/user/testPortal`;
     router.push(fullPath);
   }
+  
   return (
     <div className="w-[65%] ml-10 h-[83vh] overflow-auto">
       {questionData.map(
@@ -20,7 +21,7 @@ function RoundWise() {
                 <div className="bg-[#242424] flex justify-between text-lg">
                   <div className="text-[#B7AB98] flex gap-2">
                     <h1 id="font_proxima" className="ml-2">
-                      ROUND {index + 1}
+                      ROUND {round}
                     </h1>
                     <Image src={eye} quality={100} width={15} alt="SeeRound" />
                   </div>
@@ -43,27 +44,22 @@ function RoundWise() {
                       className="bg-[#4d4d4d] mt-2 rounded-md text-center text-[#C1BBB3] px-1"
                       id="font_proxima"
                     >
-                      Score:&nbsp;
-                      0
-                      /
-                      {question.qdata.reduce(
-                        (sum, question) => sum + parseFloat(question.points),
-                        0
-                      )}
+                      TotalScore:&nbsp;
+                      {score}
                     </div>
                   </div>
                   <div className="mt-4">
-                    {question.qdata.map((question2, index2) => (
+                    {qArr.map((question2, index2) => (
                       <div
                         className="bg-[#363434] flex w-[550px] justify-between h-[35px] items-center mb-4 rounded-lg mr-2 text-md font-light"
                         id="font_ITC"
                         key={index2}
                       >
                         <div className="text-[#d9d9d9] ml-2">
-                          {index2 + 1}. {question2.objective}
+                          {index2 + 1}. {question2.name}
                         </div>
                         <div className="bg-[#EDEDED] text-black mr-2 rounded-md px-1">
-                          {question2.points}
+                          {question2.points + " points"}
                         </div>
                       </div>
                     ))}

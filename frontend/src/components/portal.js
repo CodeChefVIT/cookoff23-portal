@@ -1,14 +1,51 @@
 import Question from "@/components/questions";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import questionData, { compilationError } from "../../Dummy_Data";
 import EditorWindow from "./EditorWindow";
+import axios from "axios";
 
-export default function Portal() {
+export default function Portal(props) {
+  const {round} = props;
   const length = questionData.length;
   const [clickedButton, setClickedButton] = useState(0);
+  const [qArr, setQArr] = useState([]);
   function handleClick(index) {
     setClickedButton(index);
   }
+  useEffect(() => {
+    const access_token = localStorage.getItem("access_token");
+    const round = localStorage.getItem("round");
+    try {
+      axios
+        .post("http://localhost:8080/ques/getRound", { round: round },{
+          headers: {
+            Authorization: `Bearer ${access_token}`,
+          },
+        })
+        .then((response) => {
+          const responseData = response.data;
+          if (responseData && responseData.length > 0) {
+            setQArr(responseData);
+          } else {
+            console.log("No data received from the API.");
+          }
+        })
+        .catch((error) => {
+          if (error.response && error.response.status === 400) {
+            console.log("400");
+          }
+        });
+    } catch {
+      (error) => {
+        console.log(error);
+      };
+    }
+  },[]);
+
+  useEffect(() => {
+    console.log("qArr:", qArr);
+  }, [qArr]);
+
   return (
     <div className="flex h-[82vh]">
       <div className="flex flex-col">
@@ -28,18 +65,21 @@ export default function Portal() {
         ))}
       </div>
 
-      <Question
-        objective={questionData[1].qdata[clickedButton].objective}
-        points={questionData[1].qdata[clickedButton].points}
-        task={questionData[1].qdata[clickedButton].task}
-        inputFormat={questionData[1].qdata[clickedButton].inputFormat}
-        outputFormat={questionData[1].qdata[clickedButton].outputFormat}
-        sampleInput1={questionData[1].qdata[clickedButton].sampleInput[0]}
-        sampleOutput1={questionData[1].qdata[clickedButton].sampleOutput[0]}
-        sampleInput2={questionData[1].qdata[clickedButton].sampleInput[1]}
-        sampleOutput2={questionData[1].qdata[clickedButton].sampleOutput[1]}
-        explanation={questionData[1].qdata[clickedButton].explanation}
-      />
+      {qArr.length > 0 && (<Question
+        objective={qArr[clickedButton].name}
+        points={qArr[clickedButton].points}
+        task={qArr[clickedButton].objective}
+        inputFormat={qArr[clickedButton].inputFormat}
+        outputFormat={qArr[clickedButton].outputFormat}
+        sampleInput1={qArr[clickedButton].testCases[0].input}
+        sampleOutput1={qArr[clickedButton].testCases[0].expectedOutput}
+        explanation1={qArr[clickedButton].testCases[0].explanation}
+        sampleInput2={qArr[clickedButton].testCases[1].input}
+        sampleOutput2={qArr[clickedButton].testCases[1].expectedOutput}
+        explanation2={qArr[clickedButton].testCases[1].explanation}
+        constraints={qArr[clickedButton].constraints}
+      />)}
+      
       <EditorWindow
         questionId={clickedButton}
         clickedButton={clickedButton}

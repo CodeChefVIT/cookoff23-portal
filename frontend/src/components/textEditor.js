@@ -152,7 +152,7 @@ const TextEditor = ({
   };
 
   return (
-    <div className="h-[90vh] w-full mb-7">
+    <div className="h-[90vh] w-full mb-7 2xl:mb-4">
       <div className="h-[48px] p-2 bg-[#0d0d0d]">
         <div className="max-w-[270px] ml-3">
           <div className="flex items-center justify-between">

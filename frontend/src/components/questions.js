@@ -10,12 +10,14 @@ function Question(props) {
     points,
     task,
     inputFormat,
-    outputformat,
+    outputFormat,
     sampleInput1,
     sampleOutput1,
+    explanation1,
     sampleInput2,
     sampleOutput2,
-    explanation,
+    explanation2,
+    constraints,
   } = props;
 
   return (
@@ -31,7 +33,7 @@ function Question(props) {
           className="bg-[#EDEDED] w-fit text-black rounded px-2 my-2 font-semibold"
           id="points"
         >
-          {points}
+          {points+ " points"}
         </div>
         <div className="text-[#EB5939] font-semibold py-3 text-lg" id="problem">
           Problem
@@ -41,16 +43,23 @@ function Question(props) {
         </div>
         <div>
           <h2 className="font-semibold my-2">Input format</h2>
-          <ReactMarkdown remarkPlugins={[remarkGfm]}>
-            {inputFormat}
-          </ReactMarkdown>
+          {inputFormat.map((format, index) => (
+            <ReactMarkdown remarkPlugins={[remarkGfm]} key={index}>
+              {format}
+            </ReactMarkdown>
+          ))}
         </div>
-        <div>
-          <h2 className="font-semibold my-2">Output format</h2>
-          <ReactMarkdown remarkPlugins={[remarkGfm]}>
-            {outputformat}
-          </ReactMarkdown>
-        </div>
+        {outputFormat.length > 0 && (
+          <div>
+            <h2 className="font-semibold my-2">Output format</h2>
+            {outputFormat.map((format, index) => (
+              <ReactMarkdown remarkPlugins={[remarkGfm]} key={index}>
+                {format}
+              </ReactMarkdown>
+            ))}
+          </div>
+        )}
+
         <div>
           <h2 className="font-semibold my-2">Sample Input 1</h2>
           <div className="bg-neutral-800 rounded-sm whitespace-pre pl-2 py-2 flex justify-between">
@@ -70,6 +79,12 @@ function Question(props) {
           <div className="bg-neutral-800 rounded whitespace-pre pl-2 py-2">
             <ReactMarkdown remarkPlugins={[remarkGfm]}>
               {sampleOutput1}
+            </ReactMarkdown>
+          </div>
+          <div>
+            <h2 className="font-semibold my-2 mt-3">Explanation</h2>
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+              {explanation1}
             </ReactMarkdown>
           </div>
           <h2 className="font-semibold my-2">Sample Input 2</h2>
@@ -96,8 +111,17 @@ function Question(props) {
         <div>
           <h2 className="font-semibold my-2 mt-3">Explanation</h2>
           <ReactMarkdown remarkPlugins={[remarkGfm]}>
-            {explanation}
+            {explanation2}
           </ReactMarkdown>
+        </div>
+        <div>
+          <h2 className="font-semibold my-2 mt-3">Constraints</h2>
+
+          {constraints.map((format, index) => (
+            <ReactMarkdown remarkPlugins={[remarkGfm]} key={index}>
+              {format}
+            </ReactMarkdown>
+          ))}
         </div>
       </div>
     </div>
