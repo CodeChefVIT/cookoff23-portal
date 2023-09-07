@@ -8,7 +8,7 @@ function TokenRefresher() {
     const refresh_token = localStorage.getItem("refresh_token");
     const refreshTokenInterval = setInterval(() => {
       axios
-        .post("https://api-cookoff-prod.codechefvit.com/auth/refresh", {
+        .post("http://localhost:8080/auth/refresh", {
           refreshToken: refresh_token,
         })
         .then((response) => {
@@ -16,7 +16,9 @@ function TokenRefresher() {
             access_token: response.data.accessToken,
           });
           localStorage.setItem("access_token", response.data.accessToken);
-          console.log("Access token refreshed." + access_token);
+        })
+        .then(() => {
+          console.log("Token refreshed");
         })
         .catch((error) => {
           console.error("Token refresh failed:", error);

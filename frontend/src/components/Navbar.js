@@ -17,11 +17,10 @@ const Navbar = () => {
 
   function handleLogout() {
     const access_token = localStorage.getItem("access_token");
-    console.log(access_token);
     try {
       axios
         .post(
-          "https://api-cookoff-prod.codechefvit.com/auth/logout",
+          "http://localhost:8080/auth/logout",
           {},
           {
             headers: {
@@ -30,7 +29,6 @@ const Navbar = () => {
           }
         )
         .then((response) => {
-          console.log(response);
           useTokenStore.setState({ access_token: "" });
           localStorage.removeItem("access_token");
           localStorage.removeItem("refresh_token");

@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 
 export default function TestPortal() {
   const router = useRouter();
+  const round = router.query.round;
   useEffect(() => {
     const handleBackButton = (e) => {
       e.preventDefault();

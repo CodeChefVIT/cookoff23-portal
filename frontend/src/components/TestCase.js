@@ -9,49 +9,107 @@ import lock from "../assets/lock.svg";
 import { testcasesdata } from "../../Dummy_Data";
 import { useState, useEffect, useRef } from "react";
 import { customTestCaseData } from "../../Dummy_Data";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import axios from "axios";
 
-const TestCase = ({ clickedButton }) => {
+const TestCase = ({ clickedButton, runData, code, program }) => {
   const containerRef = useRef(null);
   const customTestCaseRef = useRef(null);
   const [customInput, setCustomInput] = useState("");
   const [testCaseIndex, setTestCaseIndex] = useState(0);
   const [testCaseClicked, setTestCaseClicked] = useState(0);
   const [customTestCase, setCustomTestCase] = useState(null);
-  const [customTestCaseCorrect, setCustomTestCaseCorrect] = useState(null);
+  const [customOutput, setCustomOutput] = useState();
+  const [runToken, setRunToken] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-  const totalTestCases = testcasesdata[clickedButton].testcases.length;
+  const totalTestCases = runData.length;
 
-  const failedTestCases = testcasesdata[clickedButton].testcases.filter(
-    (testcase) => testcase.status === "fail"
+  const failedTestCases = runData.filter(
+    (testcase) => testcase.status_id === 4
   ).length;
 
-  const totalVisibleCases = testcasesdata[clickedButton].testcases.filter(
-    (testcase) => testcase.hidden === false
-  ).length;
+  // const totalVisibleCases = testcasesdata[clickedButton].testcases.filter(
+  //   (testcase) => testcase.hidden === false
+  // ).length;
 
-  const totalHiddenCases = testcasesdata[clickedButton].testcases.filter(
-    (testcase) => testcase.hidden === true
-  ).length;
+  // const totalHiddenCases = runData.filter(
+  //   (testcase) => testcase.hidden === true
+  // ).length;
 
   useEffect(() => {
     setTestCaseClicked(0);
     setTestCaseIndex(0);
     setCustomTestCase(null);
-    setCustomTestCaseCorrect(null);
     containerRef.current.scrollIntoView();
   }, [clickedButton]);
 
+  useEffect(() => {
+    function fetchSubmit() {
+      try {
+        console.log(runToken);
+        axios
+          .get(
+            "http://139.59.4.43:2358/submissions/" +
+              runToken +
+              "?base64_encoded=false&fields=stdout,stderr,status_id,language_id"
+          )
+          .then((response) => {
+            console.log(response.data);
+            if (
+              response.data.status_id === 1 ||
+              response.data.status_id === 2
+            ) {
+              setLoading(true);
+              setTimeout(() => {
+                fetchSubmit();
+              }, 3000);
+            } else {
+              setLoading(false);
+              setCustomOutput(response.data.stdout);
+            }
+          });
+      } catch {
+        (error) => {
+          console.log(error);
+        };
+      }
+    }
+    if (runToken) {
+      fetchSubmit();
+    }
+  }, [runToken]);
+
   function handleSubmit(event) {
     event.preventDefault();
-    console.log(customInput, clickedButton);
-    if (
-      customTestCaseData[clickedButton].expectedOutput ===
-      customTestCaseData[clickedButton].output
-    ) {
-      setCustomTestCaseCorrect(true);
-    } else {
-      setCustomTestCaseCorrect(false);
+    console.log(customInput);
+    // const cIn = customInput.replace(/\n/g, "\\n");
+    // console.log(cIn);
+    try {
+      axios
+        .post(
+          "http://139.59.4.43:2358/submissions/?base64_encoded=false",
+
+          {
+            language_id: code,
+            source_code: program,
+            stdin: customInput,
+          }
+        )
+        .then((response) => {
+          console.log(response.data);
+          if (response.status === 201) {
+            setRunToken(response.data.token);
+          }
+        });
+    } catch {
+      (error) => {
+        console.log(error);
+      };
     }
+    setLoading(true);
+    setCustomOutput(1);
   }
 
   return (
@@ -77,58 +135,12 @@ const TestCase = ({ clickedButton }) => {
             </button>
           </div> */}
         </div>
-        <div className="flex h-[400px] bg-[#161616] mx-5">
+        <div className="flex h-fit bg-[#161616] mx-5 pb-5">
           <div className="w-[30%] bg-[#1f1f1f]">
             <div>
-              {testcasesdata[clickedButton].testcases.map((testcase, index) => (
+              {runData.map((testcase, index) => (
                 <div key={index}>
-                  {testcase.hidden ? (
-                    testcase.status === "fail" ? (
-                      <button
-                        className="flex items-center px-[30px] py-4 text-[20px] font-bold w-full hover:bg-[#161616]"
-                        onClick={() => {
-                          setTestCaseIndex(index);
-                          setTestCaseClicked(index);
-                          setCustomTestCase(null);
-                        }}
-                        style={{
-                          background: testCaseClicked === index && "#161616",
-                        }}
-                      >
-                        <Image src={wrong} alt="wrong" quality={100} />
-                        <div className="text-[#EB3939] mx-3">
-                          Test Case {index}
-                        </div>
-                        <Image
-                          src={redhiddenEye}
-                          quality={100}
-                          alt="hiddentestcasefailed"
-                        />
-                      </button>
-                    ) : (
-                      <button
-                        className="flex items-center px-[30px] py-4 text-[20px] font-bold w-full hover:bg-[#161616]"
-                        onClick={() => {
-                          setTestCaseIndex(index);
-                          setTestCaseClicked(index);
-                          setCustomTestCase(null);
-                        }}
-                        style={{
-                          background: testCaseClicked === index && "#161616",
-                        }}
-                      >
-                        <Image src={correct} alt="wrong" quality={100} />
-                        <div className="text-[#1BA94C] mx-3">
-                          Test Case {index}
-                        </div>
-                        <Image
-                          src={greenhiddenEye}
-                          quality={100}
-                          alt="hiddentestcasepassed"
-                        />
-                      </button>
-                    )
-                  ) : testcase.status === "fail" ? (
+                  {testcase.status_id === 4 ? (
                     <button
                       className="flex items-center px-[30px] py-4 text-[20px] font-bold w-full hover:bg-[#161616]"
                       onClick={() => {
@@ -215,101 +227,54 @@ const TestCase = ({ clickedButton }) => {
                 >
                   Run
                 </button>
-                {customTestCaseCorrect === true && (
-                  <div className="mb-10">
-                    <div className="">
-                      <div className="mt-[20px] mb-[4px] font-bold text-lg text-[#1BA94C]">
-                        Output
-                      </div>
-                      <div
-                        id="cascadia"
-                        className="bg-[#0d0d0d] text-white py-5 px-7"
-                      >
-                        {customTestCaseData[clickedButton].output}
-                      </div>
-                    </div>
-                    <div className="">
-                      <div className="mt-[20px] mb-[4px] font-bold text-lg text-[#1BA94C]">
-                        Expected Output
-                      </div>
-                      <div
-                        id="cascadia"
-                        className="bg-[#0d0d0d] text-white py-5 px-7"
-                      >
-                        {customTestCaseData[clickedButton].expectedOutput}
+                { customOutput && 
+                  (loading ? (
+                    <div className="text-white text-center mt-10">loading...</div>
+                  ) : (
+                    <div className="mb-10">
+                      <div className="">
+                        <div className="mt-[20px] mb-[4px] font-bold text-lg text-[#1BA94C]">
+                          Output
+                        </div>
+                        <div
+                          id="cascadia"
+                          className="bg-[#0d0d0d] text-white py-5 px-7"
+                        >
+                          {customOutput}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                )}
-                {customTestCaseCorrect === false && (
-                  <div className="mb-10">
-                    <div className="">
-                      <div className="mt-[20px] mb-[4px] font-bold text-lg text-[#EB3939]">
-                        Output
-                      </div>
-                      <div
-                        id="cascadia"
-                        className="bg-[#0d0d0d] text-white py-5 px-7"
-                      >
-                        {customTestCaseData[clickedButton].output}
-                      </div>
-                    </div>
-                    <div className="">
-                      <div className="mt-[20px] mb-[4px] font-bold text-lg text-[#EB3939]">
-                        Expected Output
-                      </div>
-                      <div
-                        id="cascadia"
-                        className="bg-[#0d0d0d] text-white py-5 px-7"
-                      >
-                        {customTestCaseData[clickedButton].expectedOutput}
-                      </div>
-                    </div>
-                  </div>
-                )}
+                  ))}
               </div>
             </div>
           ) : (
             <div className="w-[70%]">
               <div className="mx-10">
                 <div className="mt-[20px] mb-[4px] font-bold text-lg text-[#C1BBB3]">
-                  Compile Message
+                  Input
                 </div>
                 <div
                   id="cascadia"
-                  className="bg-[#0d0d0d] text-white py-5 px-7"
+                  className="bg-[#0d0d0d] text-white py-5 px-7 whitespace-pre"
                 >
-                  {
-                    testcasesdata[clickedButton].testcases[testCaseIndex]
-                      .compileMessage
-                  }
+                  <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                    {runData[testCaseIndex].stdin}
+                  </ReactMarkdown>
                 </div>
               </div>
-              {testcasesdata[clickedButton].testcases[testCaseIndex].hidden && (
-                <div className="flex justify-center align-middle mt-[110px] ml-5">
-                  <div className="">
-                    <Image src={lock} quality={100} alt="locked" />
-                  </div>
-                  <div className="text-[#99948E] text-[28px] font-bold mx-5 ">
-                    Hidden Test Case
-                  </div>
-                </div>
-              )}
-              {!testcasesdata[clickedButton].testcases[testCaseIndex]
-                .hidden && (
+              {
                 <div>
                   <div className="mx-10">
                     <div className="mt-[20px] mb-[4px] font-bold text-lg text-[#C1BBB3]">
-                      Input
+                      Expected Output
                     </div>
                     <div
                       id="cascadia"
-                      className="bg-[#0d0d0d] text-white py-5 px-7"
+                      className="bg-[#0d0d0d] text-white py-5 px-7 whitespace-pre"
                     >
-                      {
-                        testcasesdata[clickedButton].testcases[testCaseIndex]
-                          .input
-                      }
+                      <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                        {runData[testCaseIndex].expected_output}
+                      </ReactMarkdown>
                     </div>
                   </div>
                   <div className="mx-10">
@@ -318,16 +283,15 @@ const TestCase = ({ clickedButton }) => {
                     </div>
                     <div
                       id="cascadia"
-                      className="bg-[#0d0d0d] text-white py-5 px-7"
+                      className="bg-[#0d0d0d] text-white py-5 px-7 whitespace-pre"
                     >
-                      {
-                        testcasesdata[clickedButton].testcases[testCaseIndex]
-                          .output
-                      }
+                      <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                        {runData[testCaseIndex].stdout}
+                      </ReactMarkdown>
                     </div>
                   </div>
                 </div>
-              )}
+              }
             </div>
           )}
         </div>
