@@ -5,7 +5,7 @@ import EditorWindow from "./EditorWindow";
 import axios from "axios";
 
 export default function Portal(props) {
-  const {round} = props;
+  const { round } = props;
   const length = questionData.length;
   const [clickedButton, setClickedButton] = useState(0);
   const [qArr, setQArr] = useState([]);
@@ -17,11 +17,15 @@ export default function Portal(props) {
     const round = localStorage.getItem("round");
     try {
       axios
-        .post("http://localhost:8080/ques/getRound", { round: round },{
-          headers: {
-            Authorization: `Bearer ${access_token}`,
-          },
-        })
+        .post(
+          "http://localhost:8080/ques/getRound",
+          { round: round },
+          {
+            headers: {
+              Authorization: `Bearer ${access_token}`,
+            },
+          }
+        )
         .then((response) => {
           const responseData = response.data;
           if (responseData && responseData.length > 0) {
@@ -40,7 +44,7 @@ export default function Portal(props) {
         console.log(error);
       };
     }
-  },[]);
+  }, []);
 
   useEffect(() => {
     console.log("qArr:", qArr);
@@ -65,28 +69,36 @@ export default function Portal(props) {
         ))}
       </div>
 
-      {qArr.length > 0 && (<Question
-        objective={qArr[clickedButton].name}
-        points={qArr[clickedButton].points}
-        task={qArr[clickedButton].objective}
-        inputFormat={qArr[clickedButton].inputFormat}
-        outputFormat={qArr[clickedButton].outputFormat}
-        sampleInput1={qArr[clickedButton].testCases[0].input}
-        sampleOutput1={qArr[clickedButton].testCases[0].expectedOutput}
-        explanation1={qArr[clickedButton].testCases[0].explanation}
-        sampleInput2={qArr[clickedButton].testCases[1].input}
-        sampleOutput2={qArr[clickedButton].testCases[1].expectedOutput}
-        explanation2={qArr[clickedButton].testCases[1].explanation}
-        constraints={qArr[clickedButton].constraints}
-      />)}
-      
-      <EditorWindow
-        questionId={clickedButton}
-        clickedButton={clickedButton}
-        error={compilationError[clickedButton].error}
-        message={compilationError[clickedButton].compileMessage}
-        exitStatus={compilationError[clickedButton].exitStatus}
-      />
+      {qArr.length > 0 && (
+        <Question
+          objective={qArr[clickedButton].name}
+          points={qArr[clickedButton].points}
+          task={qArr[clickedButton].objective}
+          inputFormat={qArr[clickedButton].inputFormat}
+          outputFormat={qArr[clickedButton].outputFormat}
+          sampleInput1={qArr[clickedButton].testCases[0].input}
+          sampleOutput1={qArr[clickedButton].testCases[0].expectedOutput}
+          explanation1={qArr[clickedButton].testCases[0].explanation}
+          sampleInput2={qArr[clickedButton].testCases[1].input}
+          sampleOutput2={qArr[clickedButton].testCases[1].expectedOutput}
+          explanation2={qArr[clickedButton].testCases[1].explanation}
+          constraints={qArr[clickedButton].constraints}
+        />
+      )}
+      {qArr.length > 0 && (
+        <EditorWindow
+          qArr={qArr}
+          questionId={clickedButton}
+          clickedButton={clickedButton}
+          error={compilationError[clickedButton].error}
+          message={compilationError[clickedButton].compileMessage}
+          exitStatus={compilationError[clickedButton].exitStatus}
+          sampleInput1={qArr[clickedButton].testCases[0].input}
+          sampleInput2={qArr[clickedButton].testCases[1].input}
+          sampleOutput1={qArr[clickedButton].testCases[0].expectedOutput}
+          sampleOutput2={qArr[clickedButton].testCases[1].expectedOutput}
+        />
+      )}
     </div>
   );
 }

@@ -28,6 +28,7 @@ function Dashboard() {
         })
         .catch((error) => {
           if (error.response && error.response.status === 401) {
+            localStorage.removeItem("access_token");
             router.push("/login");
           } else {
             console.log(error);

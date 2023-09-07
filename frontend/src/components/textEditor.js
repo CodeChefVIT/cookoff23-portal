@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Editor } from "@monaco-editor/react";
 import useTimerStore from "@/store/timeProvider";
+import axios from "axios";
 
 const TextEditor = ({
   questionId,
@@ -9,43 +10,60 @@ const TextEditor = ({
   setQuestionSubmit,
   questionRun,
   questionSubmit,
+  expectedOutput1,
+  expectedOutput2,
+  input1,
+  input2,
+  setRunTokens,
+  questionRunArray,
+  setQuestionQuestionRunArray,
+  setCode,
+  setProgram,
 }) => {
   const files = {
     "script.py": {
       name: "Python",
       language: "python",
       value: "n = int(input())\ninteger_list = map(int, input().split())",
+      code: 71,
     },
     "script.java": {
       name: "Java",
       language: "java",
       value:
-        "public class Solution {\n\tpublic static void main(String[] args) {\n\n\t}\n}",
+        "public class Main {\n\tpublic static void main(String[] args) {\n\n\t}\n}",
+      code: 62,
     },
     "script.c": {
       name: "C",
       language: "c",
-      value: "#include <stdio.h>\nint main(){\n\n}",
+      value: "#include <stdio.h>\nint main(){\n\treturn 0;\n}",
+      code: 50,
     },
     "script.cpp": {
       name: "Cpp",
       language: "cpp",
-      value: "#include<iostream>\nclass Solution {\n\n}",
+      value:
+        "#include<iostream>\nusing namespace std;\n\nint main() {\n\treturn 0;\n}",
+      code: 54,
     },
     "script.js": {
       name: "JS",
       language: "javascript",
       value: "function processData(input){\n\n}",
+      code: 63,
     },
     "script.rs": {
       name: "Rust",
       language: "rust",
       value: "impl Solution{\n\n}",
+      code: 73,
     },
   };
 
   // const initialTime = useTimerStore((state) => state.Time);
   const [selectedLanguages, setSelectedLanguages] = useState({});
+  const [langCode, setLangCode] = useState(null);
   const [fileName, setFileName] = useState("script.py");
   const editorRef = useRef(null);
   const file = files[fileName];
@@ -72,6 +90,7 @@ const TextEditor = ({
       ...existingCodeData,
       [questionId]: value,
     };
+    setProgram(updatedCodeData[questionId]);
     localStorage.setItem("codeData", JSON.stringify(updatedCodeData));
   };
 
@@ -118,30 +137,68 @@ const TextEditor = ({
       [questionId]: codeValue,
     };
     localStorage.setItem("codeData", JSON.stringify(updatedCodeData));
-    console.log(codeValue);
 
     // alert(`Code for question ${questionId} stored in local storage.`);
   };
   const handleClickRun = () => {
     getEditorValue();
+    const existingCodeData = JSON.parse(localStorage.getItem("codeData"));
+    const codeValue = existingCodeData[questionId];
+    const langCode = file.code;
+    setCode(langCode);
+    try {
+      axios
+        .post(
+          "http://139.59.4.43:2358/submissions/batch?base64_encoded=false",
+          {
+            submissions: [
+              {
+                language_id: langCode,
+                source_code: codeValue,
+                stdin: input1,
+                expected_output: expectedOutput1,
+              },
+              {
+                language_id: langCode,
+                source_code: codeValue,
+                stdin: input2,
+                expected_output: expectedOutput2,
+              },
+            ],
+          }
+        )
+        .then((response) => {
+          console.log(response.data);
+          if (response.status === 201) {
+            setRunTokens(response.data);
+          }
+        });
+    } catch {
+      (error) => {
+        console.log(error);
+      };
+    }
     setRunTestCases(true);
     if (questionSubmit.has(questionId)) {
-      setQuestionRun((prev) => new Set(prev.add(questionId)));
+      setQuestionRun(questionId);
+      setQuestionQuestionRunArray((prev) => new Set(prev.add(questionId)));
       setQuestionSubmit((prev) => {
         const newSet = new Set(prev);
         newSet.delete(questionId);
         return newSet;
       });
     } else {
-      setQuestionRun((prev) => new Set(prev.add(questionId)));
+      setQuestionRun(questionId);
+      setQuestionQuestionRunArray((prev) => new Set(prev.add(questionId)));
     }
   };
 
   const handleClickSubmit = () => {
     getEditorValue();
-    if (questionRun.has(questionId)) {
+    if (questionRunArray.has(questionId)) {
       setQuestionSubmit((prev) => new Set(prev.add(questionId)));
-      setQuestionRun((prev) => {
+      setQuestionRun(null);
+      setQuestionQuestionRunArray((prev) => {
         const newSet = new Set(prev);
         newSet.delete(questionId);
         return newSet;

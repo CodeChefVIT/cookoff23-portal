@@ -32,7 +32,7 @@ function Login() {
     if (access_token) {
       router.push("/user");
     }
-  }, [access_token, router]);
+  }, []);
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -59,6 +59,12 @@ function Login() {
               localStorage.setItem("access_token", response.data.accessToken);
               localStorage.setItem("refresh_token", response.data.refreshToken);
               router.push("/user");
+            }
+          })
+          .catch((error) => {
+            if (error.response && error.response.status === 400) {
+              setError(true);
+              console.log("Invalid credentials");
             }
           })
           .catch((error) => {
