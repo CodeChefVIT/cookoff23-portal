@@ -3,15 +3,22 @@ import { useState, useEffect } from "react";
 import questionData, { compilationError } from "../../Dummy_Data";
 import EditorWindow from "./EditorWindow";
 import axios from "axios";
+import RefreshToken from "@/utils/RefreshToken";
 
 export default function Portal(props) {
-  const { round } = props;
   const length = questionData.length;
   const [clickedButton, setClickedButton] = useState(0);
   const [qArr, setQArr] = useState([]);
   function handleClick(index) {
     setClickedButton(index);
   }
+  useEffect(() => {
+    async function fetchData() {
+      await RefreshToken();
+    }
+
+    fetchData();
+  }, []);
   useEffect(() => {
     const access_token = localStorage.getItem("access_token");
     const round = localStorage.getItem("round");

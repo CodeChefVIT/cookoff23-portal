@@ -2,11 +2,13 @@ import questionData from "../../Dummy_Data";
 import eye from "./../assets/normaleye.svg";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import RefreshToken from "@/utils/RefreshToken";
 
 function RoundWise(props) {
   const { round, score,qArr } = props;
   const router = useRouter();
-  function startTest() {
+  async function startTest() {
+    await RefreshToken();
     const fullPath = `/user/testPortal`;
     router.push(fullPath);
   }
