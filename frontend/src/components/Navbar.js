@@ -6,6 +6,8 @@ import CountdownTimer from "./countdownTimer";
 import { useRouter } from "next/router";
 import useTokenStore from "@/store/tokenProvider";
 import axios from "axios";
+import RefreshToken from "@/utils/RefreshToken";
+
 
 const Navbar = () => {
   const router = useRouter();
@@ -15,7 +17,8 @@ const Navbar = () => {
     setIsTestPortal(router.pathname.includes("testPortal"));
   }, [router.pathname]);
 
-  function handleLogout() {
+  async function handleLogout() {
+    await RefreshToken();
     const access_token = localStorage.getItem("access_token");
     try {
       axios

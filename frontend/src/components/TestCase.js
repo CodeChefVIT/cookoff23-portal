@@ -23,6 +23,7 @@ const TestCase = ({ clickedButton, runData, code, program }) => {
   const [customOutput, setCustomOutput] = useState();
   const [runToken, setRunToken] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [invalidInput, setInvalidInput] = useState(false);
 
   const totalTestCases = runData.length;
 
@@ -101,12 +102,19 @@ const TestCase = ({ clickedButton, runData, code, program }) => {
           console.log(response.data);
           if (response.status === 201) {
             setRunToken(response.data.token);
+            setInvalidInput(false);
+          }
+        }).catch((error) => {
+          if (error.response && error.response.status === 422) {
+            console.log("Invalid Input")
+            setInvalidInput(true);
+            console.log(invalidInput);
           }
         });
-    } catch {
-      (error) => {
-        console.log(error);
-      };
+    } catch (error){
+      if (error.response && error.response.status === 422) {
+        console.log("Invalid Input")
+      }
     }
     setLoading(true);
     setCustomOutput(1);
@@ -204,8 +212,8 @@ const TestCase = ({ clickedButton, runData, code, program }) => {
               </button>
             </div>
           </div>
-          {testcasesdata[clickedButton].testcases[testCaseIndex]
-            ?.compileMessage === undefined ? (
+          {(testcasesdata[clickedButton].testcases[testCaseIndex]
+            ?.compileMessage === undefined) ? (
             <div>Loadinng...</div>
           ) : testCaseClicked === null && customTestCase === clickedButton ? (
             <div className="w-[70%] overflow-auto">

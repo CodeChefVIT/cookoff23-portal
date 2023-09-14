@@ -2,10 +2,11 @@ import Navbar from "@/components/Navbar";
 import Image from "next/image";
 import tickIcon from "../../assets/TickIcon.svg";
 import { useRouter } from "next/router";
+import RefreshToken from "@/utils/RefreshToken";
 
 const TestComplete = () => {
   const router = useRouter();
-  
+
   function returnToDashboard() {
     const user = router.query.user;
     const fullPath = `/user`;

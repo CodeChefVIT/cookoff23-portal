@@ -1,7 +1,9 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Editor } from "@monaco-editor/react";
-import useTimerStore from "@/store/timeProvider";
+import useTokenStore from "@/store/tokenProvider";
 import axios from "axios";
+import Cookies from "js-cookie";
+import RefreshToken from "@/utils/RefreshToken";
 
 const TextEditor = ({
   questionId,
@@ -19,6 +21,9 @@ const TextEditor = ({
   setQuestionQuestionRunArray,
   setCode,
   setProgram,
+  qArr,
+  setSubmissionArray,
+  setSubLoading,
 }) => {
   const files = {
     "script.py": {
@@ -141,6 +146,7 @@ const TextEditor = ({
     // alert(`Code for question ${questionId} stored in local storage.`);
   };
   const handleClickRun = () => {
+    RefreshToken();
     getEditorValue();
     const existingCodeData = JSON.parse(localStorage.getItem("codeData"));
     const codeValue = existingCodeData[questionId];
@@ -172,6 +178,11 @@ const TextEditor = ({
           if (response.status === 201) {
             setRunTokens(response.data);
           }
+        })
+        .catch((error) => {
+          if (error.response.status === 401) {
+            RefreshToken();
+          }
         });
     } catch {
       (error) => {
@@ -193,20 +204,51 @@ const TextEditor = ({
     }
   };
 
-  const handleClickSubmit = () => {
-    getEditorValue();
-    if (questionRunArray.has(questionId)) {
-      setQuestionSubmit((prev) => new Set(prev.add(questionId)));
-      setQuestionRun(null);
-      setQuestionQuestionRunArray((prev) => {
-        const newSet = new Set(prev);
-        newSet.delete(questionId);
-        return newSet;
-      });
-    } else {
-      setQuestionSubmit((prev) => new Set(prev.add(questionId)));
+  async function handleClickSubmit() {    
+    try {
+      setSubLoading(true);
+      await RefreshToken();
+      getEditorValue();
+      const access_token = localStorage.getItem("access_token");
+      const existingCodeData = JSON.parse(localStorage.getItem("codeData"));
+      const codeValue = existingCodeData[questionId];
+      const langCode = file.code;
+      const q_ID = qArr[questionId]._id;
+      const response = await axios.post(
+        "http://localhost:8080/submit/eval/",
+        {
+          question_id: q_ID,
+          language_id: langCode,
+          code: codeValue,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${access_token}`,
+          },
+        }
+      );
+      console.log(response.data);
+      if (response.status === 201) {
+        setSubmissionArray(response.data);
+        Cookies.set(String(questionId + 10), JSON.stringify(response.data));
+      }
+      if (questionRunArray.has(questionId)) {
+        setQuestionSubmit((prev) => new Set(prev.add(questionId)));
+        setQuestionRun(null);
+        setQuestionQuestionRunArray((prev) => {
+          const newSet = new Set(prev);
+          newSet.delete(questionId);
+          return newSet;
+        });
+      } else {
+        setQuestionSubmit((prev) => new Set(prev.add(questionId)));
+      }
+    } catch (error) {
+      if (error.response && error.response.status === 401) {
+        RefreshToken();
+      }
     }
-  };
+  }
 
   return (
     <div className="h-[90vh] w-full mb-7 2xl:mb-4">

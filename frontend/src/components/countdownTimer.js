@@ -3,37 +3,42 @@ import Cookies from 'js-cookie';
 import useTimerStore from "@/store/timeProvider";
 
 function CountdownTimer() {
-  // const initialTime = 2 * 60 * 60;
   const initialTime = useTimerStore((state) => state.Time);
-  // const [timeRemaining, setTimeRemaining] = useState(initialTime);
+  const updateTimer = (newTime) => {
+    useTimerStore.setState({ Time: newTime });
+    Cookies.set('timerTime', newTime.toString());
+  };
+
   useEffect(() => {
-    const storedTime = Cookies.get('timerTime');
-    if (storedTime !== undefined) {
-      useTimerStore.setState({ Time: parseInt(storedTime, 10) });
-      // setTimeRemaining(parseInt(storedTime, 10));
-    } else {
-      useTimerStore.setState({Time: 2*60*60});
-    }
-  }, []);
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'hidden') {
+        Cookies.set('timerTime', initialTime.toString());
+      } else {
+        const storedTime = Cookies.get('timerTime');
+        if (storedTime !== undefined) {
+          updateTimer(parseInt(storedTime, 10));
+        }
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, [initialTime]);
+
   useEffect(() => {
     const interval = setInterval(() => {
       if (initialTime > 0) {
-        // setTimeRemaining((prevTime) => prevTime - 1);
-        useTimerStore.setState({ Time: useTimerStore.getState().Time - 1 });
+        updateTimer(useTimerStore.getState().Time - 1);
       } else {
-        useTimerStore.setState({Time: 2*60*60});
+        updateTimer(2 * 60 * 60);
       }
     }, 1000);
 
-    const handleBeforeUnload = () => {
-      Cookies.set('timerTime', initialTime.toString());
-    };
-
-    window.addEventListener('beforeunload', handleBeforeUnload);
-
     return () => {
       clearInterval(interval);
-      window.removeEventListener('beforeunload', handleBeforeUnload);
     };
   }, [initialTime]);
 

@@ -26,13 +26,6 @@ const validate = (values) => {
 function Login() {
   const [error, setError] = useState(false);
   const router = useRouter();
-  const access_token = useTokenStore((state) => state.access_token);
-  useEffect(() => {
-    const access_token = localStorage.getItem("access_token");
-    if (access_token) {
-      router.push("/user");
-    }
-  }, []);
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -52,13 +45,26 @@ function Login() {
             // localStorage.setItem("refresh_token", response.data.refreshToken);
             if (response.status === 200) {
               // Login was successful
-
+              console.log(response.data.accessToken);
               useTokenStore.setState({
                 access_token: response.data.accessToken,
               });
               localStorage.setItem("access_token", response.data.accessToken);
               localStorage.setItem("refresh_token", response.data.refreshToken);
-              router.push("/user");
+            }
+          })
+          .then(() => {
+            router.push("/user");
+          })
+          .catch((error) => {
+            if (error.response && error.response.status === 401) {
+              localStorage.removeItem("access_token");
+              useTokenStore.setState({
+                access_token: "",
+              });
+              router.push("/login");
+            } else {
+              console.log(error);
             }
           })
           .catch((error) => {
