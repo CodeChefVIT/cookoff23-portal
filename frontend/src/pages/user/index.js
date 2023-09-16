@@ -14,12 +14,14 @@ function Dashboard() {
   const [round, setRound] = useState(1);
   const [score, setScore] = useState(0);
   useEffect(() => {
-    async function fetchData() {
+    async function Refresher(){
       await RefreshToken();
-      // Continue with the rest of your logic here
+    }
+    async function fetchDataDash() {
       const access_token = localStorage.getItem("access_token");
+      console.log(access_token);
       try {
-        const response = await axios.get("http://localhost:8080/auth/dashboard", {
+        const response = await axios.get("https://api-cookoff-prod.codechefvit.com/auth/dashboard", {
           headers: {
             Authorization: `Bearer ${access_token}`,
           },
@@ -40,36 +42,34 @@ function Dashboard() {
         }
       }
     }
-
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    const access_token = localStorage.getItem("access_token");
-    try {
-      axios
-        .post(
-          "http://localhost:8080/ques/getRound",
+    async function fetchDataRound(){
+      const access_token = localStorage.getItem("access_token");
+      try{
+        const response = await axios.post(
+          "https://api-cookoff-prod.codechefvit.com/ques/getRound",
           { round: round },
           {
             headers: {
               Authorization: `Bearer ${access_token}`,
             },
           }
-        )
-        .then((response) => {
-          const responseData = response.data;
-          if (responseData && responseData.length > 0) {
-            setQArr(responseData);
-          } else {
-            console.log("No data received from the API.");
-          }
-        });
-    } catch {
-      (error) => {
-        console.log(error);
-      };
+        );
+        const responseData = response.data;
+        if (responseData && responseData.length > 0) {
+          setQArr(responseData);
+        } else {
+          console.log("No data received from the API.");
+        }
+      } catch(error){
+
+      }
     }
+    async function action(){
+      await Refresher();
+      await fetchDataDash();
+      await fetchDataRound();
+    } 
+    action();
   }, []);
 
   return (

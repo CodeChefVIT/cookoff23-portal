@@ -10,8 +10,7 @@ import RefreshToken from "@/utils/RefreshToken";
 import axios from "axios";
 
 function EditorWindow(props) {
-  const { sampleOutput1, sampleOutput2, sampleInput1, sampleInput2, qArr } =
-    props;
+  const { sampleOutputs, sampleInputs, qArr } = props;
   const router = useRouter();
   const initialTime = useTimerStore((state) => state.Time);
   const user = router.query.user;
@@ -45,6 +44,7 @@ function EditorWindow(props) {
           .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
       });
       useTimerStore.setState({ Time: 2 * 60 * 60 });
+      RefreshToken();
       router.push(fullPath);
     }
   }, [initialTime]);
@@ -52,21 +52,18 @@ function EditorWindow(props) {
   useEffect(() => {
     const storedData = Cookies.get(String(props.questionId + 1));
     const storedData2 = Cookies.get(String(props.questionId + 10));
+
     if (storedData) {
-      setRunData(JSON.parse(storedData));
-      if (
-        (JSON.parse(storedData)[0].status_id === 3 ||
-          JSON.parse(storedData)[0].status_id === 4) &&
-        (JSON.parse(storedData)[1].status_id === 3 ||
-          JSON.parse(storedData)[1].status_id === 4)
-      ) {
-        setError(false);
-        setLoading(false);
-      } else {
-        setLoading(false);
-        setError(true);
-      }
+      const runData = JSON.parse(storedData);
+      const allRunDataValid = runData.every(
+        (submission) => submission.status_id === 3 || submission.status_id === 4
+      );
+
+      setLoading(false);
+      setError(!allRunDataValid);
+      setRunData(runData);
     }
+
     if (storedData2) {
       setSubmissionArray(JSON.parse(storedData2));
     }
@@ -83,37 +80,38 @@ function EditorWindow(props) {
               "&base64_encoded=false&fields=status_id,stdout,expected_output,stdin,stderr,compile_output,source_code"
           )
           .then((response) => {
-            console.log(response.data);
+            const submissions = response.data.submissions;
+
             if (
-              response.data.submissions[0].status_id === 1 ||
-              response.data.submissions[1].status_id === 1 ||
-              response.data.submissions[0].status_id === 2 ||
-              response.data.submissions[1].status_id === 2
+              submissions.some(
+                (submission) =>
+                  submission.status_id === 1 || submission.status_id === 2
+              )
             ) {
               setLoading(true);
               setTimeout(() => {
                 fetchSubmissionStatus(str);
               }, 3000);
             } else if (
-              (response.data.submissions[0].status_id === 3 ||
-                response.data.submissions[0].status_id === 4) &&
-              (response.data.submissions[1].status_id === 3 ||
-                response.data.submissions[1].status_id === 4)
+              submissions.every(
+                (submission) =>
+                  submission.status_id === 3 || submission.status_id === 4
+              )
             ) {
               setError(false);
               setLoading(false);
-              setRunData(response.data.submissions);
+              setRunData(submissions);
               Cookies.set(
                 String(props.questionId + 1),
-                JSON.stringify(response.data.submissions)
+                JSON.stringify(submissions)
               );
             } else {
               setLoading(false);
               setError(true);
-              setRunData(response.data.submissions);
+              setRunData(submissions);
               Cookies.set(
                 String(props.questionId + 1),
-                JSON.stringify(response.data.submissions)
+                JSON.stringify(submissions)
               );
             }
           });
@@ -159,17 +157,16 @@ function EditorWindow(props) {
         questionRunArray={questionRunArray}
         questionRun={questionRun}
         questionSubmit={questionSubmit}
-        expectedOutput1={sampleOutput1}
-        expectedOutput2={sampleOutput2}
-        input1={sampleInput1}
-        input2={sampleInput2}
+        expectedOutputs={sampleOutputs}
+        inputs={sampleInputs}
         setCode={setCode}
         setProgram={setProgram}
       />
       {!loading &&
         !error &&
         runData.length > 0 &&
-        questionRunArray.has(props.questionId) && (!subLoading) && (
+        questionRunArray.has(props.questionId) &&
+        !subLoading && (
           <TestCase
             clickedButton={props.clickedButton}
             runData={runData}

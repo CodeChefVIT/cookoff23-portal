@@ -1,7 +1,7 @@
 import { easeInOut, motion } from "framer-motion";
 import { useFormik } from "formik";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import useTokenStore from "@/store/tokenProvider";
 import axios from "axios";
 
@@ -32,61 +32,43 @@ function Login() {
       password: "",
     },
     validate,
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       console.log(values);
+
       try {
-        axios
-          .post("http://localhost:8080/auth/login", values)
-          .then((response) => {
-            // useTokenStore.setState({
-            //   access_token: response.data.accessToken,
-            // });
-            // localStorage.setItem("access_token", response.data.accessToken);
-            // localStorage.setItem("refresh_token", response.data.refreshToken);
-            if (response.status === 200) {
-              // Login was successful
-              console.log(response.data.accessToken);
-              useTokenStore.setState({
-                access_token: response.data.accessToken,
-              });
-              localStorage.setItem("access_token", response.data.accessToken);
-              localStorage.setItem("refresh_token", response.data.refreshToken);
-            }
-          })
-          .then(() => {
-            router.push("/user");
-          })
-          .catch((error) => {
-            if (error.response && error.response.status === 401) {
-              localStorage.removeItem("access_token");
-              useTokenStore.setState({
-                access_token: "",
-              });
-              router.push("/login");
-            } else {
-              console.log(error);
-            }
-          })
-          .catch((error) => {
-            if (error.response && error.response.status === 400) {
-              setError(true);
-              console.log("Invalid credentials");
-            }
-          })
-          .catch((error) => {
-            if (error.response && error.response.status === 400) {
-              setError(true);
-              console.log("Invalid credentials");
-            }
+        const response = await axios.post(
+          "https://api-cookoff-prod.codechefvit.com/auth/login",
+          values
+        );
+
+        if (response.status >= 200 && response.status < 300) {
+          useTokenStore.setState({
+            access_token: response.data.accessToken,
           });
-        // .then(() => {
-        //   console.log("login successful");
-        //   router.push("/user");
-        // });
-      } catch {
-        (error) => {
-          console.log("Login failed: " + error);
-        };
+          localStorage.setItem("access_token", response.data.accessToken);
+          localStorage.setItem("refresh_token", response.data.refreshToken);
+          router.push("/user");
+        } else if (response.status === 400) {
+          setError(true);
+          console.log("Invalid credentials");
+        }
+      } catch (error) {
+        if (error.response) {
+          const statusCode = error.response.status;
+          if (statusCode === 401) {
+            localStorage.removeItem("access_token");
+            useTokenStore.setState({
+              access_token: "",
+            });
+            router.push("/login");
+          } else if (statusCode === 403) {
+            console.log("Access forbidden:", error);
+          } else {
+            console.log("An error occurred:", error);
+          }
+        } else {
+          console.log("An unexpected error occurred:", error);
+        }
       }
     },
   });

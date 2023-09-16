@@ -2,13 +2,8 @@ import Image from "next/image";
 import correct from "../assets/correct.svg";
 import wrong from "../assets/wrong.svg";
 import redopenEye from "../assets/redopenEye.svg";
-import redhiddenEye from "../assets/redhiddenEye.svg";
 import greenopenEye from "../assets/greenopenEye.svg";
-import greenhiddenEye from "../assets/greenhiddenEye.svg";
-import lock from "../assets/lock.svg";
-import { testcasesdata } from "../../Dummy_Data";
 import { useState, useEffect, useRef } from "react";
-import { customTestCaseData } from "../../Dummy_Data";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import axios from "axios";
@@ -30,14 +25,6 @@ const TestCase = ({ clickedButton, runData, code, program }) => {
   const failedTestCases = runData.filter(
     (testcase) => testcase.status_id === 4
   ).length;
-
-  // const totalVisibleCases = testcasesdata[clickedButton].testcases.filter(
-  //   (testcase) => testcase.hidden === false
-  // ).length;
-
-  // const totalHiddenCases = runData.filter(
-  //   (testcase) => testcase.hidden === true
-  // ).length;
 
   useEffect(() => {
     setTestCaseClicked(0);
@@ -162,7 +149,7 @@ const TestCase = ({ clickedButton, runData, code, program }) => {
                     >
                       <Image src={wrong} alt="wrong" quality={100} />
                       <div className="text-[#EB3939] mx-3">
-                        Test Case {index}
+                        Test Case {index+1}
                       </div>
                       <Image
                         src={redopenEye}
@@ -184,7 +171,7 @@ const TestCase = ({ clickedButton, runData, code, program }) => {
                     >
                       <Image src={correct} alt="wrong" quality={100} />
                       <div className="text-[#1BA94C] mx-3">
-                        Test Case {index}
+                        Test Case {index+1}
                       </div>
                       <Image
                         src={greenopenEye}
@@ -212,8 +199,7 @@ const TestCase = ({ clickedButton, runData, code, program }) => {
               </button>
             </div>
           </div>
-          {(testcasesdata[clickedButton].testcases[testCaseIndex]
-            ?.compileMessage === undefined) ? (
+          {(runData[testCaseIndex].stdin === undefined) ? (
             <div>Loadinng...</div>
           ) : testCaseClicked === null && customTestCase === clickedButton ? (
             <div className="w-[70%] overflow-auto">

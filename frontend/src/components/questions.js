@@ -11,14 +11,17 @@ function Question(props) {
     task,
     inputFormat,
     outputFormat,
-    sampleInput1,
-    sampleOutput1,
-    explanation1,
-    sampleInput2,
-    sampleOutput2,
-    explanation2,
+    sampleInputs,
+    sampleOutputs,
+    explanations,
     constraints,
   } = props;
+
+  const inputElements = [];
+
+  for (let i = 0; i < sampleInputs.length; i++) {
+    inputElements.push(i);
+  }
 
   return (
     <div className="bg-[#161616] text-[#B5A996] w-[40%] h-[82vh] overflow-auto">
@@ -33,7 +36,7 @@ function Question(props) {
           className="bg-[#EDEDED] w-fit text-black rounded px-2 my-2 font-semibold"
           id="points"
         >
-          {points+ " points"}
+          {points + " points"}
         </div>
         <div className="text-[#EB5939] font-semibold py-3 text-lg" id="problem">
           Problem
@@ -59,61 +62,56 @@ function Question(props) {
             ))}
           </div>
         )}
-
-        <div>
-          <h2 className="font-semibold my-2">Sample Input 1</h2>
-          <div className="bg-neutral-800 rounded-sm whitespace-pre pl-2 py-2 flex justify-between">
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>
-              {sampleInput1}
-            </ReactMarkdown>
-            <button
-              className="self-start pr-1"
-              onClick={() => {
-                navigator.clipboard.writeText(sampleInput1);
-              }}
-            >
-              <Image src={copy} alt="copy" height={20} width={15} />
-            </button>
+        {inputElements.map((input, index) => (
+          <div key={index}>
+            {sampleInputs[input] !== null &&
+              sampleInputs[input] !== undefined &&
+              sampleInputs[input] !== "" && (
+                <div>
+                  <h2 className="font-semibold my-2">
+                    Sample Input {index + 1}
+                  </h2>
+                  <div className="bg-neutral-800 rounded-sm whitespace-pre pl-2 py-2 flex justify-between">
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                      {sampleInputs[input]}
+                    </ReactMarkdown>
+                    <button
+                      className="self-start pr-1"
+                      onClick={() => {
+                        navigator.clipboard.writeText(sampleInputs[input]);
+                      }}
+                    >
+                      <Image src={copy} alt="copy" height={20} width={15} />
+                    </button>
+                  </div>
+                </div>
+              )}
+            {sampleOutputs[input] !== null &&
+              sampleOutputs[input] !== undefined &&
+              sampleOutputs[input] !== "" && (
+                <div>
+                  <h2 className="font-semibold my-2">
+                    Sample Output {index + 1}
+                  </h2>
+                  <div className="bg-neutral-800 rounded whitespace-pre pl-2 py-2">
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                      {sampleOutputs[input]}
+                    </ReactMarkdown>
+                  </div>
+                </div>
+              )}
+            {explanations[input] !== null &&
+              explanations[input] !== undefined &&
+              explanations[input] !== "" && (
+                <div>
+                  <h2 className="font-semibold my-2 mt-3">Explanation</h2>
+                  <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                    {explanations[input]}
+                  </ReactMarkdown>
+                </div>
+              )}
           </div>
-          <h2 className="font-semibold my-2">Sample Output 1</h2>
-          <div className="bg-neutral-800 rounded whitespace-pre pl-2 py-2">
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>
-              {sampleOutput1}
-            </ReactMarkdown>
-          </div>
-          <div>
-            <h2 className="font-semibold my-2 mt-3">Explanation</h2>
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>
-              {explanation1}
-            </ReactMarkdown>
-          </div>
-          <h2 className="font-semibold my-2">Sample Input 2</h2>
-          <div className="bg-neutral-800 rounded-sm whitespace-pre pl-2 py-2 flex justify-between">
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>
-              {sampleInput2}
-            </ReactMarkdown>
-            <button
-              className="self-start pr-1"
-              onClick={() => {
-                navigator.clipboard.writeText(sampleInput2);
-              }}
-            >
-              <Image src={copy} alt="copy" height={20} width={15} />
-            </button>
-          </div>
-          <h2 className="font-semibold my-2">Sample Output 2</h2>
-          <div className="bg-neutral-800 rounded whitespace-pre pl-2 py-2">
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>
-              {sampleOutput2}
-            </ReactMarkdown>
-          </div>
-        </div>
-        <div>
-          <h2 className="font-semibold my-2 mt-3">Explanation</h2>
-          <ReactMarkdown remarkPlugins={[remarkGfm]}>
-            {explanation2}
-          </ReactMarkdown>
-        </div>
+        ))}
         <div>
           <h2 className="font-semibold my-2 mt-3">Constraints</h2>
 

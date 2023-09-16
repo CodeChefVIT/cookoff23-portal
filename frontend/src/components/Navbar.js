@@ -23,7 +23,7 @@ const Navbar = () => {
     try {
       axios
         .post(
-          "http://localhost:8080/auth/logout",
+          "https://api-cookoff-prod.codechefvit.com/auth/logout",
           {},
           {
             headers: {
