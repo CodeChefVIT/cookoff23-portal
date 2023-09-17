@@ -115,7 +115,7 @@ function Question(props) {
         <div>
           <h2 className="font-semibold my-2 mt-3">Constraints</h2>
 
-          {constraints.map((format, index) => (
+          {(constraints !== null) && constraints.map((format, index) => (
             <ReactMarkdown remarkPlugins={[remarkGfm]} key={index}>
               {format}
             </ReactMarkdown>
