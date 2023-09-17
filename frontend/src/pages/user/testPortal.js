@@ -1,11 +1,9 @@
 import Navbar from "@/components/Navbar";
 import Portal from "@/components/portal";
-import React, { useEffect,useState } from "react";
+import React, { useEffect } from "react";
 import { useRouter } from "next/router";
 
 export default function TestPortal() {
-  const router = useRouter();
-  const round = router.query.round;
   useEffect(() => {
     const handleBackButton = (e) => {
       e.preventDefault();

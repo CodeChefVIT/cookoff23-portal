@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Editor } from "@monaco-editor/react";
-import useTokenStore from "@/store/tokenProvider";
 import axios from "axios";
 import Cookies from "js-cookie";
 import RefreshToken from "@/utils/RefreshToken";
@@ -10,12 +9,12 @@ const TextEditor = ({
   setRunTestCases,
   setQuestionRun,
   setQuestionSubmit,
+  setInvalidInput,
   questionRun,
+  submitInvalidInput,
   questionSubmit,
-  expectedOutput1,
-  expectedOutput2,
-  input1,
-  input2,
+  expectedOutputs,
+  inputs,
   setRunTokens,
   questionRunArray,
   setQuestionQuestionRunArray,
@@ -145,66 +144,57 @@ const TextEditor = ({
 
     // alert(`Code for question ${questionId} stored in local storage.`);
   };
-  const handleClickRun = () => {
-    RefreshToken();
+  const handleClickRun = async () => {
+    await RefreshToken();
+    console.log(localStorage.getItem("access_token"));
     getEditorValue();
     const existingCodeData = JSON.parse(localStorage.getItem("codeData"));
     const codeValue = existingCodeData[questionId];
     const langCode = file.code;
     setCode(langCode);
     try {
-      axios
-        .post(
-          "http://139.59.4.43:2358/submissions/batch?base64_encoded=false",
-          {
-            submissions: [
-              {
-                language_id: langCode,
-                source_code: codeValue,
-                stdin: input1,
-                expected_output: expectedOutput1,
-              },
-              {
-                language_id: langCode,
-                source_code: codeValue,
-                stdin: input2,
-                expected_output: expectedOutput2,
-              },
-            ],
-          }
-        )
-        .then((response) => {
-          console.log(response.data);
-          if (response.status === 201) {
-            setRunTokens(response.data);
-          }
-        })
-        .catch((error) => {
-          if (error.response.status === 401) {
-            RefreshToken();
-          }
-        });
-    } catch {
-      (error) => {
-        console.log(error);
-      };
-    }
-    setRunTestCases(true);
-    if (questionSubmit.has(questionId)) {
-      setQuestionRun(questionId);
-      setQuestionQuestionRunArray((prev) => new Set(prev.add(questionId)));
-      setQuestionSubmit((prev) => {
-        const newSet = new Set(prev);
-        newSet.delete(questionId);
-        return newSet;
-      });
-    } else {
-      setQuestionRun(questionId);
-      setQuestionQuestionRunArray((prev) => new Set(prev.add(questionId)));
+      const response = await axios.post(
+        "http://139.59.4.43:2358/submissions/batch?base64_encoded=false",
+        {
+          submissions: inputs.map((input, index) => ({
+            language_id: langCode,
+            source_code: codeValue,
+            stdin: input,
+            expected_output: expectedOutputs[index],
+          })),
+        }
+      );
+
+      console.log(response.data);
+      if (response.status === 201) {
+        await setInvalidInput(false);
+        setRunTokens(response.data);
+        setRunTestCases(true);
+        if (questionSubmit.has(questionId)) {
+          setQuestionRun(questionId);
+          setQuestionQuestionRunArray((prev) => new Set(prev.add(questionId)));
+          setQuestionSubmit((prev) => {
+            const newSet = new Set(prev);
+            newSet.delete(questionId);
+            return newSet;
+          });
+        } else {
+          setQuestionRun(questionId);
+          setQuestionQuestionRunArray((prev) => new Set(prev.add(questionId)));
+        }
+      }
+    } catch (error) {
+      if (error.response.status === 401) {
+        await RefreshToken();
+      } else if (error.response.status === 422) {
+        console.log("Invalid input");
+        setInvalidInput(true);
+      }
+      console.log(error);
     }
   };
 
-  async function handleClickSubmit() {    
+  async function handleClickSubmit() {
     try {
       setSubLoading(true);
       await RefreshToken();
@@ -214,12 +204,15 @@ const TextEditor = ({
       const codeValue = existingCodeData[questionId];
       const langCode = file.code;
       const q_ID = qArr[questionId]._id;
+      console.log(q_ID);
+      console.log(codeValue);
+      console.log(langCode);
       const response = await axios.post(
-        "http://localhost:8080/submit/eval/",
+        "https://api-cookoff-prod.codechefvit.com/submit/eval/",
         {
           question_id: q_ID,
-          language_id: langCode,
           code: codeValue,
+          language_id: langCode,
         },
         {
           headers: {
@@ -229,6 +222,7 @@ const TextEditor = ({
       );
       console.log(response.data);
       if (response.status === 201) {
+        await setInvalidInput(false);
         setSubmissionArray(response.data);
         Cookies.set(String(questionId + 10), JSON.stringify(response.data));
       }
@@ -245,7 +239,12 @@ const TextEditor = ({
       }
     } catch (error) {
       if (error.response && error.response.status === 401) {
-        RefreshToken();
+        await RefreshToken();
+        handleClickSubmit();
+      } else if (error.response.status === 400) {
+        console.log("Invalid input");
+        setSubLoading(false);
+        submitInvalidInput(true);
       }
     }
   }

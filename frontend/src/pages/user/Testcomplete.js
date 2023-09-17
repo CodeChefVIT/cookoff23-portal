@@ -6,9 +6,8 @@ import RefreshToken from "@/utils/RefreshToken";
 
 const TestComplete = () => {
   const router = useRouter();
-
-  function returnToDashboard() {
-    const user = router.query.user;
+  async function returnToDashboard() {
+    await RefreshToken();
     const fullPath = `/user`;
     router.push(fullPath);
   }

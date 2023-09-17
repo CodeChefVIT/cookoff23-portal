@@ -2,13 +2,8 @@ import Image from "next/image";
 import correct from "../assets/correct.svg";
 import wrong from "../assets/wrong.svg";
 import redopenEye from "../assets/redopenEye.svg";
-import redhiddenEye from "../assets/redhiddenEye.svg";
 import greenopenEye from "../assets/greenopenEye.svg";
-import greenhiddenEye from "../assets/greenhiddenEye.svg";
-import lock from "../assets/lock.svg";
-import { testcasesdata } from "../../Dummy_Data";
 import { useState, useEffect, useRef } from "react";
-import { customTestCaseData } from "../../Dummy_Data";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import axios from "axios";
@@ -31,14 +26,6 @@ const TestCase = ({ clickedButton, runData, code, program }) => {
     (testcase) => testcase.status_id === 4
   ).length;
 
-  // const totalVisibleCases = testcasesdata[clickedButton].testcases.filter(
-  //   (testcase) => testcase.hidden === false
-  // ).length;
-
-  // const totalHiddenCases = runData.filter(
-  //   (testcase) => testcase.hidden === true
-  // ).length;
-
   useEffect(() => {
     setTestCaseClicked(0);
     setTestCaseIndex(0);
@@ -47,75 +34,64 @@ const TestCase = ({ clickedButton, runData, code, program }) => {
   }, [clickedButton]);
 
   useEffect(() => {
-    function fetchSubmit() {
+    async function fetchSubmit() {
       try {
         console.log(runToken);
-        axios
-          .get(
-            "http://139.59.4.43:2358/submissions/" +
-              runToken +
-              "?base64_encoded=false&fields=stdout,stderr,status_id,language_id"
-          )
-          .then((response) => {
-            console.log(response.data);
-            if (
-              response.data.status_id === 1 ||
-              response.data.status_id === 2
-            ) {
-              setLoading(true);
-              setTimeout(() => {
-                fetchSubmit();
-              }, 3000);
-            } else {
-              setLoading(false);
-              setCustomOutput(response.data.stdout);
-            }
-          });
-      } catch {
-        (error) => {
-          console.log(error);
-        };
+        const response = await axios.get(
+          "http://139.59.4.43:2358/submissions/" +
+            runToken +
+            "?base64_encoded=false&fields=stdout,stderr,status_id,language_id"
+        );
+    
+        console.log(response.data);
+    
+        if (response.data.status_id === 1 || response.data.status_id === 2) {
+          setLoading(true);
+          setTimeout(async () => {
+            await fetchSubmit();
+          }, 3000);
+        } else {
+          setLoading(false);
+          setCustomOutput(response.data.stdout);
+        }
+      } catch (error) {
+        console.log(error);
       }
     }
+    
     if (runToken) {
       fetchSubmit();
     }
   }, [runToken]);
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
     console.log(customInput);
-    // const cIn = customInput.replace(/\n/g, "\\n");
-    // console.log(cIn);
-    try {
-      axios
-        .post(
-          "http://139.59.4.43:2358/submissions/?base64_encoded=false",
 
-          {
-            language_id: code,
-            source_code: program,
-            stdin: customInput,
-          }
-        )
-        .then((response) => {
-          console.log(response.data);
-          if (response.status === 201) {
-            setRunToken(response.data.token);
-            setInvalidInput(false);
-          }
-        }).catch((error) => {
-          if (error.response && error.response.status === 422) {
-            console.log("Invalid Input")
-            setInvalidInput(true);
-            console.log(invalidInput);
-          }
-        });
-    } catch (error){
+    try {
+      const response = await axios.post(
+        "http://139.59.4.43:2358/submissions/?base64_encoded=false",
+        {
+          language_id: code,
+          source_code: program,
+          stdin: customInput,
+        }
+      );
+
+      console.log(response.data);
+
+      if (response.status === 201) {
+        setRunToken(response.data.token);
+        setInvalidInput(false);
+      }
+    } catch (error) {
       if (error.response && error.response.status === 422) {
-        console.log("Invalid Input")
+        console.log("Invalid Input");
+        setInvalidInput(true);
+        console.log(invalidInput);
       }
     }
+
     setLoading(true);
     setCustomOutput(1);
   }
@@ -162,7 +138,7 @@ const TestCase = ({ clickedButton, runData, code, program }) => {
                     >
                       <Image src={wrong} alt="wrong" quality={100} />
                       <div className="text-[#EB3939] mx-3">
-                        Test Case {index}
+                        Test Case {index + 1}
                       </div>
                       <Image
                         src={redopenEye}
@@ -184,7 +160,7 @@ const TestCase = ({ clickedButton, runData, code, program }) => {
                     >
                       <Image src={correct} alt="wrong" quality={100} />
                       <div className="text-[#1BA94C] mx-3">
-                        Test Case {index}
+                        Test Case {index + 1}
                       </div>
                       <Image
                         src={greenopenEye}
@@ -212,8 +188,7 @@ const TestCase = ({ clickedButton, runData, code, program }) => {
               </button>
             </div>
           </div>
-          {(testcasesdata[clickedButton].testcases[testCaseIndex]
-            ?.compileMessage === undefined) ? (
+          {runData[testCaseIndex].stdin === undefined ? (
             <div>Loadinng...</div>
           ) : testCaseClicked === null && customTestCase === clickedButton ? (
             <div className="w-[70%] overflow-auto">
@@ -235,9 +210,11 @@ const TestCase = ({ clickedButton, runData, code, program }) => {
                 >
                   Run
                 </button>
-                { customOutput && 
+                {customOutput &&
                   (loading ? (
-                    <div className="text-white text-center mt-10">loading...</div>
+                    <div className="text-white text-center mt-10">
+                      loading...
+                    </div>
                   ) : (
                     <div className="mb-10">
                       <div className="">

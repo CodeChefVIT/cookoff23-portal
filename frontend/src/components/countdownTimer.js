@@ -3,19 +3,23 @@ import Cookies from 'js-cookie';
 import useTimerStore from "@/store/timeProvider";
 
 function CountdownTimer() {
-  const initialTime = useTimerStore((state) => state.Time);
+  const [initialTime, setInitialTime] = useState(() => {
+    const storedTime = localStorage.getItem('timerTime');
+    return storedTime ? parseInt(storedTime, 10) : useTimerStore.getState().Time;
+  });
+
   const updateTimer = (newTime) => {
-    useTimerStore.setState({ Time: newTime });
-    Cookies.set('timerTime', newTime.toString());
+    setInitialTime(newTime);
+    localStorage.setItem('timerTime', newTime.toString());
   };
 
   useEffect(() => {
     const handleVisibilityChange = () => {
       if (document.visibilityState === 'hidden') {
-        Cookies.set('timerTime', initialTime.toString());
+        localStorage.setItem('timerTime', initialTime.toString());
       } else {
-        const storedTime = Cookies.get('timerTime');
-        if (storedTime !== undefined) {
+        const storedTime = localStorage.getItem('timerTime');
+        if (storedTime !== null) {
           updateTimer(parseInt(storedTime, 10));
         }
       }
@@ -31,7 +35,7 @@ function CountdownTimer() {
   useEffect(() => {
     const interval = setInterval(() => {
       if (initialTime > 0) {
-        updateTimer(useTimerStore.getState().Time - 1);
+        updateTimer(initialTime - 1);
       } else {
         updateTimer(2 * 60 * 60);
       }
