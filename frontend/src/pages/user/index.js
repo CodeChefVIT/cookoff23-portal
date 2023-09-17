@@ -14,9 +14,6 @@ function Dashboard() {
   const [round, setRound] = useState(1);
   const [score, setScore] = useState(0);
   useEffect(() => {
-    async function Refresher(){
-      await RefreshToken();
-    }
     async function fetchDataDash() {
       const access_token = localStorage.getItem("access_token");
       console.log(access_token);
@@ -26,6 +23,7 @@ function Dashboard() {
             Authorization: `Bearer ${access_token}`,
           },
         });
+        // console.log(response.data);
         setName(response.data.name);
         setRound(response.data.roundQualified + 1);
         setScore(response.data.score);
@@ -47,7 +45,7 @@ function Dashboard() {
       try{
         const response = await axios.post(
           "https://api-cookoff-prod.codechefvit.com/ques/getRound",
-          { round: round },
+          { round: round},
           {
             headers: {
               Authorization: `Bearer ${access_token}`,
@@ -61,11 +59,12 @@ function Dashboard() {
           console.log("No data received from the API.");
         }
       } catch(error){
-
+        if (error.response && error.response.status === 404) {
+          console.log("No questions");
+        }
       }
     }
     async function action(){
-      await Refresher();
       await fetchDataDash();
       await fetchDataRound();
     } 

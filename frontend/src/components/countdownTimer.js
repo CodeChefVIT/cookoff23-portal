@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import Cookies from 'js-cookie';
 import useTimerStore from "@/store/timeProvider";
+import router from "next/router";
+import RefreshToken from "@/utils/RefreshToken";
 
 function CountdownTimer() {
   const [initialTime, setInitialTime] = useState(() => {
@@ -38,6 +40,13 @@ function CountdownTimer() {
         updateTimer(initialTime - 1);
       } else {
         updateTimer(2 * 60 * 60);
+        document.cookie.split(";").forEach((c) => {
+          document.cookie = c
+            .replace(/^ +/, "")
+            .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+        });
+        RefreshToken();
+        router.push("/user/Testcomplete");
       }
     }, 1000);
 

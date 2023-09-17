@@ -14,8 +14,6 @@ function EditorWindow(props) {
   const router = useRouter();
   const [invalidInput, setInvalidInput] = useState(false);
   const [invalidsubmit, submitInvalidInput] = useState(false);
-  const initialTime = useTimerStore((state) => state.Time);
-  const user = router.query.user;
   const fullPath = `/user/Testcomplete`;
   const [runTestCases, setRunTestCases] = useState(false);
   const [questionRun, setQuestionRun] = useState(null);
@@ -36,20 +34,6 @@ function EditorWindow(props) {
       setSubLoading(false);
     }
   }, [submissionArray]);
-
-  useEffect(() => {
-    if (initialTime === 0) {
-      document.cookie.split(";").forEach((c) => {
-        document.cookie = c
-          .replace(/^ +/, "")
-          .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
-      });
-      useTimerStore.setState({ Time: 2 * 60 * 60 });
-      RefreshToken();
-      localStorage.removeItem("timerTime");
-      router.push(fullPath);
-    }
-  }, [initialTime]);
 
   useEffect(() => {
     setInvalidInput(false);
@@ -138,7 +122,7 @@ function EditorWindow(props) {
         .replace(/^ +/, "")
         .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
     });
-    useTimerStore.setState({ Time: 2 * 60 * 60 });
+    useTimerStore.setState({ Time: 2 * 60 *60});
     localStorage.removeItem("timerTime");
     RefreshToken();
     router.push(fullPath);
@@ -194,7 +178,7 @@ function EditorWindow(props) {
 
       {subLoading && (
         <div className="text-white flex justify-center">
-          <p>Cooking...</p>
+          <p>Serving...</p>
         </div>
       )}
 

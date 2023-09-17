@@ -195,13 +195,14 @@ const TextEditor = ({
   };
 
   async function handleClickSubmit() {
+    const codeValue = existingCodeData[questionId];
     try {
       setSubLoading(true);
       await RefreshToken();
       getEditorValue();
       const access_token = localStorage.getItem("access_token");
       const existingCodeData = JSON.parse(localStorage.getItem("codeData"));
-      const codeValue = existingCodeData[questionId];
+      
       const langCode = file.code;
       const q_ID = qArr[questionId]._id;
       console.log(q_ID);
@@ -244,7 +245,9 @@ const TextEditor = ({
       } else if (error.response.status === 400) {
         console.log("Invalid input");
         setSubLoading(false);
-        submitInvalidInput(true);
+        if (codeValue === "" || codeValue === undefined || codeValue === null) {
+          submitInvalidInput(true);
+        }
       }
     }
   }

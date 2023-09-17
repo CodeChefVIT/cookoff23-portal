@@ -2,7 +2,10 @@ import { easeInOut, motion } from "framer-motion";
 import { useFormik } from "formik";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import Image from "next/image";
+import cookoff from "../assets/cook-head.svg";
 import useTokenStore from "@/store/tokenProvider";
+import RefreshToken from "@/utils/RefreshToken";
 import axios from "axios";
 
 const validate = (values) => {
@@ -13,9 +16,9 @@ const validate = (values) => {
     //   errors.email = "Must be 15 characters or less";
     // }
   }
-  if (!values.password) {
-    errors.password = "Password Required";
-  }
+  // if (!values.password) {
+  //   errors.password = "Password Required";
+  // }
   // } else if (!/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{5,}$/i.test(values.password)) {
   //   errors.password = "Invalid Password";
   // }
@@ -47,15 +50,17 @@ function Login() {
           });
           localStorage.setItem("access_token", response.data.accessToken);
           localStorage.setItem("refresh_token", response.data.refreshToken);
+
+          await RefreshToken();
+          setError(false);
+
           router.push("/user");
-        } else if (response.status === 400) {
-          setError(true);
-          console.log("Invalid credentials");
         }
       } catch (error) {
         if (error.response) {
           const statusCode = error.response.status;
           if (statusCode === 401) {
+            setError(true);
             localStorage.removeItem("access_token");
             useTokenStore.setState({
               access_token: "",
@@ -63,6 +68,10 @@ function Login() {
             router.push("/login");
           } else if (statusCode === 403) {
             console.log("Access forbidden:", error);
+          } else if (statusCode === 400) {
+            console.log("Invalid credentials");
+            setError(true);
+            
           } else {
             console.log("An error occurred:", error);
           }
@@ -81,13 +90,16 @@ function Login() {
         transition={{ ease: easeInOut, duration: 0.5 }}
         className="flex justify-center items-center h-screen"
       >
-        <div>
+        <div className="flex flex-col">
+          <div className={`flex w-[700px] ml-32 self-center ${!error ? 'mb-12' : ''}`}>
+            <Image src={cookoff} quality={100} alt="Cook-Off 8.0" />
+          </div>
           {error && (
-            <div className="text-[#D9D9D999] mb-10 text-center">
+            <div className="text-[#D9D9D999] my-10 text-center">
               Invalid credentials
             </div>
           )}
-          <form className="w-[400px]" onSubmit={formik.handleSubmit}>
+          <form className="w-[400px] self-center" onSubmit={formik.handleSubmit}>
             <div className="mb-[40px]">
               <input
                 className="w-full py-[18px] px-[33px] text-[#D9D9D999] bg-[#1F1F1F] rounded-[25px] text-[22px] font-semibold"

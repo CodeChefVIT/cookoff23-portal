@@ -42,6 +42,8 @@ export default function Portal(props) {
         .catch((error) => {
           if (error.response && error.response.status === 400) {
             console.log("400");
+          } else if (error.response && error.response.status === 404) {
+            console.log("No questions");
           }
         });
     } catch {
