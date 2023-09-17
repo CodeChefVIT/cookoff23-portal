@@ -9,7 +9,9 @@ const TextEditor = ({
   setRunTestCases,
   setQuestionRun,
   setQuestionSubmit,
+  setInvalidInput,
   questionRun,
+  submitInvalidInput,
   questionSubmit,
   expectedOutputs,
   inputs,
@@ -165,27 +167,30 @@ const TextEditor = ({
 
       console.log(response.data);
       if (response.status === 201) {
+        await setInvalidInput(false);
         setRunTokens(response.data);
+        setRunTestCases(true);
+        if (questionSubmit.has(questionId)) {
+          setQuestionRun(questionId);
+          setQuestionQuestionRunArray((prev) => new Set(prev.add(questionId)));
+          setQuestionSubmit((prev) => {
+            const newSet = new Set(prev);
+            newSet.delete(questionId);
+            return newSet;
+          });
+        } else {
+          setQuestionRun(questionId);
+          setQuestionQuestionRunArray((prev) => new Set(prev.add(questionId)));
+        }
       }
     } catch (error) {
       if (error.response.status === 401) {
         await RefreshToken();
+      } else if (error.response.status === 422) {
+        console.log("Invalid input");
+        setInvalidInput(true);
       }
       console.log(error);
-    }
-
-    setRunTestCases(true);
-    if (questionSubmit.has(questionId)) {
-      setQuestionRun(questionId);
-      setQuestionQuestionRunArray((prev) => new Set(prev.add(questionId)));
-      setQuestionSubmit((prev) => {
-        const newSet = new Set(prev);
-        newSet.delete(questionId);
-        return newSet;
-      });
-    } else {
-      setQuestionRun(questionId);
-      setQuestionQuestionRunArray((prev) => new Set(prev.add(questionId)));
     }
   };
 
@@ -217,6 +222,7 @@ const TextEditor = ({
       );
       console.log(response.data);
       if (response.status === 201) {
+        await setInvalidInput(false);
         setSubmissionArray(response.data);
         Cookies.set(String(questionId + 10), JSON.stringify(response.data));
       }
@@ -235,6 +241,10 @@ const TextEditor = ({
       if (error.response && error.response.status === 401) {
         await RefreshToken();
         handleClickSubmit();
+      } else if (error.response.status === 400) {
+        console.log("Invalid input");
+        setSubLoading(false);
+        submitInvalidInput(true);
       }
     }
   }

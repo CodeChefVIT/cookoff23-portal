@@ -12,6 +12,8 @@ import axios from "axios";
 function EditorWindow(props) {
   const { sampleOutputs, sampleInputs, qArr } = props;
   const router = useRouter();
+  const [invalidInput, setInvalidInput] = useState(false);
+  const [invalidsubmit, submitInvalidInput] = useState(false);
   const initialTime = useTimerStore((state) => state.Time);
   const user = router.query.user;
   const fullPath = `/user/Testcomplete`;
@@ -29,7 +31,6 @@ function EditorWindow(props) {
   const [submissionArray, setSubmissionArray] = useState(null);
 
   useEffect(() => {
-    console.log("submissionArray:", submissionArray);
     if (submissionArray !== null) {
       console.log("yes");
       setSubLoading(false);
@@ -45,11 +46,14 @@ function EditorWindow(props) {
       });
       useTimerStore.setState({ Time: 2 * 60 * 60 });
       RefreshToken();
+      localStorage.removeItem("timerTime");
       router.push(fullPath);
     }
   }, [initialTime]);
 
   useEffect(() => {
+    setInvalidInput(false);
+    submitInvalidInput(false);
     const storedData = Cookies.get(String(props.questionId + 1));
     const storedData2 = Cookies.get(String(props.questionId + 10));
 
@@ -138,6 +142,7 @@ function EditorWindow(props) {
         .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
     });
     useTimerStore.setState({ Time: 2 * 60 * 60 });
+    localStorage.removeItem("timerTime");
     RefreshToken();
     router.push(fullPath);
   }
@@ -148,6 +153,8 @@ function EditorWindow(props) {
         setSubLoading={setSubLoading}
         qArr={qArr}
         setSubmissionArray={setSubmissionArray}
+        setInvalidInput={setInvalidInput}
+        submitInvalidInput={submitInvalidInput}
         questionId={props.questionId}
         setRunTestCases={setRunTestCases}
         setQuestionRun={setQuestionRun}
@@ -166,7 +173,8 @@ function EditorWindow(props) {
         !error &&
         runData.length > 0 &&
         questionRunArray.has(props.questionId) &&
-        !subLoading && (
+        !subLoading &&
+        !invalidInput && (
           <TestCase
             clickedButton={props.clickedButton}
             runData={runData}
@@ -174,6 +182,12 @@ function EditorWindow(props) {
             program={program}
           />
         )}
+
+      {(invalidInput || invalidsubmit) && (
+        <div className="text-white flex justify-center">
+          Please do not run/submit blank code
+        </div>
+      )}
 
       {loading && (
         <div className="text-white flex justify-center">
@@ -194,7 +208,7 @@ function EditorWindow(props) {
       )}
       {questionSubmit.has(props.questionId) &&
         !subLoading &&
-        submissionArray !== null && (
+        submissionArray !== null && !invalidsubmit && (
           <SubmitCode
             clickedButton={props.clickedButton}
             submissionArray={submissionArray}
