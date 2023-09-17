@@ -8,7 +8,6 @@ import useTokenStore from "@/store/tokenProvider";
 import axios from "axios";
 import RefreshToken from "@/utils/RefreshToken";
 
-
 const Navbar = () => {
   const router = useRouter();
 
@@ -21,28 +20,27 @@ const Navbar = () => {
     await RefreshToken();
     const access_token = localStorage.getItem("access_token");
     try {
-      axios
-        .post(
-          "https://api-cookoff-prod.codechefvit.com/auth/logout",
-          {},
-          {
-            headers: {
-              Authorization: `Bearer ${access_token}`,
-            },
-          }
-        )
-        .then((response) => {
-          useTokenStore.setState({ access_token: "" });
-          localStorage.removeItem("access_token");
-          localStorage.removeItem("refresh_token");
-        })
-        .then(() => {
-          router.push("/login");
-        });
-    } catch {
-      (error) => {
-        console.log("Logout failed: " + error);
-      };
+      const response = await axios.post(
+        "https://api-cookoff-prod.codechefvit.com/auth/logout",
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${access_token}`,
+          },
+        }
+      );
+
+      useTokenStore.setState({ access_token: "" });
+      localStorage.removeItem("access_token");
+      localStorage.removeItem("refresh_token");
+      document.cookie.split(";").forEach((c) => {
+        document.cookie = c
+          .replace(/^ +/, "")
+          .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+      });
+      await router.push("/login");
+    } catch (error) {
+      console.log("Logout failed: " + error);
     }
   }
   return (

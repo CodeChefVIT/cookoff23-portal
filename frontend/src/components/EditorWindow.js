@@ -74,57 +74,54 @@ function EditorWindow(props) {
   }, [props.questionId]);
 
   useEffect(() => {
-    function fetchSubmissionStatus(string) {
+    async function fetchSubmissionStatus(string) {
       console.log(props.questionId);
       try {
-        axios
-          .get(
-            "http://139.59.4.43:2358/submissions/batch?tokens=" +
-              string.toString() +
-              "&base64_encoded=false&fields=status_id,stdout,expected_output,stdin,stderr,compile_output,source_code"
-          )
-          .then((response) => {
-            const submissions = response.data.submissions;
+        const response = await axios.get(
+          "http://139.59.4.43:2358/submissions/batch?tokens=" +
+            string.toString() +
+            "&base64_encoded=false&fields=status_id,stdout,expected_output,stdin,stderr,compile_output,source_code"
+        );
 
-            if (
-              submissions.some(
-                (submission) =>
-                  submission.status_id === 1 || submission.status_id === 2
-              )
-            ) {
-              setLoading(true);
-              setTimeout(() => {
-                fetchSubmissionStatus(str);
-              }, 3000);
-            } else if (
-              submissions.every(
-                (submission) =>
-                  submission.status_id === 3 || submission.status_id === 4
-              )
-            ) {
-              setError(false);
-              setLoading(false);
-              setRunData(submissions);
-              Cookies.set(
-                String(props.questionId + 1),
-                JSON.stringify(submissions)
-              );
-            } else {
-              setLoading(false);
-              setError(true);
-              setRunData(submissions);
-              Cookies.set(
-                String(props.questionId + 1),
-                JSON.stringify(submissions)
-              );
-            }
-          });
-      } catch {
-        (error) => {
-          console.log(error);
-        };
+        const submissions = response.data.submissions;
+
+        if (
+          submissions.some(
+            (submission) =>
+              submission.status_id === 1 || submission.status_id === 2
+          )
+        ) {
+          setLoading(true);
+          setTimeout(async () => {
+            await fetchSubmissionStatus(str);
+          }, 3000);
+        } else if (
+          submissions.every(
+            (submission) =>
+              submission.status_id === 3 || submission.status_id === 4
+          )
+        ) {
+          setError(false);
+          setLoading(false);
+          setRunData(submissions);
+          Cookies.set(
+            String(props.questionId + 1),
+            JSON.stringify(submissions)
+          );
+        } else {
+          setLoading(false);
+          setError(true);
+          setRunData(submissions);
+          Cookies.set(
+            String(props.questionId + 1),
+            JSON.stringify(submissions)
+          );
+        }
+      } catch (error) {
+        console.log(error);
       }
     }
+
     let str = [];
     runTokens.forEach((element) => {
       str.push(element.token);
@@ -208,7 +205,8 @@ function EditorWindow(props) {
       )}
       {questionSubmit.has(props.questionId) &&
         !subLoading &&
-        submissionArray !== null && !invalidsubmit && (
+        submissionArray !== null &&
+        !invalidsubmit && (
           <SubmitCode
             clickedButton={props.clickedButton}
             submissionArray={submissionArray}
