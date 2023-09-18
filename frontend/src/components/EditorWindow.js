@@ -32,10 +32,7 @@ function EditorWindow(props) {
   const [program, setProgram] = useState(null);
   const [submissionArray, setSubmissionArray] = useState(null);
 
-  const updateTimer = (newTime) => {
-    setInitialTime(newTime);
-    localStorage.setItem('timerTime', newTime.toString());
-  };
+
   useEffect(() => {
     if (submissionArray !== null) {
       console.log("yes");
@@ -125,6 +122,10 @@ function EditorWindow(props) {
   }, [runTokens]);
 
   function submitQuestions() {
+    const updateTimer = (newTime) => {
+      setInitialTime(newTime);
+      localStorage.setItem('timerTime', newTime.toString());
+    };
     document.cookie.split(";").forEach((c) => {
       document.cookie = c
         .replace(/^ +/, "")
