@@ -12,6 +12,10 @@ import axios from "axios";
 function EditorWindow(props) {
   const { sampleOutputs, sampleInputs, qArr } = props;
   const router = useRouter();
+  const [initialTime, setInitialTime] = useState(() => {
+    const storedTime = localStorage.getItem('timerTime');
+    return storedTime ? parseInt(storedTime, 10) : useTimerStore.getState().Time;
+  });
   const [invalidInput, setInvalidInput] = useState(false);
   const [invalidsubmit, submitInvalidInput] = useState(false);
   const fullPath = `/user/Testcomplete`;
@@ -28,6 +32,10 @@ function EditorWindow(props) {
   const [program, setProgram] = useState(null);
   const [submissionArray, setSubmissionArray] = useState(null);
 
+  const updateTimer = (newTime) => {
+    setInitialTime(newTime);
+    localStorage.setItem('timerTime', newTime.toString());
+  };
   useEffect(() => {
     if (submissionArray !== null) {
       console.log("yes");
@@ -122,8 +130,7 @@ function EditorWindow(props) {
         .replace(/^ +/, "")
         .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
     });
-    useTimerStore.setState({ Time: 2 * 60 *60});
-    localStorage.removeItem("timerTime");
+    updateTimer(2 * 60 * 60);
     RefreshToken();
     router.push(fullPath);
   }

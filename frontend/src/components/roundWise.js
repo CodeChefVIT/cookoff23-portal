@@ -45,7 +45,7 @@ function RoundWise(props) {
                 className="bg-[#4d4d4d] mt-2 rounded-md text-center text-[#C1BBB3] px-2 py-2"
                 id="font_proxima"
               >
-                TotalScore:&nbsp;
+                Round Score:&nbsp;
                 {score}
               </div>
             </div>
