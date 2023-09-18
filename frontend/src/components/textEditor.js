@@ -28,7 +28,7 @@ const TextEditor = ({
     "script.py": {
       name: "Python",
       language: "python",
-      value: "n = int(input())\ninteger_list = map(int, input().split())",
+      value: "print('Hello, world!')",
       code: 71,
     },
     "script.java": {
@@ -66,6 +66,7 @@ const TextEditor = ({
   };
 
   // const initialTime = useTimerStore((state) => state.Time);
+
   const [selectedLanguages, setSelectedLanguages] = useState({});
   const [langCode, setLangCode] = useState(null);
   const [fileName, setFileName] = useState("script.py");
@@ -103,12 +104,26 @@ const TextEditor = ({
   //   }
   // }, [initialTime]);
 
+  const isCodeEmpty = (code) => {
+    return code.trim() === "";
+  };
+
   useEffect(() => {
     const existingCodeData = JSON.parse(localStorage.getItem("codeData")) || {};
     const savedCode = existingCodeData[questionId] || "";
 
     if (editorRef.current) {
-      editorRef.current.setValue(savedCode);
+      if (isCodeEmpty(savedCode)) {
+        editorRef.current.setValue(files["script.py"].value);
+
+        const updatedCodeData = {
+          ...existingCodeData,
+          [questionId]: files["script.py"].value,
+        };
+        localStorage.setItem("codeData", JSON.stringify(updatedCodeData));
+      } else {
+        editorRef.current.setValue(savedCode);
+      }
     }
   }, [questionId]);
 
@@ -116,6 +131,8 @@ const TextEditor = ({
     const selectedLanguage = selectedLanguages[questionId];
     if (selectedLanguage) {
       setFileName(selectedLanguage);
+    } else {
+      setSelectedLanguages({ ...selectedLanguages, [questionId]: "script.py" });
     }
   }, [questionId, selectedLanguages]);
 
@@ -127,6 +144,8 @@ const TextEditor = ({
       ...prevSelectedLanguages,
       [questionId]: option,
     }));
+
+    setCodeValue(files[option].value);
   };
 
   const handleEditorDidMount = (Editor, monaco) => {
@@ -195,7 +214,6 @@ const TextEditor = ({
   };
 
   async function handleClickSubmit() {
-    
     try {
       setSubLoading(true);
       await RefreshToken();
@@ -284,7 +302,7 @@ const TextEditor = ({
                     strokeLinecap="round"
                     strokeLinejoin="round"
                   >
-                    <polyline points="18 15 12 9 6 15" />
+                    <polyline points="6 9 12 15 18 9" />
                   </svg>
                 </label>
               </div>
