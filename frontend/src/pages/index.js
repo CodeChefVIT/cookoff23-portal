@@ -8,6 +8,7 @@ import logo from "../assets/logo.svg";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useWindowSize } from "@uidotdev/usehooks";
+import RefreshToken from "@/utils/RefreshToken";
 
 function App() {
   const router = useRouter();
@@ -22,6 +23,17 @@ function App() {
       setisClicked(true);
     }, 300);
   };
+
+  useEffect(() => {
+    const refresh_token = localStorage.getItem("refresh_token");
+    async function fetchData() {
+      if (refresh_token){
+        await RefreshToken();
+        router.push("/user");
+      }
+    }
+    fetchData();
+  }, []);
 
   useEffect(() => {
     const timer = setTimeout(() => {

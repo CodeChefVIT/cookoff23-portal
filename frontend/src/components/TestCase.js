@@ -67,7 +67,13 @@ const TestCase = ({ clickedButton, runData, code, program }) => {
   async function handleSubmit(event) {
     event.preventDefault();
     console.log(customInput);
-
+    if (customInput === "" || customInput === null || customInput === undefined) {
+      setInvalidInput(true);
+      alert("Please do not leave the custom input field empty");
+      return;
+    }
+      
+    
     try {
       const response = await axios.post(
         "http://139.59.4.43:2358/submissions/?base64_encoded=false",

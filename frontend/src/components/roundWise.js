@@ -21,32 +21,10 @@ function RoundWise(props) {
               <h1 id="font_proxima" className="ml-2">
                 ROUND {round}
               </h1>
-              <Image src={eye} quality={100} width={15} alt="SeeRound" />
-            </div>
-            <div className="text-[#B7AB98]">
-              <button id="font_proxima" className="mr-2">
-                View Submissions &gt;
-              </button>
             </div>
           </div>
           <div className="bg-[#161616] leading-relaxed flex justify-between">
-            <div className="flex flex-col self-center mx-auto my-2">
-              <div
-                className="rounded-full border-[#C1BBB3] border-2 text-[#C1BBB3] text-center py-4 text-lg"
-                id="font_proxima"
-              >
-                <p>0/{qArr.length}</p>
-                <p>Solved</p>
-              </div>
-              <div
-                className="bg-[#4d4d4d] mt-2 rounded-md text-center text-[#C1BBB3] px-1"
-                id="font_proxima"
-              >
-                TotalScore:&nbsp;
-                {score}
-              </div>
-            </div>
-            <div className="mt-4">
+            <div className="mt-4 ml-2">
               {qArr.map((question2, index2) => (
                 <div
                   className="bg-[#363434] flex w-[550px] justify-between h-[35px] items-center mb-4 rounded-lg mr-2 text-md font-light"
@@ -61,6 +39,15 @@ function RoundWise(props) {
                   </div>
                 </div>
               ))}
+            </div>
+            <div className="flex flex-col self-center mx-auto my-2">
+              <div
+                className="bg-[#4d4d4d] mt-2 rounded-md text-center text-[#C1BBB3] px-2 py-2"
+                id="font_proxima"
+              >
+                Round Score:&nbsp;
+                {score}
+              </div>
             </div>
           </div>
         </div>

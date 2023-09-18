@@ -195,6 +195,7 @@ const TextEditor = ({
   };
 
   async function handleClickSubmit() {
+    
     try {
       setSubLoading(true);
       await RefreshToken();
@@ -244,7 +245,9 @@ const TextEditor = ({
       } else if (error.response.status === 400) {
         console.log("Invalid input");
         setSubLoading(false);
-        submitInvalidInput(true);
+        if (codeValue === "" || codeValue === undefined || codeValue === null) {
+          submitInvalidInput(true);
+        }
       }
     }
   }
