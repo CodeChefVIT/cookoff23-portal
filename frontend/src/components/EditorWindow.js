@@ -132,7 +132,6 @@ function EditorWindow(props) {
       };
       updateTimer(2 * 60 * 60);
       router.push("/user/FinalTaskCheck");
-      await router.push("/user/FinalTaskCheck");
     }
   }
 
