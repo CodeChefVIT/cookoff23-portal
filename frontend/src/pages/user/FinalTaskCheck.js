@@ -1,15 +1,18 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Cookies from "js-cookie";
 
 const CompleteTest = () => {
-  const handleButtonClick = () => {
-    localStorage.removeItem("codeData");
-  };
+  let codeData = {};
 
-  const codeData = JSON.parse(localStorage.getItem("codeData")) || {};
+  if (typeof window !== "undefined") {
+    try {
+      codeData = JSON.parse(localStorage.getItem("codeData")) || {};
+    } catch (error) {
+      console.error("Error parsing codeData:", error);
+    }
+  }
+
   const codeDataLength = Object.keys(codeData).length;
-
-  console.log("Length of codeData:", codeDataLength);
 
   const computeArrayValue = (array) => {
     let sum = 0;
@@ -19,13 +22,17 @@ const CompleteTest = () => {
         sum += 1;
       }
     }
-    if ((array[0] === array[1]) === true) {
+
+    if (!array[0] && !array[1]) {
       sum += 1;
     }
 
     return sum;
   };
 
+  const handleButtonClick = () => {
+    localStorage.removeItem("codeData");
+  };
   return (
     <div className="min-h-screen flex justify-center items-center">
       <div className="text-[#D9D9D999] text-center">
