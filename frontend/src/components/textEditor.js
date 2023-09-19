@@ -180,7 +180,7 @@ const TextEditor = ({
     setCode(langCode);
     try {
       const response = await axios.post(
-        "http://139.59.4.43:2358/submissions/batch?base64_encoded=false",
+        "https://judge0.codechefvit.com/submissions/batch?base64_encoded=false",
         {
           submissions: inputs.map((input, index) => ({
             language_id: langCode,
