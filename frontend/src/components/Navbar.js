@@ -10,7 +10,6 @@ import RefreshToken from "@/utils/RefreshToken";
 
 const Navbar = () => {
   const router = useRouter();
-
   const [isTestPortal, setIsTestPortal] = useState(false);
   useEffect(() => {
     setIsTestPortal(router.pathname.includes("testPortal"));
@@ -45,9 +44,14 @@ const Navbar = () => {
   }
 
   async function handleEndTest() {
-    alert("Are you sure you want to end the test?");
-    await router.push("/user/FinalTaskCheck");
+    const userConfirmed = window.confirm("Please submit all questions. If not submitted the code will not be saved. Are you sure you want to end the test");
+  
+    if (userConfirmed) {
+      await RefreshToken();
+      await router.push("/user/FinalTaskCheck");
+    }
   }
+  
 
   return (
     <>
