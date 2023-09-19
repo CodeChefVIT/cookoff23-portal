@@ -5,11 +5,16 @@ const CompleteTest = () => {
     localStorage.removeItem("codeData");
   };
 
+  const codeData = JSON.parse(localStorage.getItem("codeData")) || {};
+  const codeDataLength = Object.keys(codeData).length;
+
+  console.log("Length of codeData:", codeDataLength);
+
   return (
     <div className="min-h-screen flex justify-center items-center">
       <div className="text-[#D9D9D999] text-center">
         <div className="w-[60vw] py-[11px] bg-[#1F1F1F] rounded-[10px] text-[27px] font-semibold text-center ring-2 ring-[#D9D9D9] ring-offset-4 hover:ring-offset-[5px] ring-offset-[#0D0D0D]">
-          No of questions submitted:&nbsp;&nbsp; 8
+          No of questions submitted:&nbsp;&nbsp; {codeDataLength}
         </div>
         <div className="grid grid-cols-3 gap-4 mt-10">
           {Array(8)
