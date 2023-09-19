@@ -67,7 +67,7 @@ function EditorWindow(props) {
       console.log(props.questionId);
       try {
         const response = await axios.get(
-          "http://139.59.4.43:2358/submissions/batch?tokens=" +
+          "https://judge0.codechefvit.com/submissions/batch?tokens=" +
             string.toString() +
             "&base64_encoded=false&fields=status_id,stdout,expected_output,stdin,stderr,compile_output,source_code"
         );
