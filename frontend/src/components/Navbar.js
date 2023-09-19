@@ -46,6 +46,7 @@ const Navbar = () => {
 
   async function handleEndTest() {
     alert("Are you sure you want to end the test?");
+    await router.push("/user/FinalTaskCheck");
   }
 
   return (
@@ -59,6 +60,7 @@ const Navbar = () => {
             </div>
             <div className=" flex mx-5">
               <button
+                href=""
                 className="text-[#C1BBB3] font-[700] px-[45px] py-[11px] mr-[30px] flex-shrink-0 border-none bg-[#1f1f1f] rounded-[25px]"
                 onClick={handleEndTest}
               >
