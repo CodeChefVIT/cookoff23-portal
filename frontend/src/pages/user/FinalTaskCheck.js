@@ -35,7 +35,7 @@ const CompleteTest = () => {
       setInitialTime(newTime);
       localStorage.setItem('timerTime', newTime.toString());
     };
-    updateTimer(1 * 60);
+    updateTimer(2 * 60 * 60);
     await RefreshToken();
     localStorage.removeItem("codeData");
     
