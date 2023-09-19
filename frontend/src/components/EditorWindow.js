@@ -32,10 +32,7 @@ function EditorWindow(props) {
   const [program, setProgram] = useState(null);
   const [submissionArray, setSubmissionArray] = useState(null);
 
-  const updateTimer = (newTime) => {
-    setInitialTime(newTime);
-    localStorage.setItem('timerTime', newTime.toString());
-  };
+
   useEffect(() => {
     if (submissionArray !== null) {
       console.log("yes");
@@ -124,15 +121,18 @@ function EditorWindow(props) {
     }
   }, [runTokens]);
 
-  function submitQuestions() {
-    document.cookie.split(";").forEach((c) => {
-      document.cookie = c
-        .replace(/^ +/, "")
-        .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
-    });
-    updateTimer(2 * 60 * 60);
-    RefreshToken();
-    router.push(fullPath);
+  async function submitQuestions() {
+    const userConfirmed = window.confirm("Please submit all questions. If not submitted the code will not be saved. Are you sure you want to end the test");
+  
+    if (userConfirmed) {
+      await RefreshToken();
+      const updateTimer = (newTime) => {
+        setInitialTime(newTime);
+        localStorage.setItem('timerTime', newTime.toString());
+      };
+      updateTimer(2 * 60 * 60);
+      router.push("/user/FinalTaskCheck");
+    }
   }
 
   return (
@@ -177,7 +177,7 @@ function EditorWindow(props) {
         </div>
       )}
 
-      {loading && (
+      {loading && !subLoading &&(
         <div className="text-white flex justify-center">
           <p>Cooking...</p>
         </div>

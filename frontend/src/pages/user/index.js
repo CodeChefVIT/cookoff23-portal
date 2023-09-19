@@ -19,10 +19,10 @@ function Dashboard() {
       console.log(access_token);
       try {
         const response = await axios.get("https://api-cookoff-prod.codechefvit.com/auth/dashboard", {
-          headers: {
-            Authorization: `Bearer ${access_token}`,
-          },
-        });
+            headers: {
+              Authorization: `Bearer ${access_token}`,
+            },
+          });
         // console.log(response.data);
         setName(response.data.name);
         setRound(response.data.roundQualified + 1);
@@ -31,6 +31,7 @@ function Dashboard() {
       } catch (error) {
         if (error.response && error.response.status === 401) {
           localStorage.removeItem("access_token");
+          localStorage.removeItem("refresh_token");
           useTokenStore.setState({
             access_token: "",
           });
@@ -67,7 +68,7 @@ function Dashboard() {
     async function action(){
       await fetchDataDash();
       await fetchDataRound();
-    } 
+    }
     action();
   }, []);
 
