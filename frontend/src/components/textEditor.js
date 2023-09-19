@@ -137,15 +137,22 @@ const TextEditor = ({
   }, [questionId, selectedLanguages]);
 
   const handleOptionClick = (option) => {
-    setSelectedOption(option);
-    setShowMore(false);
+    if (
+      isCodeEmpty(codeValue) ||
+      window.confirm(
+        "Progress will be lost for this question. Are you sure you want to continue?"
+      )
+    ) {
+      setSelectedOption(option);
+      setShowMore(false);
 
-    setSelectedLanguages((prevSelectedLanguages) => ({
-      ...prevSelectedLanguages,
-      [questionId]: option,
-    }));
+      setSelectedLanguages((prevSelectedLanguages) => ({
+        ...prevSelectedLanguages,
+        [questionId]: option,
+      }));
 
-    setCodeValue(files[option].value);
+      setCodeValue(files[option].value);
+    }
   };
 
   const handleEditorDidMount = (Editor, monaco) => {
