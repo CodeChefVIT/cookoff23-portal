@@ -4,38 +4,39 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import Image from "next/image";
 import cookoff from "../assets/cook-head.svg";
-import useTokenStore from "@/store/tokenProvider";
-import RefreshToken from "@/utils/RefreshToken";
 import axios from "axios";
 
 const validate = (values) => {
-    const errors = {};
-  
-    if (!values.name) {
-      errors.name = "Name is required";
-    } else if (values.name.length < 3) {
-      errors.name = "Name must be at least 3 characters long";
-    }
-  
-    if (!values.registerNo) {
-      errors.registerNo = "Register Number is required";
-    } else if (!/^\d{2}[A-Za-z]{3}\d{4}$/.test(values.registerNo)) {
-      errors.registerNo =
-        "Enter valid Register number";
-    }
-  
-    return errors;
-  };
-  
-  
+  const errors = {};
+
+  if (!values.name) {
+    errors.name = "Name is required";
+  } else if (values.name.length < 3) {
+    errors.name = "Name must be at least 3 characters long";
+  }
+
+  if (!values.regNo) {
+    errors.regNo = "Register Number is required";
+  } else if (!/^\d{2}[A-Za-z]{3}\d{4}$/.test(values.regNo)) {
+    errors.regNo = "Enter a valid Register number";
+  }
+
+  if (!values.email) {
+    errors.email = "Email Required";
+  }
+
+  return errors;
+};
+
 const register = () => {
   const [error, setError] = useState(false);
   const router = useRouter();
   const formik = useFormik({
     initialValues: {
       name: "",
-      registerNo: "",
+      regNo: "",
       email: "",
+      password: "1234"
     },
     validate,
     onSubmit: async (values) => {
@@ -43,36 +44,21 @@ const register = () => {
 
       try {
         const response = await axios.post(
-          "https://api-cookoff-prod.codechefvit.com/auth/login",
+          `https://api-cookoff-prod.codechefvit.com/auth/signup`,
           values
         );
+        console.log("API response:", response);
 
         if (response.status >= 200 && response.status < 300) {
-          useTokenStore.setState({
-            access_token: response.data.accessToken,
-          });
-          localStorage.setItem("access_token", response.data.accessToken);
-          localStorage.setItem("refresh_token", response.data.refreshToken);
-
-          await RefreshToken();
           setError(false);
-
           router.push("/login");
         }
       } catch (error) {
         if (error.response) {
+          console.error("API error:", error);
           const statusCode = error.response.status;
-          if (statusCode === 401) {
-            setError(true);
-            localStorage.removeItem("access_token");
-            useTokenStore.setState({
-              access_token: "",
-            });
-            router.push("/login");
-          } else if (statusCode === 403) {
-            console.log("Access forbidden:", error);
-          } else if (statusCode === 400) {
-            console.log("Invalid credentials");
+          console.log(`status code: ${statusCode}`);
+          if (statusCode === 400) {
             setError(true);
           } else {
             console.log("An error occurred:", error);
@@ -83,6 +69,7 @@ const register = () => {
       }
     },
   });
+
   return (
     <div>
       <motion.div
@@ -101,7 +88,7 @@ const register = () => {
           </div>
           {error && (
             <div className="text-[#D9D9D999] my-10 text-center">
-              Invalid credentials
+              Registration failed. Please check your information
             </div>
           )}
           <form
@@ -126,15 +113,15 @@ const register = () => {
             <div className="mb-6">
               <input
                 className="w-full py-[18px] px-[33px] text-[#D9D9D999] bg-[#1F1F1F] rounded-[25px] text-[22px] font-semibold"
-                id="registerNo"
+                id="regNo"
                 type="text"
-                placeholder="registerNo"
+                placeholder="regNo"
                 onChange={formik.handleChange}
-                value={formik.values.registerNo}
+                value={formik.values.regNo}
               />
-              {formik.errors.registerNo ? (
+              {formik.errors.regNo ? (
                 <div className="text-[#D9D9D999] mt-1 ml-2">
-                  {formik.errors.registerNo}
+                  {formik.errors.regNo}
                 </div>
               ) : null}
             </div>
