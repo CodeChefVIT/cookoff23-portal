@@ -40,13 +40,8 @@ function CountdownTimer() {
         updateTimer(initialTime - 1);
       } else {
         updateTimer(2 * 60 * 60);
-        document.cookie.split(";").forEach((c) => {
-          document.cookie = c
-            .replace(/^ +/, "")
-            .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
-        });
         RefreshToken();
-        router.push("/user/Testcomplete");
+        router.push("/user/FinalTaskCheck");
       }
     }, 1000);
 

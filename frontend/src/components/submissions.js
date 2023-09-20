@@ -6,6 +6,11 @@ function SubmitCode(props) {
   const { clickedButton, submissionArray } = props;
   const containerRef = useRef(null);
   const [testCaseClicked, setTestCaseClicked] = useState(0);
+  const subData = [
+    "Run/Compilation error",
+    "Time Limit Exceeded",
+    "Wrong Output",
+  ];
 
   useEffect(() => {
     setTestCaseClicked(0);
@@ -14,7 +19,10 @@ function SubmitCode(props) {
   return (
     <>
       {submissionArray.error[0] ? (
-        <div className="bg-[#1f1f1f] w-[95%] h-fit mb-10 mx-5" ref={containerRef}>
+        <div
+          className="bg-[#1f1f1f] w-[95%] h-fit mb-10 mx-5"
+          ref={containerRef}
+        >
           <div className="pl-5 py-4">
             <h1 className="text-[#CC3333] text-2xl font-semibold">
               Compilation Error :(
@@ -37,8 +45,7 @@ function SubmitCode(props) {
           <div className="text-[#c1bbb3] px-5">
             <p className="font-semibold text-lg">Exit Status</p>
             <div className="bg-[#0D0D0D] py-3 pl-3">
-              {/* {runData[0].status_id} */}
-              6
+              {/* {runData[0].status_id} */}6
             </div>
           </div>
           <div>&nbsp;</div>
@@ -66,7 +73,7 @@ function SubmitCode(props) {
                       <div>{index}</div>
                       <div className="flex-col ml-10">
                         <div>Not Accepted</div>
-                        <div className="text-xs text-center">{value}</div>
+                        <div className="text-xs text-center">{subData[index]}</div>
                       </div>
                     </div>
                   );
