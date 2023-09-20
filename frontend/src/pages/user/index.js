@@ -66,6 +66,7 @@ function Dashboard() {
       }
     }
     async function action(){
+      await RefreshToken();
       await fetchDataDash();
       await fetchDataRound();
     }

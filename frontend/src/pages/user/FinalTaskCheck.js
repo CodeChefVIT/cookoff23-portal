@@ -3,16 +3,10 @@ import Navbar from "@/components/Navbar";
 import { useRouter } from "next/router";
 import RefreshToken from "@/utils/RefreshToken";
 import Cookies from "js-cookie";
-import useTimerStore from "@/store/timeProvider";
 
 const CompleteTest = () => {
   const router = useRouter();
-  const [initialTime, setInitialTime] = useState(() => {
-    const storedTime = localStorage.getItem("timerTime");
-    return storedTime
-      ? parseInt(storedTime, 10)
-      : useTimerStore.getState().Time;
-  });
+
   useEffect(() => {
     const handleBackButton = (e) => {
       e.preventDefault();
@@ -33,25 +27,15 @@ const CompleteTest = () => {
         .replace(/^ +/, "")
         .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
     });
-    const updateTimer = (newTime) => {
-      setInitialTime(newTime);
-      localStorage.setItem("timerTime", newTime.toString());
-    };
-    updateTimer(2 * 60 * 60);
     await RefreshToken();
-    localStorage.removeItem("codeData");
-
     router.push("/user");
   }
   let codeData = {};
 
-  if (typeof window !== "undefined") {
-    try {
-      codeData = JSON.parse(localStorage.getItem("codeData")) || {};
-    } catch (error) {
-      console.error("Error parsing codeData:", error);
-    }
-  }
+  useEffect(() => {
+    const length = Number(localStorage.getItem("QueArrlength"));
+    console.log(length);
+  }, []);
 
   const codeDataLength = Object.keys(codeData).length;
 
@@ -71,9 +55,6 @@ const CompleteTest = () => {
 
     return sum;
   };
-
-  const length = Number(localStorage.getItem("QueArrlength"));
-  console.log(length);
 
   return (
     <>

@@ -14,6 +14,9 @@ const Navbar = () => {
   useEffect(() => {
     setIsTestPortal(router.pathname.includes("testPortal"));
   }, [router.pathname]);
+  const updateTimer = (newTime) => {
+    localStorage.setItem("timerTime", newTime.toString());
+  };
 
   async function handleLogout() {
     await RefreshToken();
@@ -39,15 +42,28 @@ const Navbar = () => {
       });
       await router.push("/login");
     } catch (error) {
-      console.log("Logout failed: " + error);
+      if (error.response && error.response.status === 403) {
+        localStorage.removeItem("access_token");
+        localStorage.removeItem("refresh_token");
+        document.cookie.split(";").forEach((c) => {
+          document.cookie = c
+            .replace(/^ +/, "")
+            .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+        });
+        router.push("/login");
+      }
     }
   }
 
   async function handleEndTest() {
-    const userConfirmed = window.confirm("Please submit all questions. If not submitted the code will not be saved. Are you sure you want to end the test");
-  
+    const userConfirmed = window.confirm(
+      "Please submit all questions. If not submitted the code will not be saved. Are you sure you want to end the test"
+    );
+
     if (userConfirmed) {
       await RefreshToken();
+      updateTimer(2 * 60 * 60);
+      localStorage.removeItem("codeData");
       await router.push("/user/FinalTaskCheck");
     }
   }
