@@ -11,10 +11,14 @@ import axios from "axios";
 
 function EditorWindow(props) {
   const { sampleOutputs, sampleInputs, qArr } = props;
+  const a = qArr.length;
+  localStorage.setItem("QueArrlength", a);
   const router = useRouter();
   const [initialTime, setInitialTime] = useState(() => {
-    const storedTime = localStorage.getItem('timerTime');
-    return storedTime ? parseInt(storedTime, 10) : useTimerStore.getState().Time;
+    const storedTime = localStorage.getItem("timerTime");
+    return storedTime
+      ? parseInt(storedTime, 10)
+      : useTimerStore.getState().Time;
   });
   const [invalidInput, setInvalidInput] = useState(false);
   const [invalidsubmit, submitInvalidInput] = useState(false);
@@ -31,7 +35,6 @@ function EditorWindow(props) {
   const [code, setCode] = useState(null);
   const [program, setProgram] = useState(null);
   const [submissionArray, setSubmissionArray] = useState(null);
-
 
   useEffect(() => {
     if (submissionArray !== null) {
@@ -122,13 +125,15 @@ function EditorWindow(props) {
   }, [runTokens]);
 
   async function submitQuestions() {
-    const userConfirmed = window.confirm("Please submit all questions. If not submitted the code will not be saved. Are you sure you want to end the test");
-  
+    const userConfirmed = window.confirm(
+      "Please submit all questions. If not submitted the code will not be saved. Are you sure you want to end the test"
+    );
+
     if (userConfirmed) {
       await RefreshToken();
       const updateTimer = (newTime) => {
         setInitialTime(newTime);
-        localStorage.setItem('timerTime', newTime.toString());
+        localStorage.setItem("timerTime", newTime.toString());
       };
       updateTimer(2 * 60 * 60);
       router.push("/user/FinalTaskCheck");
@@ -177,7 +182,7 @@ function EditorWindow(props) {
         </div>
       )}
 
-      {loading && !subLoading &&(
+      {loading && !subLoading && (
         <div className="text-white flex justify-center">
           <p>Cooking...</p>
         </div>
