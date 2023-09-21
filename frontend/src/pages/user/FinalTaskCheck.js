@@ -6,6 +6,7 @@ import Cookies from "js-cookie";
 
 const CompleteTest = () => {
   const router = useRouter();
+  const [length, setLength] = useState(0);
 
   useEffect(() => {
     const handleBackButton = (e) => {
@@ -33,8 +34,9 @@ const CompleteTest = () => {
   let codeData = {};
 
   useEffect(() => {
-    const length = Number(localStorage.getItem("QueArrlength"));
-    console.log(length);
+    const lengthFromLocalStorage = Number(localStorage.getItem("QueArrlength"));
+    setLength(lengthFromLocalStorage);
+    console.log(lengthFromLocalStorage);
   }, []);
 
   const codeDataLength = Object.keys(codeData).length;
@@ -55,9 +57,6 @@ const CompleteTest = () => {
 
     return sum;
   };
-
-  const length = Number(localStorage.getItem("QueArrlength"));
-  console.log(length);
 
   return (
     <>
