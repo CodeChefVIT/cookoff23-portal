@@ -94,7 +94,7 @@ function EditorWindow(props) {
         const response = await axios.get(
           "https://judge0.codechefvit.com/submissions/batch?tokens=" +
             string.toString() +
-            "&base64_encoded=false&fields=status_id,stdout,expected_output,stdin,stderr,compile_output,source_code"
+            "&base64_encoded=true&fields=status_id,stdout,expected_output,stdin,stderr,compile_output,source_code"
         );
 
         const submissions = response.data.submissions;
@@ -132,7 +132,9 @@ function EditorWindow(props) {
           );
         }
       } catch (error) {
-        console.log(error);
+        if (error.response && error.response.status === 400) {
+          setLoading(false);
+        }
       }
     }
 
@@ -223,7 +225,7 @@ function EditorWindow(props) {
         </div>
       )}
 
-      {error && !loading && questionRunArray.has(props.questionId) && (
+      {error && !loading && questionRunArray.has(props.questionId) && !subLoading &&(
         <div className="h-fit px-5 pb-5">
           <CompilationError runTestCases={runTestCases} runData={runData} />
         </div>

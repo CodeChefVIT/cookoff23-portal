@@ -54,13 +54,14 @@ function RoundWise(props) {
       </div>
 
       <div className="flex items-center justify-center mt-16">
-        <button
-          className="uppercase text-[#D9D9D9] font-semibold py-[16px] px-[26px] text-[22px] border-[3px] border-[#D9D9D9] rounded-full hover:bg-[#D9D9D9] hover:text-black"
-          onClick={startTest}
-          disabled={!roundActive}
-        >
-          Start Test
-        </button>
+        {roundActive && (
+          <button
+            className="uppercase text-[#D9D9D9] font-semibold py-[16px] px-[26px] text-[22px] border-[3px] border-[#D9D9D9] rounded-full hover:bg-[#D9D9D9] hover:text-black"
+            onClick={startTest}
+          >
+            Start Test
+          </button>
+        )}
       </div>
     </div>
   );

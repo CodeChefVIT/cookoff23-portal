@@ -40,7 +40,7 @@ const TestCase = ({ clickedButton, runData, code, program }) => {
         const response = await axios.get(
           "https://judge0.codechefvit.com/submissions/" +
             runToken +
-            "?base64_encoded=false&fields=stdout,stderr,status_id,language_id"
+            "?base64_encoded=true&fields=stdout,stderr,status_id,language_id"
         );
 
         console.log(response.data);
@@ -52,7 +52,7 @@ const TestCase = ({ clickedButton, runData, code, program }) => {
           }, 3000);
         } else {
           setLoading(false);
-          setCustomOutput(response.data.stdout);
+          setCustomOutput(response.data.stdout || response.data.stderr);
         }
       } catch (error) {
         console.log(error);
@@ -227,14 +227,14 @@ const TestCase = ({ clickedButton, runData, code, program }) => {
                   ) : (
                     <div className="mb-10">
                       <div className="">
-                        <div className="mt-[20px] mb-[4px] font-bold text-lg text-[#1BA94C]">
+                        <div className="mt-[20px] mb-[4px] font-bold text-lg text-[#C1BBB3]">
                           Output
                         </div>
                         <div
                           id="cascadia"
                           className="bg-[#0d0d0d] text-white py-5 px-7"
                         >
-                          {customOutput}
+                          {atob(customOutput)}
                         </div>
                       </div>
                     </div>
@@ -252,7 +252,7 @@ const TestCase = ({ clickedButton, runData, code, program }) => {
                   className="bg-[#0d0d0d] text-white py-5 px-7 whitespace-pre"
                 >
                   <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                    {runData[testCaseIndex].stdin}
+                    {atob(runData[testCaseIndex].stdin)}
                   </ReactMarkdown>
                 </div>
               </div>
@@ -267,7 +267,7 @@ const TestCase = ({ clickedButton, runData, code, program }) => {
                       className="bg-[#0d0d0d] text-white py-5 px-7 whitespace-pre"
                     >
                       <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                        {runData[testCaseIndex].expected_output}
+                        {atob(runData[testCaseIndex].expected_output)}
                       </ReactMarkdown>
                     </div>
                   </div>
@@ -280,7 +280,7 @@ const TestCase = ({ clickedButton, runData, code, program }) => {
                       className="bg-[#0d0d0d] text-white py-5 px-7 whitespace-pre"
                     >
                       <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                        {runData[testCaseIndex].stdout}
+                        {atob(runData[testCaseIndex].stdout)}
                       </ReactMarkdown>
                     </div>
                   </div>
