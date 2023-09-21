@@ -114,12 +114,16 @@ function Question(props) {
         ))}
         <div>
           <h2 className="font-semibold my-2 mt-3">Constraints</h2>
-
-          {(constraints !== null) && constraints.map((format, index) => (
-            <ReactMarkdown remarkPlugins={[remarkGfm]} key={index}>
-              {format}
-            </ReactMarkdown>
-          ))}
+          <ul>
+            {constraints !== null &&
+              constraints.map((format, index) => (
+                <li>
+                  <ReactMarkdown remarkPlugins={[remarkGfm]} key={index}>
+                    {format}
+                  </ReactMarkdown>
+                </li>
+              ))}
+          </ul>
         </div>
       </div>
     </div>

@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import RefreshToken from "@/utils/RefreshToken";
 
 function RoundWise(props) {
-  const { round, score, qArr } = props;
+  const { round, score, qArr, roundActive } = props;
   const router = useRouter();
   async function startTest() {
     await RefreshToken();
@@ -57,6 +57,7 @@ function RoundWise(props) {
         <button
           className="uppercase text-[#D9D9D9] font-semibold py-[16px] px-[26px] text-[22px] border-[3px] border-[#D9D9D9] rounded-full hover:bg-[#D9D9D9] hover:text-black"
           onClick={startTest}
+          disabled={!roundActive}
         >
           Start Test
         </button>
