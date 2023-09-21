@@ -38,13 +38,13 @@ const TestCase = ({ clickedButton, runData, code, program }) => {
       try {
         console.log(runToken);
         const response = await axios.get(
-          "http://139.59.4.43:2358/submissions/" +
+          "https://judge0.codechefvit.com/submissions/" +
             runToken +
             "?base64_encoded=false&fields=stdout,stderr,status_id,language_id"
         );
-    
+
         console.log(response.data);
-    
+
         if (response.data.status_id === 1 || response.data.status_id === 2) {
           setLoading(true);
           setTimeout(async () => {
@@ -58,7 +58,7 @@ const TestCase = ({ clickedButton, runData, code, program }) => {
         console.log(error);
       }
     }
-    
+
     if (runToken) {
       fetchSubmit();
     }
@@ -67,16 +67,19 @@ const TestCase = ({ clickedButton, runData, code, program }) => {
   async function handleSubmit(event) {
     event.preventDefault();
     console.log(customInput);
-    if (customInput === "" || customInput === null || customInput === undefined) {
+    if (
+      customInput === "" ||
+      customInput === null ||
+      customInput === undefined
+    ) {
       setInvalidInput(true);
       alert("Please do not leave the custom input field empty");
       return;
     }
-      
-    
+
     try {
       const response = await axios.post(
-        "http://139.59.4.43:2358/submissions/?base64_encoded=false",
+        "https://judge0.codechefvit.com/submissions/?base64_encoded=false",
         {
           language_id: code,
           source_code: program,
