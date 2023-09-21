@@ -56,6 +56,9 @@ const CompleteTest = () => {
     return sum;
   };
 
+  const length = Number(localStorage.getItem("QueArrlength"));
+  console.log(length);
+
   return (
     <>
       <Navbar />
@@ -65,7 +68,7 @@ const CompleteTest = () => {
             No of questions submitted:&nbsp;&nbsp; {codeDataLength}
           </div>
           <div className="grid grid-cols-3 gap-4 mt-10">
-            {Array(5)
+            {Array(length)
               .fill()
               .map((_, index) => {
                 const taskCompletionCookieName = `${index + 10}`;
