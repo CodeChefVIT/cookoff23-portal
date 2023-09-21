@@ -11,6 +11,7 @@ const TextEditor = ({
   setQuestionSubmit,
   setInvalidInput,
   questionRun,
+  setTestcaseInvalid,
   submitInvalidInput,
   questionSubmit,
   expectedOutputs,
@@ -180,6 +181,7 @@ const TextEditor = ({
   };
   const handleClickRun = async () => {
     await RefreshToken();
+    setTestcaseInvalid(false);
     console.log(localStorage.getItem("access_token"));
     getEditorValue();
     const existingCodeData = JSON.parse(localStorage.getItem("codeData"));
@@ -258,6 +260,7 @@ const TextEditor = ({
       if (response.status === 201) {
         await setInvalidInput(false);
         setSubmissionArray(response.data);
+        setTestcaseInvalid(false);
         Cookies.set(String(questionId + 10), JSON.stringify(response.data));
       }
       if (questionRunArray.has(questionId)) {
@@ -278,6 +281,12 @@ const TextEditor = ({
       } else if (error.response.status === 400) {
         console.log("Invalid input");
         setSubLoading(false);
+        setQuestionQuestionRunArray((prev) => {
+          const newSet = new Set(prev);
+          newSet.delete(questionId);
+          return newSet;
+        });
+        setTestcaseInvalid(true);
         if (codeValue === "" || codeValue === undefined || codeValue === null) {
           submitInvalidInput(true);
         }
