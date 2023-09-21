@@ -289,7 +289,9 @@ const TextEditor = ({
             <div className="relative">
               <div className="h-8 w-40 bg-[#0d0d0d] flex border border-gray-200 rounded items-center">
                 <input
-                  value={selectedLanguages[questionId] || "select"}
+                  value={
+                    selectedLanguages[questionId]?.split(".")[1] || "select"
+                  }
                   name="select"
                   id="select"
                   className="px-2  appearance-none bg-[#0d0d0d] outline-none text-white w-full"
