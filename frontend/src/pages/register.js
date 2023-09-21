@@ -28,7 +28,7 @@ const validate = (values) => {
   return errors;
 };
 
-const register = () => {
+function Register () {
   const [error, setError] = useState(false);
   const router = useRouter();
   const formik = useFormik({
@@ -155,4 +155,4 @@ const register = () => {
   );
 };
 
-export default register;
+export default Register;

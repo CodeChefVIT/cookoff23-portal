@@ -1,6 +1,6 @@
 import TextEditor from "./textEditor";
 import TestCase from "./TestCase";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import CompilationError from "./compError";
 import SubmitCode from "./submissions";
 import { useRouter } from "next/router";
@@ -10,6 +10,8 @@ import RefreshToken from "@/utils/RefreshToken";
 import axios from "axios";
 
 function EditorWindow(props) {
+  const container1Ref = useRef(null);
+  const container2Ref = useRef(null);
   const { sampleOutputs, sampleInputs, qArr } = props;
   const a = qArr.length;
   localStorage.setItem("QueArrlength", a);
@@ -35,6 +37,18 @@ function EditorWindow(props) {
   const [code, setCode] = useState(null);
   const [program, setProgram] = useState(null);
   const [submissionArray, setSubmissionArray] = useState(null);
+
+  useEffect(() => {
+    if (container1Ref.current !== null) {
+      container1Ref.current.scrollIntoView();
+    }
+    
+  }, [loading]);
+  useEffect(() => {
+    if (container2Ref.current !== null) {
+      container2Ref.current.scrollIntoView();
+    }
+  }, [subLoading]);
 
   useEffect(() => {
     if (submissionArray !== null) {
@@ -183,13 +197,13 @@ function EditorWindow(props) {
       )}
 
       {loading && !subLoading && (
-        <div className="text-white flex justify-center">
+        <div className="text-white flex justify-center" ref={container1Ref}>
           <p>Cooking...</p>
         </div>
       )}
 
       {subLoading && (
-        <div className="text-white flex justify-center">
+        <div className="text-white flex justify-center" ref={container2Ref}>
           <p>Serving...</p>
         </div>
       )}
