@@ -12,6 +12,7 @@ import axios from "axios";
 function EditorWindow(props) {
   const container1Ref = useRef(null);
   const container2Ref = useRef(null);
+  const container3Ref = useRef(null);
   const { sampleOutputs, sampleInputs, qArr } = props;
   const a = qArr.length;
   localStorage.setItem("QueArrlength", a);
@@ -25,6 +26,7 @@ function EditorWindow(props) {
   const [invalidInput, setInvalidInput] = useState(false);
   const [invalidsubmit, submitInvalidInput] = useState(false);
   const fullPath = `/user/Testcomplete`;
+  const [testcaseInvalid, setTestcaseInvalid] = useState(false);
   const [runTestCases, setRunTestCases] = useState(false);
   const [questionRun, setQuestionRun] = useState(null);
   const [questionSubmit, setQuestionSubmit] = useState(new Set());
@@ -49,6 +51,12 @@ function EditorWindow(props) {
       container2Ref.current.scrollIntoView();
     }
   }, [subLoading]);
+
+  useEffect(() => {
+    if (container2Ref.current !== null) {
+      container2Ref.current.scrollIntoView();
+    }
+  }, [testcaseInvalid]);
 
   useEffect(() => {
     if (submissionArray !== null) {
@@ -164,6 +172,7 @@ function EditorWindow(props) {
         submitInvalidInput={submitInvalidInput}
         questionId={props.questionId}
         setRunTestCases={setRunTestCases}
+        setTestcaseInvalid={setTestcaseInvalid}
         setQuestionRun={setQuestionRun}
         setQuestionSubmit={setQuestionSubmit}
         setRunTokens={setRunTokens}
@@ -205,6 +214,12 @@ function EditorWindow(props) {
       {subLoading && (
         <div className="text-white flex justify-center" ref={container2Ref}>
           <p>Serving...</p>
+        </div>
+      )}
+
+      {testcaseInvalid && (
+        <div className="text-white flex justify-center" ref={container3Ref}>
+          <p>Something went wrong</p>
         </div>
       )}
 

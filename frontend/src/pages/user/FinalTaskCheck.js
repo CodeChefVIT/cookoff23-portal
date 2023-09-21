@@ -3,6 +3,7 @@ import Navbar from "@/components/Navbar";
 import { useRouter } from "next/router";
 import RefreshToken from "@/utils/RefreshToken";
 import Cookies from "js-cookie";
+import axios from "axios";
 
 const CompleteTest = () => {
   const router = useRouter();
@@ -23,13 +24,32 @@ const CompleteTest = () => {
     };
   }, []);
   async function handleButtonClick() {
-    document.cookie.split(";").forEach((c) => {
-      document.cookie = c
-        .replace(/^ +/, "")
-        .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
-    });
-    await RefreshToken();
-    router.push("/user");
+    
+
+    
+    try {
+      await RefreshToken();
+      const access_token = localStorage.getItem("access_token");
+      console.log(access_token);
+      const response = await axios.get(
+        "https://api-cookoff-prod.codechefvit.com/submit/endtest",
+        {
+          headers: {
+            Authorization: `Bearer ${access_token}`,
+          },
+        }
+      );
+      if (response.status >= 200 && response.status < 300) {
+        document.cookie.split(";").forEach((c) => {
+          document.cookie = c
+            .replace(/^ +/, "")
+            .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+        });
+        router.push("/user");
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
   let codeData = {};
 

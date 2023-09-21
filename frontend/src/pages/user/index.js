@@ -13,20 +13,26 @@ function Dashboard() {
   const [qArr, setQArr] = useState([]);
   const [round, setRound] = useState(1);
   const [score, setScore] = useState(0);
+  const [roundActive, setRoundActive] = useState(true);
   useEffect(() => {
     async function fetchDataDash() {
       const access_token = localStorage.getItem("access_token");
       console.log(access_token);
       try {
-        const response = await axios.get("https://api-cookoff-prod.codechefvit.com/auth/dashboard", {
+        const response = await axios.get(
+          "https://api-cookoff-prod.codechefvit.com/auth/dashboard",
+          {
             headers: {
               Authorization: `Bearer ${access_token}`,
             },
-          });
+          }
+        );
         // console.log(response.data);
         setName(response.data.name);
         setRound(response.data.roundQualified + 1);
         setScore(response.data.score);
+        console.log(response.data.isRoundActive);
+        setRoundActive(response.data.isRoundActive);
         localStorage.setItem("round", response.data.roundQualified + 1);
       } catch (error) {
         if (error.response && error.response.status === 401) {
@@ -41,12 +47,12 @@ function Dashboard() {
         }
       }
     }
-    async function fetchDataRound(){
+    async function fetchDataRound() {
       const access_token = localStorage.getItem("access_token");
-      try{
+      try {
         const response = await axios.post(
           "https://api-cookoff-prod.codechefvit.com/ques/getRound",
-          { round: round},
+          { round: round },
           {
             headers: {
               Authorization: `Bearer ${access_token}`,
@@ -59,13 +65,21 @@ function Dashboard() {
         } else {
           console.log("No data received from the API.");
         }
-      } catch(error){
+      } catch (error) {
         if (error.response && error.response.status === 404) {
           console.log("No questions");
+        } else if (error.response && error.response.status === 403) {
+          console.log("No questions");
+          localStorage.removeItem("access_token");
+          localStorage.removeItem("refresh_token");
+          useTokenStore.setState({
+            access_token: "",
+          });
+          router.push("/login");
         }
       }
     }
-    async function action(){
+    async function action() {
       await RefreshToken();
       await fetchDataDash();
       await fetchDataRound();
@@ -79,7 +93,12 @@ function Dashboard() {
         <Navbar />
         <div className="flex">
           <CurrentProfile name={name} round={round} />
-          <RoundWise round={round} score={score} qArr={qArr} />
+          <RoundWise
+            round={round}
+            score={score}
+            qArr={qArr}
+            roundActive={roundActive}
+          />
         </div>
       </main>
     </>
