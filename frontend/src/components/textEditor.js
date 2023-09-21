@@ -45,7 +45,7 @@ const TextEditor = ({
       code: 50,
     },
     "script.cpp": {
-      name: "Cpp",
+      name: "C++",
       language: "cpp",
       value:
         "#include<iostream>\nusing namespace std;\n\nint main() {\n\treturn 0;\n}",
@@ -277,6 +277,10 @@ const TextEditor = ({
     }
   }
 
+  function capitalizeFirstLetter(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+
   return (
     <div className="h-[90vh] w-full mb-7 2xl:mb-4">
       <div className="h-[48px] p-2 bg-[#0d0d0d]">
@@ -290,7 +294,9 @@ const TextEditor = ({
               <div className="h-8 w-40 bg-[#0d0d0d] flex border border-gray-200 rounded items-center">
                 <input
                   value={
-                    selectedLanguages[questionId]?.split(".")[1] || "select"
+                    selectedLanguages[questionId]
+                      ? files[selectedLanguages[questionId]].name
+                      : "Select"
                   }
                   name="select"
                   id="select"
@@ -347,7 +353,7 @@ const TextEditor = ({
                             : "group-hover:bg-[#1b1b1b]"
                         }`}
                       >
-                        {option.substring(option.lastIndexOf(".") + 1)}
+                        {files[option].name}
                       </p>
                     </div>
                   ))}
