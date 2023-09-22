@@ -117,7 +117,7 @@ function Question(props) {
           <ul>
             {constraints !== null &&
               constraints.map((format, index) => (
-                <li>
+                <li key={index}>
                   <ReactMarkdown remarkPlugins={[remarkGfm]} key={index}>
                     {format}
                   </ReactMarkdown>

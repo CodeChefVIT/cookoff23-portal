@@ -4,6 +4,8 @@ import { useRouter } from "next/router";
 import RefreshToken from "@/utils/RefreshToken";
 import Cookies from "js-cookie";
 import axios from "axios";
+import Head from "next/head";
+import useTokenStore from "@/store/tokenProvider";
 
 const CompleteTest = () => {
   const router = useRouter();
@@ -27,7 +29,6 @@ const CompleteTest = () => {
     try {
       await RefreshToken();
       const access_token = localStorage.getItem("access_token");
-      console.log(access_token);
       const response = await axios.get(
         "https://api-cookoff-prod.codechefvit.com/submit/endtest",
         {
@@ -48,7 +49,13 @@ const CompleteTest = () => {
         router.push("/user");
       }
     } catch (error) {
-      console.log(error);
+      if (error.response && error.response.status === 400) {
+        localStorage.removeItem("access_token");
+        useTokenStore.setState({
+          access_token: "",
+        });
+        router.push("/login");
+      }
     }
   }
   let codeData = {};
@@ -56,7 +63,6 @@ const CompleteTest = () => {
   useEffect(() => {
     const lengthFromLocalStorage = Number(localStorage.getItem("QueArrlength"));
     setLength(lengthFromLocalStorage);
-    console.log(lengthFromLocalStorage);
   }, []);
 
   const codeDataLength = Object.keys(codeData).length;
@@ -80,6 +86,30 @@ const CompleteTest = () => {
 
   return (
     <>
+      <Head>
+        <title>submissions</title>
+        <link
+          rel="apple-touch-icon"
+          sizes="180x180"
+          href="/apple-touch-icon.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="32x32"
+          href="/favicon-32x32.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="16x16"
+          href="/favicon-16x16.png"
+        />
+        <link rel="manifest" href="/site.webmanifest" />
+        <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
+        <meta name="msapplication-TileColor" content="#da532c" />
+        <meta name="theme-color" content="#ffffff" />
+      </Head>
       <Navbar />
       <div className="min-h-[84vh] flex justify-center items-center">
         <div className="text-[#D9D9D999] text-center">

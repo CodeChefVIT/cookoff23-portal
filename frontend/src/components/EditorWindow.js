@@ -60,7 +60,6 @@ function EditorWindow(props) {
 
   useEffect(() => {
     if (submissionArray !== null) {
-      console.log("yes");
       setSubLoading(false);
     }
   }, [submissionArray]);
@@ -68,6 +67,7 @@ function EditorWindow(props) {
   useEffect(() => {
     setInvalidInput(false);
     submitInvalidInput(false);
+    setTestcaseInvalid(false);
     const storedData = Cookies.get(String(props.questionId + 1));
     const storedData2 = Cookies.get(String(props.questionId + 10));
 
@@ -89,12 +89,11 @@ function EditorWindow(props) {
 
   useEffect(() => {
     async function fetchSubmissionStatus(string) {
-      console.log(props.questionId);
       try {
         const response = await axios.get(
           "https://judge0.codechefvit.com/submissions/batch?tokens=" +
             string.toString() +
-            "&base64_encoded=false&fields=status_id,stdout,expected_output,stdin,stderr,compile_output,source_code"
+            "&base64_encoded=true&fields=status_id,stdout,expected_output,stdin,stderr,compile_output,source_code"
         );
 
         const submissions = response.data.submissions;
@@ -132,7 +131,9 @@ function EditorWindow(props) {
           );
         }
       } catch (error) {
-        console.log(error);
+        if (error.response && error.response.status === 400) {
+          setLoading(false);
+        }
       }
     }
 
@@ -140,7 +141,6 @@ function EditorWindow(props) {
     runTokens.forEach((element) => {
       str.push(element.token);
     });
-    console.log(str.toString());
     if (runTokens.length > 0) {
       fetchSubmissionStatus(str);
     }
@@ -223,7 +223,7 @@ function EditorWindow(props) {
         </div>
       )}
 
-      {error && !loading && questionRunArray.has(props.questionId) && (
+      {error && !loading && questionRunArray.has(props.questionId) && !subLoading &&(
         <div className="h-fit px-5 pb-5">
           <CompilationError runTestCases={runTestCases} runData={runData} />
         </div>

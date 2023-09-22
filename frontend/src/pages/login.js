@@ -7,6 +7,7 @@ import cookoff from "../assets/cook-head.svg";
 import useTokenStore from "@/store/tokenProvider";
 import RefreshToken from "@/utils/RefreshToken";
 import axios from "axios";
+import Head from "next/head";
 
 const validate = (values) => {
   const errors = {};
@@ -36,8 +37,6 @@ function Login() {
     },
     validate,
     onSubmit: async (values) => {
-      console.log(values);
-
       try {
         const response = await axios.post(
           "https://api-cookoff-prod.codechefvit.com/auth/login",
@@ -67,16 +66,27 @@ function Login() {
             });
             router.push("/login");
           } else if (statusCode === 403) {
-            console.log("Access forbidden:", error);
-          } else if (statusCode === 400) {
-            console.log("Invalid credentials");
             setError(true);
-            
+            localStorage.removeItem("access_token");
+            useTokenStore.setState({
+              access_token: "",
+            });
+            router.push("/login");
+          } else if (statusCode === 400) {
+            setError(true);
+            localStorage.removeItem("access_token");
+            useTokenStore.setState({
+              access_token: "",
+            });
+            router.push("/login");
           } else {
-            console.log("An error occurred:", error);
+            setError(true);
+            localStorage.removeItem("access_token");
+            useTokenStore.setState({
+              access_token: "",
+            });
+            router.push("/login");
           }
-        } else {
-          console.log("An unexpected error occurred:", error);
         }
       }
     },
@@ -84,6 +94,30 @@ function Login() {
 
   return (
     <div>
+      <Head>
+        <title>CookOff | Login</title>
+        <link
+          rel="apple-touch-icon"
+          sizes="180x180"
+          href="/apple-touch-icon.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="32x32"
+          href="/favicon-32x32.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="16x16"
+          href="/favicon-16x16.png"
+        />
+        <link rel="manifest" href="/site.webmanifest" />
+        <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
+        <meta name="msapplication-TileColor" content="#da532c" />
+        <meta name="theme-color" content="#ffffff" />
+      </Head>
       <motion.div
         initial={{ opacity: 0, y: 100 }}
         animate={{ opacity: 1, y: 0 }}
@@ -91,7 +125,11 @@ function Login() {
         className="flex justify-center items-center h-screen"
       >
         <div className="flex flex-col">
-          <div className={`flex w-[700px] ml-32 self-center ${!error ? 'mb-12' : ''}`}>
+          <div
+            className={`flex w-[700px] ml-32 self-center ${
+              !error ? "mb-12" : ""
+            }`}
+          >
             <Image src={cookoff} quality={100} alt="Cook-Off 8.0" />
           </div>
           {error && (
@@ -99,7 +137,10 @@ function Login() {
               Invalid credentials
             </div>
           )}
-          <form className="w-[400px] self-center" onSubmit={formik.handleSubmit}>
+          <form
+            className="w-[400px] self-center"
+            onSubmit={formik.handleSubmit}
+          >
             <div className="mb-[40px]">
               <input
                 className="w-full py-[18px] px-[33px] text-[#D9D9D999] bg-[#1F1F1F] rounded-[25px] text-[22px] font-semibold"
