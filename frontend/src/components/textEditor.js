@@ -64,6 +64,13 @@ const TextEditor = ({
       value: "impl Solution{\n\n}",
       code: 73,
     },
+    "script.go": {
+      name: "Go",
+      language: "go",
+      value:
+        'package main\nimport "fmt"\nfunc main() {\n\tfmt.Println("Hello World")\n}',
+      code: 60,
+    },
   };
 
   // const initialTime = useTimerStore((state) => state.Time);
@@ -84,6 +91,7 @@ const TextEditor = ({
     "script.py",
     "script.js",
     "script.rs",
+    "script.go",
   ];
 
   // const [isChecked, setIsChecked] = useState(false);
