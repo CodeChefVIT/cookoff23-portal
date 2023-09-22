@@ -47,7 +47,7 @@ function Dashboard() {
       const access_token = localStorage.getItem("access_token");
       try {
         const response = await axios.post(
-          "https://api-cookoff-prod.codechefvit.com/ques/getRound",
+          "https://api-cookoff-prod.codechefvit.com/ques/get/dashboard",
           { round: round },
           {
             headers: {

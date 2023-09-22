@@ -27,6 +27,7 @@ function EditorWindow(props) {
   const [invalidsubmit, submitInvalidInput] = useState(false);
   const fullPath = `/user/Testcomplete`;
   const [testcaseInvalid, setTestcaseInvalid] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
   const [runTestCases, setRunTestCases] = useState(false);
   const [questionRun, setQuestionRun] = useState(null);
   const [questionSubmit, setQuestionSubmit] = useState(new Set());
@@ -170,6 +171,7 @@ function EditorWindow(props) {
         setSubmissionArray={setSubmissionArray}
         setInvalidInput={setInvalidInput}
         submitInvalidInput={submitInvalidInput}
+        setErrorMessage={setErrorMessage}
         questionId={props.questionId}
         setRunTestCases={setRunTestCases}
         setTestcaseInvalid={setTestcaseInvalid}
@@ -219,7 +221,7 @@ function EditorWindow(props) {
 
       {testcaseInvalid && (
         <div className="text-white flex justify-center" ref={container3Ref}>
-          <p>Something went wrong</p>
+          <p>Something went wrong/{errorMessage}</p>
         </div>
       )}
 

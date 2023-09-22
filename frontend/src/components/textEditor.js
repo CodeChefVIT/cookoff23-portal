@@ -11,6 +11,7 @@ const TextEditor = ({
   setQuestionSubmit,
   setInvalidInput,
   questionRun,
+  setErrorMessage,
   setTestcaseInvalid,
   submitInvalidInput,
   questionSubmit,
@@ -277,6 +278,7 @@ const TextEditor = ({
         handleClickSubmit();
       } else if (error.response.status === 400) {
         setSubLoading(false);
+        setErrorMessage(error.response.data.Error || error.response.data.message);
         setQuestionQuestionRunArray((prev) => {
           const newSet = new Set(prev);
           newSet.delete(questionId);
