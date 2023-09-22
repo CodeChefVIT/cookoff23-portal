@@ -34,7 +34,7 @@ function RoundWise(props) {
                   <div className="text-[#d9d9d9] ml-2">
                     {index2 + 1}. {question2.name}
                   </div>
-                  <div className="bg-[#EDEDED] text-black mr-2 rounded-md px-1">
+                  <div className="bg-[#EDEDED] text-black mr-2 rounded-sm px-1 text-sm">
                     {question2.points + " points"}
                   </div>
                 </div>
@@ -54,13 +54,14 @@ function RoundWise(props) {
       </div>
 
       <div className="flex items-center justify-center mt-16">
-        <button
-          className="uppercase text-[#D9D9D9] font-semibold py-[16px] px-[26px] text-[22px] border-[3px] border-[#D9D9D9] rounded-full hover:bg-[#D9D9D9] hover:text-black"
-          onClick={startTest}
-          disabled={!roundActive}
-        >
-          Start Test
-        </button>
+        {roundActive && (
+          <button
+            className="uppercase text-[#D9D9D9] font-semibold py-[16px] px-[26px] text-[22px] border-[3px] border-[#D9D9D9] rounded-full hover:bg-[#D9D9D9] hover:text-black"
+            onClick={startTest}
+          >
+            Start Test
+          </button>
+        )}
       </div>
     </div>
   );

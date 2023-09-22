@@ -5,6 +5,7 @@ import { useState } from "react";
 import Image from "next/image";
 import cookoff from "../assets/cook-head.svg";
 import axios from "axios";
+import Head from "next/head";
 
 const validate = (values) => {
   const errors = {};
@@ -28,25 +29,23 @@ const validate = (values) => {
   return errors;
 };
 
-function Register () {
+function Register() {
   const [error, setError] = useState("");
   const router = useRouter();
   const formik = useFormik({
     initialValues: {
       name: "",
       regNo: "",
-      email: ""
+      email: "",
     },
     validate,
     onSubmit: async (values) => {
-      console.log(values);
 
       try {
         const response = await axios.post(
           `https://api-cookoff-prod.codechefvit.com/auth/create`,
           values
         );
-        console.log("API response:", response);
 
         if (response.status >= 200 && response.status < 300) {
           setError(false);
@@ -54,16 +53,10 @@ function Register () {
         }
       } catch (error) {
         if (error.response) {
-          console.error("API error:", error);
           const statusCode = error.response.status;
-          console.log(`status code: ${statusCode}`);
-          if (statusCode === 400) {
+          if (statusCode >= 400) {
             setError(error.response.data.error);
-          } else {
-            console.log("An error occurred:", error);
           }
-        } else {
-          console.log("An unexpected error occurred:", error);
         }
       }
     },
@@ -71,6 +64,30 @@ function Register () {
 
   return (
     <div>
+      <Head>
+        <title>CookOff | Register</title>
+        <link
+          rel="apple-touch-icon"
+          sizes="180x180"
+          href="/apple-touch-icon.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="32x32"
+          href="/favicon-32x32.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="16x16"
+          href="/favicon-16x16.png"
+        />
+        <link rel="manifest" href="/site.webmanifest" />
+        <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
+        <meta name="msapplication-TileColor" content="#da532c" />
+        <meta name="theme-color" content="#ffffff" />
+      </Head>
       <motion.div
         initial={{ opacity: 0, y: 100 }}
         animate={{ opacity: 1, y: 0 }}
@@ -86,9 +103,7 @@ function Register () {
             <Image src={cookoff} quality={100} alt="Cook-Off 8.0" />
           </div>
           {error && (
-            <div className="text-[#D9D9D999] my-10 text-center">
-              {error}
-            </div>
+            <div className="text-[#D9D9D999] my-10 text-center">{error}</div>
           )}
           <form
             className="w-[400px] self-center"
@@ -152,6 +167,6 @@ function Register () {
       </motion.div>
     </div>
   );
-};
+}
 
 export default Register;

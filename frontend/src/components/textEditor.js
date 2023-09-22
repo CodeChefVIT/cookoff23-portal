@@ -182,7 +182,6 @@ const TextEditor = ({
   const handleClickRun = async () => {
     await RefreshToken();
     setTestcaseInvalid(false);
-    console.log(localStorage.getItem("access_token"));
     getEditorValue();
     const existingCodeData = JSON.parse(localStorage.getItem("codeData"));
     const codeValue = existingCodeData[questionId];
@@ -201,7 +200,6 @@ const TextEditor = ({
         }
       );
 
-      console.log(response.data);
       if (response.status === 201) {
         await setInvalidInput(false);
         setRunTokens(response.data);
@@ -223,10 +221,8 @@ const TextEditor = ({
       if (error.response.status === 401) {
         await RefreshToken();
       } else if (error.response.status === 422) {
-        console.log("Invalid input");
         setInvalidInput(true);
       }
-      console.log(error);
     }
   };
 
@@ -240,9 +236,6 @@ const TextEditor = ({
       const codeValue = existingCodeData[questionId];
       const langCode = file.code;
       const q_ID = qArr[questionId]._id;
-      console.log(q_ID);
-      console.log(codeValue);
-      console.log(langCode);
       const response = await axios.post(
         "https://api-cookoff-prod.codechefvit.com/submit/eval/",
         {
@@ -256,7 +249,6 @@ const TextEditor = ({
           },
         }
       );
-      console.log(response.data);
       if (response.status === 201) {
         await setInvalidInput(false);
         setSubmissionArray(response.data);
@@ -279,7 +271,6 @@ const TextEditor = ({
         await RefreshToken();
         handleClickSubmit();
       } else if (error.response.status === 400) {
-        console.log("Invalid input");
         setSubLoading(false);
         setQuestionQuestionRunArray((prev) => {
           const newSet = new Set(prev);

@@ -1,5 +1,6 @@
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { Buffer } from 'buffer';
 import { useRef, useEffect } from "react";
 
 function CompilationError(props) {
@@ -26,7 +27,7 @@ function CompilationError(props) {
             <p className="font-semibold text-lg">Compile Message</p>
             <div className="bg-[#0D0D0D] py-2 pl-3 whitespace-pre">
               <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                {runData[0].compile_output || runData[0].stderr}
+                {Buffer.from(runData[0].compile_output, 'base64').toString('utf-8') || Buffer.from(runData[0].stderr, 'base64').toString('utf-8')}
               </ReactMarkdown>
             </div>
           </div>

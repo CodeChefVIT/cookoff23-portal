@@ -53,10 +53,6 @@ export default function Portal(props) {
     }
   }, []);
 
-  useEffect(() => {
-    console.log("qArr:", qArr);
-  }, [qArr]);
-
   return (
     <div className="flex h-[82vh]">
       <div className="flex flex-col">

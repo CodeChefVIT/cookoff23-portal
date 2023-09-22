@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import useTokenStore from "@/store/tokenProvider";
 import axios from "axios";
 import RefreshToken from "@/utils/RefreshToken";
+import Head from "next/head";
 
 function Dashboard() {
   const router = useRouter();
@@ -17,7 +18,6 @@ function Dashboard() {
   useEffect(() => {
     async function fetchDataDash() {
       const access_token = localStorage.getItem("access_token");
-      console.log(access_token);
       try {
         const response = await axios.get(
           "https://api-cookoff-prod.codechefvit.com/auth/dashboard",
@@ -27,11 +27,9 @@ function Dashboard() {
             },
           }
         );
-        // console.log(response.data);
         setName(response.data.name);
         setRound(response.data.roundQualified + 1);
         setScore(response.data.score);
-        console.log(response.data.isRoundActive);
         setRoundActive(response.data.isRoundActive);
         localStorage.setItem("round", response.data.roundQualified + 1);
       } catch (error) {
@@ -42,9 +40,7 @@ function Dashboard() {
             access_token: "",
           });
           router.push("/login");
-        } else {
-          console.log(error);
-        }
+        } 
       }
     }
     async function fetchDataRound() {
@@ -69,7 +65,6 @@ function Dashboard() {
         if (error.response && error.response.status === 404) {
           console.log("No questions");
         } else if (error.response && error.response.status === 403) {
-          console.log("No questions");
           localStorage.removeItem("access_token");
           localStorage.removeItem("refresh_token");
           useTokenStore.setState({
@@ -89,6 +84,30 @@ function Dashboard() {
 
   return (
     <>
+      <Head>
+        <title>Dashboard</title>
+        <link
+          rel="apple-touch-icon"
+          sizes="180x180"
+          href="/apple-touch-icon.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="32x32"
+          href="/favicon-32x32.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="16x16"
+          href="/favicon-16x16.png"
+        />
+        <link rel="manifest" href="/site.webmanifest" />
+        <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
+        <meta name="msapplication-TileColor" content="#da532c" />
+        <meta name="theme-color" content="#ffffff" />
+      </Head>
       <main>
         <Navbar />
         <div className="flex">
