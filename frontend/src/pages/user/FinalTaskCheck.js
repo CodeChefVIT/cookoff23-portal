@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import RefreshToken from "@/utils/RefreshToken";
 import Cookies from "js-cookie";
 import axios from "axios";
+import Head from "next/head";
 
 const CompleteTest = () => {
   const router = useRouter();
@@ -24,9 +25,6 @@ const CompleteTest = () => {
     };
   }, []);
   async function handleButtonClick() {
-    
-
-    
     try {
       await RefreshToken();
       const access_token = localStorage.getItem("access_token");
@@ -43,7 +41,10 @@ const CompleteTest = () => {
         document.cookie.split(";").forEach((c) => {
           document.cookie = c
             .replace(/^ +/, "")
-            .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+            .replace(
+              /=.*/,
+              "=;expires=" + new Date().toUTCString() + ";path=/"
+            );
         });
         router.push("/user");
       }
@@ -80,6 +81,30 @@ const CompleteTest = () => {
 
   return (
     <>
+      <Head>
+        <title>submissions</title>
+        <link
+          rel="apple-touch-icon"
+          sizes="180x180"
+          href="/apple-touch-icon.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="32x32"
+          href="/favicon-32x32.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="16x16"
+          href="/favicon-16x16.png"
+        />
+        <link rel="manifest" href="/site.webmanifest" />
+        <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
+        <meta name="msapplication-TileColor" content="#da532c" />
+        <meta name="theme-color" content="#ffffff" />
+      </Head>
       <Navbar />
       <div className="min-h-[84vh] flex justify-center items-center">
         <div className="text-[#D9D9D999] text-center">

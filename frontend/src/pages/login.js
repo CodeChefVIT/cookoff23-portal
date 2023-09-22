@@ -7,6 +7,7 @@ import cookoff from "../assets/cook-head.svg";
 import useTokenStore from "@/store/tokenProvider";
 import RefreshToken from "@/utils/RefreshToken";
 import axios from "axios";
+import Head from "next/head";
 
 const validate = (values) => {
   const errors = {};
@@ -84,6 +85,30 @@ function Login() {
 
   return (
     <div>
+      <Head>
+      <title>CookOff | Login</title>
+      <link
+          rel="apple-touch-icon"
+          sizes="180x180"
+          href="/apple-touch-icon.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="32x32"
+          href="/favicon-32x32.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="16x16"
+          href="/favicon-16x16.png"
+        />
+        <link rel="manifest" href="/site.webmanifest" />
+        <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
+        <meta name="msapplication-TileColor" content="#da532c" />
+        <meta name="theme-color" content="#ffffff" />
+      </Head>
       <motion.div
         initial={{ opacity: 0, y: 100 }}
         animate={{ opacity: 1, y: 0 }}
