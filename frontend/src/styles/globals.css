@@ -61,3 +61,7 @@ body {
 #font_proxima {
   font-family: 'proxima nova';
 }
+
+ul{
+  list-style: disc;
+}
