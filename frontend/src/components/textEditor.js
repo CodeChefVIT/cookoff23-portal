@@ -61,7 +61,7 @@ const TextEditor = ({
     "script.rs": {
       name: "Rust",
       language: "rust",
-      value: "impl Solution{\n\n}",
+      value: 'fn main(){\n\tprintln!("Hello world");\n}',
       code: 73,
     },
     "script.go": {
