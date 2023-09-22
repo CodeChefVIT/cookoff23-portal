@@ -12,14 +12,14 @@ export default function TestPortal() {
       window.history.pushState(null, null, window.location.pathname);
     };
 
-    const handleContextMenu = (e) => {
-      e.preventDefault();
-      alert("Right-click context menu is disabled on this page.");
-    };
+    // const handleContextMenu = (e) => {
+    //   e.preventDefault();
+    //   alert("Right-click context menu is disabled on this page.");
+    // };
 
     window.history.pushState(null, null, window.location.pathname);
     window.addEventListener("popstate", handleBackButton);
-    window.addEventListener("contextmenu", handleContextMenu);
+    // window.addEventListener("contextmenu", handleContextMenu);
 
     return () => {
       window.removeEventListener("popstate", handleBackButton);
