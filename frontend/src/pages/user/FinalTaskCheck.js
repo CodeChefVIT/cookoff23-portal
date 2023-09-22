@@ -24,9 +24,6 @@ const CompleteTest = () => {
     };
   }, []);
   async function handleButtonClick() {
-    
-
-    
     try {
       await RefreshToken();
       const access_token = localStorage.getItem("access_token");
@@ -43,7 +40,10 @@ const CompleteTest = () => {
         document.cookie.split(";").forEach((c) => {
           document.cookie = c
             .replace(/^ +/, "")
-            .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+            .replace(
+              /=.*/,
+              "=;expires=" + new Date().toUTCString() + ";path=/"
+            );
         });
         router.push("/user");
       }

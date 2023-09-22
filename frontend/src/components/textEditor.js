@@ -159,8 +159,13 @@ const TextEditor = ({
         ...prevSelectedLanguages,
         [questionId]: option,
       }));
-
       setCodeValue(files[option].value);
+    } else {
+      setSelectedLanguages((prevSelectedLanguages) => ({
+        ...prevSelectedLanguages,
+      }));
+      setCodeValue(codeValue);
+      setShowMore(false);
     }
   };
 
