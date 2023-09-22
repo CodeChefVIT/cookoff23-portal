@@ -34,7 +34,7 @@ function RoundWise(props) {
                   <div className="text-[#d9d9d9] ml-2">
                     {index2 + 1}. {question2.name}
                   </div>
-                  <div className="bg-[#EDEDED] text-black mr-2 rounded-md px-1">
+                  <div className="bg-[#EDEDED] text-black mr-2 rounded-sm px-1 text-sm">
                     {question2.points + " points"}
                   </div>
                 </div>

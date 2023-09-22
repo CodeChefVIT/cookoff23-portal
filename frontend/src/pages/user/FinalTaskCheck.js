@@ -5,6 +5,7 @@ import RefreshToken from "@/utils/RefreshToken";
 import Cookies from "js-cookie";
 import axios from "axios";
 import Head from "next/head";
+import useTokenStore from "@/store/tokenProvider";
 
 const CompleteTest = () => {
   const router = useRouter();
@@ -28,7 +29,6 @@ const CompleteTest = () => {
     try {
       await RefreshToken();
       const access_token = localStorage.getItem("access_token");
-      console.log(access_token);
       const response = await axios.get(
         "https://api-cookoff-prod.codechefvit.com/submit/endtest",
         {
@@ -49,7 +49,13 @@ const CompleteTest = () => {
         router.push("/user");
       }
     } catch (error) {
-      console.log(error);
+      if (error.response && error.response.status === 400) {
+        localStorage.removeItem("access_token");
+        useTokenStore.setState({
+          access_token: "",
+        });
+        router.push("/login");
+      }
     }
   }
   let codeData = {};
@@ -57,7 +63,6 @@ const CompleteTest = () => {
   useEffect(() => {
     const lengthFromLocalStorage = Number(localStorage.getItem("QueArrlength"));
     setLength(lengthFromLocalStorage);
-    console.log(lengthFromLocalStorage);
   }, []);
 
   const codeDataLength = Object.keys(codeData).length;

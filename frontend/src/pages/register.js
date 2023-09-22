@@ -40,14 +40,12 @@ function Register() {
     },
     validate,
     onSubmit: async (values) => {
-      console.log(values);
 
       try {
         const response = await axios.post(
           `https://api-cookoff-prod.codechefvit.com/auth/create`,
           values
         );
-        console.log("API response:", response);
 
         if (response.status >= 200 && response.status < 300) {
           setError(false);
@@ -55,16 +53,10 @@ function Register() {
         }
       } catch (error) {
         if (error.response) {
-          console.error("API error:", error);
           const statusCode = error.response.status;
-          console.log(`status code: ${statusCode}`);
-          if (statusCode === 400) {
+          if (statusCode >= 400) {
             setError(error.response.data.error);
-          } else {
-            console.log("An error occurred:", error);
           }
-        } else {
-          console.log("An unexpected error occurred:", error);
         }
       }
     },

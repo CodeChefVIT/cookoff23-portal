@@ -36,14 +36,11 @@ const TestCase = ({ clickedButton, runData, code, program }) => {
   useEffect(() => {
     async function fetchSubmit() {
       try {
-        console.log(runToken);
         const response = await axios.get(
           "https://judge0.codechefvit.com/submissions/" +
             runToken +
             "?base64_encoded=true&fields=stdout,stderr,status_id,language_id"
         );
-
-        console.log(response.data);
 
         if (response.data.status_id === 1 || response.data.status_id === 2) {
           setLoading(true);
@@ -66,7 +63,6 @@ const TestCase = ({ clickedButton, runData, code, program }) => {
 
   async function handleSubmit(event) {
     event.preventDefault();
-    console.log(customInput);
     if (
       customInput === "" ||
       customInput === null ||
@@ -87,7 +83,6 @@ const TestCase = ({ clickedButton, runData, code, program }) => {
         }
       );
 
-      console.log(response.data);
 
       if (response.status === 201) {
         setRunToken(response.data.token);
@@ -95,9 +90,8 @@ const TestCase = ({ clickedButton, runData, code, program }) => {
       }
     } catch (error) {
       if (error.response && error.response.status === 422) {
-        console.log("Invalid Input");
+        setLoading(false)
         setInvalidInput(true);
-        console.log(invalidInput);
       }
     }
 

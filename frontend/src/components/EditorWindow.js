@@ -60,7 +60,6 @@ function EditorWindow(props) {
 
   useEffect(() => {
     if (submissionArray !== null) {
-      console.log("yes");
       setSubLoading(false);
     }
   }, [submissionArray]);
@@ -68,6 +67,7 @@ function EditorWindow(props) {
   useEffect(() => {
     setInvalidInput(false);
     submitInvalidInput(false);
+    setTestcaseInvalid(false);
     const storedData = Cookies.get(String(props.questionId + 1));
     const storedData2 = Cookies.get(String(props.questionId + 10));
 
@@ -89,7 +89,6 @@ function EditorWindow(props) {
 
   useEffect(() => {
     async function fetchSubmissionStatus(string) {
-      console.log(props.questionId);
       try {
         const response = await axios.get(
           "https://judge0.codechefvit.com/submissions/batch?tokens=" +
@@ -142,7 +141,6 @@ function EditorWindow(props) {
     runTokens.forEach((element) => {
       str.push(element.token);
     });
-    console.log(str.toString());
     if (runTokens.length > 0) {
       fetchSubmissionStatus(str);
     }

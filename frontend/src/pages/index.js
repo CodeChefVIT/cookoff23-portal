@@ -10,7 +10,6 @@ import { useRouter } from "next/router";
 import { useWindowSize } from "@uidotdev/usehooks";
 import RefreshToken from "@/utils/RefreshToken";
 import Head from "next/head";
-import axios from "axios";
 
 function App() {
   const router = useRouter();

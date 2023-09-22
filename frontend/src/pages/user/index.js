@@ -18,7 +18,6 @@ function Dashboard() {
   useEffect(() => {
     async function fetchDataDash() {
       const access_token = localStorage.getItem("access_token");
-      console.log(access_token);
       try {
         const response = await axios.get(
           "https://api-cookoff-prod.codechefvit.com/auth/dashboard",
@@ -28,11 +27,9 @@ function Dashboard() {
             },
           }
         );
-        // console.log(response.data);
         setName(response.data.name);
         setRound(response.data.roundQualified + 1);
         setScore(response.data.score);
-        console.log(response.data.isRoundActive);
         setRoundActive(response.data.isRoundActive);
         localStorage.setItem("round", response.data.roundQualified + 1);
       } catch (error) {
@@ -43,9 +40,7 @@ function Dashboard() {
             access_token: "",
           });
           router.push("/login");
-        } else {
-          console.log(error);
-        }
+        } 
       }
     }
     async function fetchDataRound() {
@@ -70,7 +65,6 @@ function Dashboard() {
         if (error.response && error.response.status === 404) {
           console.log("No questions");
         } else if (error.response && error.response.status === 403) {
-          console.log("No questions");
           localStorage.removeItem("access_token");
           localStorage.removeItem("refresh_token");
           useTokenStore.setState({
