@@ -56,7 +56,7 @@ const TextEditor = ({
     "script.js": {
       name: "JS",
       language: "javascript",
-      value: "function processData(input){\n\n}",
+      value: "",
       code: 63,
     },
     "script.rs": {
