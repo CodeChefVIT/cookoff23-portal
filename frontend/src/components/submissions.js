@@ -11,7 +11,11 @@ function SubmitCode(props) {
     "Time Limit Exceeded",
     "Wrong Output",
   ];
-
+  const subRes = [
+    "No Runtime error",
+    "Within time limit",
+    "ALl test cases have passed",
+  ];
   useEffect(() => {
     setTestCaseClicked(0);
     containerRef.current.scrollIntoView();
@@ -91,7 +95,7 @@ function SubmitCode(props) {
                       <div className="text-center">
                         <div>Correct</div>
                         <div className="text-xs text-center">
-                          {subData[index]}
+                          {subRes[index]}
                         </div>
                       </div>
                     </div>
