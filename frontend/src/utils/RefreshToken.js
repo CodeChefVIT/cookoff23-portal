@@ -19,10 +19,6 @@ export default async function RefreshToken() {
     if (error.response.status === 404 || error.response.status === 400) {
       localStorage.removeItem("access_token");
       localStorage.removeItem("refresh_token");
-      useTokenStore.setState({
-        access_token: "",
-      });
-      router.push("/login");
     }
   }
 }

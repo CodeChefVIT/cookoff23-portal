@@ -2,9 +2,11 @@ import Question from "@/components/questions";
 import { useState, useEffect } from "react";
 import EditorWindow from "./EditorWindow";
 import axios from "axios";
+import { useRouter } from "next/router";
 import RefreshToken from "@/utils/RefreshToken";
 
 export default function Portal(props) {
+  const router = useRouter();
   const [clickedButton, setClickedButton] = useState(0);
   const [qArr, setQArr] = useState([]);
   function handleClick(index) {
@@ -42,11 +44,11 @@ export default function Portal(props) {
             }
           })
           .catch((error) => {
-            if (error.response && error.response.status === 400) {
-              console.log("400");
-            } else if (error.response && error.response.status === 404) {
-              console.log("No questions");
-            }
+            if (error.response && error.response.status === 401) {
+              router.push("/user");
+            } else if (error.response && error.response.status === 400) {
+              router.push("/user");
+            } 
           });
       } catch {
         (error) => {

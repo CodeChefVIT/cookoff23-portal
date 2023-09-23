@@ -61,13 +61,34 @@ const Navbar = () => {
     );
 
     if (userConfirmed) {
-      await RefreshToken();
-      const updateTimer = (newTime) => {
-        localStorage.setItem("timerTime", newTime.toString());
-      };
-      updateTimer(2 * 60 * 60);
+      try {
+        await RefreshToken();
+        const access_token = localStorage.getItem("access_token");
+        const response = await axios.get(
+          "https://api-cookoff-prod.codechefvit.com/submit/endtest",
+          {
+            headers: {
+              Authorization: `Bearer ${access_token}`,
+            },
+          }
+        );
+        if (response.status >= 200 && response.status < 300) {
+          const updateTimer = (newTime) => {
+            localStorage.setItem("timerTime", newTime.toString());
+          };
+          updateTimer(2 * 60 * 45);
 
-      await router.push("/user/FinalTaskCheck");
+          await router.push("/user/FinalTaskCheck");
+        }
+      } catch (error) {
+        if (error.response && error.response.status === 400) {
+          localStorage.removeItem("access_token");
+          useTokenStore.setState({
+            access_token: "",
+          });
+          router.push("/login");
+        }
+      }
     }
   }
 
