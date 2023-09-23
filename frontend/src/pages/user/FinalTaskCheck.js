@@ -26,38 +26,14 @@ const CompleteTest = () => {
     };
   }, []);
   async function handleButtonClick() {
-    try {
-      localStorage.removeItem("codeData");
-      await RefreshToken();
-      const access_token = localStorage.getItem("access_token");
-      const response = await axios.get(
-        "https://api-cookoff-prod.codechefvit.com/submit/endtest",
-        {
-          headers: {
-            Authorization: `Bearer ${access_token}`,
-          },
-        }
-      );
-      if (response.status >= 200 && response.status < 300) {
-        document.cookie.split(";").forEach((c) => {
-          document.cookie = c
-            .replace(/^ +/, "")
-            .replace(
-              /=.*/,
-              "=;expires=" + new Date().toUTCString() + ";path=/"
-            );
-        });
-        router.push("/user");
-      }
-    } catch (error) {
-      if (error.response && error.response.status === 400) {
-        localStorage.removeItem("access_token");
-        useTokenStore.setState({
-          access_token: "",
-        });
-        router.push("/login");
-      }
-    }
+    await RefreshToken();
+    localStorage.removeItem("codeData");
+    document.cookie.split(";").forEach((c) => {
+      document.cookie = c
+        .replace(/^ +/, "")
+        .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+    });
+    router.push("/user");
   }
 
   const [codeDataLength, setCodeDataLenth] = useState(0);
@@ -66,7 +42,7 @@ const CompleteTest = () => {
     setLength(lengthFromLocalStorage);
     let jsonData = localStorage.getItem("codeData");
     const jsonObject = JSON.parse(jsonData);
-    const codeDataLength = Object.keys(jsonObject).length;
+    const codeDataLength = jsonObject ? Object.keys(jsonObject).length : null;
     setCodeDataLenth(codeDataLength);
   }, []);
 
@@ -117,7 +93,8 @@ const CompleteTest = () => {
       <div className="min-h-[84vh] flex justify-center items-center">
         <div className="text-[#D9D9D999] text-center">
           <div className="w-[60vw] py-[11px] bg-[#1F1F1F] rounded-[10px] text-[27px] font-semibold text-center ring-2 ring-[#D9D9D9] ring-offset-4 hover:ring-offset-[5px] ring-offset-[#0D0D0D]">
-            No of questions submitted:&nbsp;&nbsp; {codeDataLength}
+            No of questions submitted:&nbsp;&nbsp;{" "}
+            {codeDataLength ? codeDataLength : 0}
           </div>
           <div className="grid grid-cols-3 gap-4 mt-10">
             {Array(length)

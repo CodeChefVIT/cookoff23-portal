@@ -39,7 +39,7 @@ function CountdownTimer() {
       if (initialTime > 0) {
         updateTimer(initialTime - 1);
       } else {
-        updateTimer(2 * 60 * 60);
+        updateTimer(2 * 60 * 45);
         RefreshToken();
         router.push("/user/FinalTaskCheck");
       }
