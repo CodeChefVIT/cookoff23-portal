@@ -32,6 +32,7 @@ const Navbar = () => {
       useTokenStore.setState({ access_token: "" });
       localStorage.removeItem("access_token");
       localStorage.removeItem("refresh_token");
+      localStorage.removeItem("timerTime");
       document.cookie.split(";").forEach((c) => {
         document.cookie = c
           .replace(/^ +/, "")
