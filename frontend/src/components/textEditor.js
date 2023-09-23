@@ -268,6 +268,7 @@ const TextEditor = ({
         await setInvalidInput(false);
         setSubmissionArray(response.data);
         setTestcaseInvalid(false);
+        submitInvalidInput(false);
         Cookies.set(String(questionId + 10), JSON.stringify(response.data));
       }
       if (questionRunArray.has(questionId)) {
