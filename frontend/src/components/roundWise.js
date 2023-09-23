@@ -13,7 +13,7 @@ function RoundWise(props) {
   }
 
   return (
-    <div className="w-[65%] ml-10 h-[83vh] overflow-auto">
+    <div className="w-[65%] ml-10 h-[84vh] overflow-auto">
       <div className="mt-2">
         <div>
           <div className="bg-[#242424] flex justify-between text-lg">
@@ -46,7 +46,7 @@ function RoundWise(props) {
                 id="font_proxima"
               >
                 Round Score:&nbsp;
-                {score}
+                {Math.floor(score * (1/3) * 10)}
               </div>
             </div>
           </div>
@@ -56,7 +56,7 @@ function RoundWise(props) {
       <div className="flex items-center justify-center mt-16">
         {roundActive && (
           <button
-            className="uppercase text-[#D9D9D9] font-semibold py-[16px] px-[26px] text-[22px] border-[3px] border-[#D9D9D9] rounded-full hover:bg-[#D9D9D9] hover:text-black"
+            className="uppercase text-[#D9D9D9] font-semibold py-[16px] px-[26px] text-[22px] border-[3px] border-[#D9D9D9] rounded-full hover:bg-[#D9D9D9] hover:text-black mb-12"
             onClick={startTest}
           >
             Start Test

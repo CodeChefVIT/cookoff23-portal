@@ -6,7 +6,7 @@ function CurrentProfile(props) {
   const { name, round } = props;
   return (
     <div className="mt-2 ml-10">
-      <div className="h-[61vh] w-[27vw] bg-[#161616] overflow-auto">
+      <div className="h-fit w-[27vw] bg-[#161616] overflow-auto">
         <div className="h-9 flex justify-center items-center bg-[#242424] text-[#EB5939] text-lg font-bold">
           <h2>Current Profile</h2>
         </div>
