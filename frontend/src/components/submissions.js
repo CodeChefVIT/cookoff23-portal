@@ -54,8 +54,8 @@ function SubmitCode(props) {
         <div id="font_proxima" className="mb-8" ref={containerRef}>
           <div className="h-[350px] bg-[#161616] mx-5 pl-5 pt-5">
             <div className="flex gap-10 items-center">
-              <h1 className="text-[#1ba94c] text-2xl font-semibold">
-                Accepted !
+              <h1 className="text-[#C1BBB3] text-2xl font-semibold">
+                Submitted
               </h1>
             </div>
             <div className="flex-col mt-8">
@@ -68,12 +68,16 @@ function SubmitCode(props) {
                   return (
                     <div
                       key={index}
-                      className="flex text-xl text-[#EB3939] font-semibold justify-around my-7 ml-8"
+                      className="flex text-xl text-[#C1BBB3] font-semibold justify-around my-7 ml-8"
                     >
                       <div>{index}</div>
                       <div className="flex-col ml-10">
                         <div>Not Accepted</div>
-                        <div className="text-xs text-center">{subData[index]}</div>
+                        {!submissionArray.error[index] && (
+                          <div className="text-xs text-center">
+                            {subData[index]}
+                          </div>
+                        )}
                       </div>
                     </div>
                   );
@@ -83,8 +87,13 @@ function SubmitCode(props) {
                       key={index}
                       className="flex text-xl text-[#1ba94c] font-semibold justify-around my-8"
                     >
-                      <div>{index}</div>
-                      <div>Correct</div>
+                      <div className="ml-6">{index}</div>
+                      <div className="text-center">
+                        <div>Correct</div>
+                        <div className="text-xs text-center">
+                          {subData[index]}
+                        </div>
+                      </div>
                     </div>
                   );
                 }
