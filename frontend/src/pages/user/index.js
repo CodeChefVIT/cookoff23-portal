@@ -48,7 +48,7 @@ function Dashboard() {
       try {
         const response = await axios.post(
           "https://api-cookoff-prod.codechefvit.com/ques/get/dashboard",
-          { round: round },
+          { round_no: round },
           {
             headers: {
               Authorization: `Bearer ${access_token}`,
