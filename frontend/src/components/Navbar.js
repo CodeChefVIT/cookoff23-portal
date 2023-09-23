@@ -14,9 +14,6 @@ const Navbar = () => {
   useEffect(() => {
     setIsTestPortal(router.pathname.includes("testPortal"));
   }, [router.pathname]);
-  const updateTimer = (newTime) => {
-    localStorage.setItem("timerTime", newTime.toString());
-  };
 
   async function handleLogout() {
     await RefreshToken();
@@ -65,6 +62,9 @@ const Navbar = () => {
 
     if (userConfirmed) {
       await RefreshToken();
+      const updateTimer = (newTime) => {
+        localStorage.setItem("timerTime", newTime.toString());
+      };
       updateTimer(2 * 60 * 60);
 
       await router.push("/user/FinalTaskCheck");

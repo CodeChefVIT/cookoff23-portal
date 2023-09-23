@@ -18,39 +18,43 @@ export default function Portal(props) {
   //   fetchData();
   // }, []);
   useEffect(() => {
-    const access_token = localStorage.getItem("access_token");
     const round = localStorage.getItem("round");
-    try {
-      axios
-        .post(
-          "https://api-cookoff-prod.codechefvit.com/ques/getRound",
-          { round: round },
-          {
-            headers: {
-              Authorization: `Bearer ${access_token}`,
-            },
-          }
-        )
-        .then((response) => {
-          const responseData = response.data;
-          if (responseData && responseData.length > 0) {
-            setQArr(responseData);
-          } else {
-            console.log("No data received from the API.");
-          }
-        })
-        .catch((error) => {
-          if (error.response && error.response.status === 400) {
-            console.log("400");
-          } else if (error.response && error.response.status === 404) {
-            console.log("No questions");
-          }
-        });
-    } catch {
-      (error) => {
-        console.log(error);
-      };
+    async function fetchData() {
+      try {
+        await RefreshToken();
+        const access_token = localStorage.getItem("access_token");
+        axios
+          .post(
+            "https://api-cookoff-prod.codechefvit.com/ques/getRound",
+            { round: round },
+            {
+              headers: {
+                Authorization: `Bearer ${access_token}`,
+              },
+            }
+          )
+          .then((response) => {
+            const responseData = response.data;
+            if (responseData && responseData.length > 0) {
+              setQArr(responseData);
+            } else {
+              console.log("No data received from the API.");
+            }
+          })
+          .catch((error) => {
+            if (error.response && error.response.status === 400) {
+              console.log("400");
+            } else if (error.response && error.response.status === 404) {
+              console.log("No questions");
+            }
+          });
+      } catch {
+        (error) => {
+          console.log(error);
+        };
+      }
     }
+    fetchData();
   }, []);
 
   return (
