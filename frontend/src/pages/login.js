@@ -28,7 +28,8 @@ const validate = (values) => {
 };
 
 function Login() {
-  const [error, setError] = useState(false);
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false)
   const router = useRouter();
   const formik = useFormik({
     initialValues: {
@@ -37,6 +38,7 @@ function Login() {
     },
     validate,
     onSubmit: async (values) => {
+      setIsLoading(true)
       try {
         const response = await axios.post(
           "https://api-cookoff-prod.codechefvit.com/auth/login",
@@ -59,28 +61,29 @@ function Login() {
         if (error.response) {
           const statusCode = error.response.status;
           if (statusCode === 401) {
-            setError(true);
+            setError("Invalid credentials");
             localStorage.removeItem("access_token");
             useTokenStore.setState({
               access_token: "",
             });
             router.push("/login");
           } else if (statusCode === 403) {
-            setError(true);
+            // setError("User is banned");
             localStorage.removeItem("access_token");
             useTokenStore.setState({
               access_token: "",
             });
-            router.push("/login");
+            alert("Skill Issue detected. Please contact organisers")
+            router.push("/skissue");
           } else if (statusCode === 400) {
-            setError(true);
+            setError("User not found");
             localStorage.removeItem("access_token");
             useTokenStore.setState({
               access_token: "",
             });
             router.push("/login");
           } else {
-            setError(true);
+            setError("Something went wrong. Please try again.");
             localStorage.removeItem("access_token");
             useTokenStore.setState({
               access_token: "",
@@ -89,6 +92,7 @@ function Login() {
           }
         }
       }
+      setIsLoading(false)
     },
   });
 
@@ -134,7 +138,7 @@ function Login() {
           </div>
           {error && (
             <div className="text-[#D9D9D999] my-10 text-center">
-              Invalid credentials
+              {error}
             </div>
           )}
           <form
@@ -175,8 +179,9 @@ function Login() {
               <button
                 className="uppercase text-[#D9D9D9] font-semibold py-[16px] px-[26px] text-[22px] border-[3px] border-[#D9D9D9] rounded-full hover:bg-[#D9D9D9] hover:text-black mt-5"
                 type="submit"
+                disabled={isLoading}
               >
-                Let&apos;s Get Cooking
+                {isLoading?"Lighting a fire...":"Let's Get Cooking"}
               </button>
             </div>
           </form>
