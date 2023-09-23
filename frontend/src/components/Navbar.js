@@ -111,9 +111,7 @@ const Navbar = () => {
                 End Test
               </button>
 
-              <button>
                 <Image src={profile} quality={100} alt="user" />
-              </button>
             </div>
           </div>
         ) : (
@@ -130,9 +128,7 @@ const Navbar = () => {
                 Logout
               </button>
 
-              <button>
                 <Image src={profile} quality={100} alt="user" />
-              </button>
             </div>
           </div>
         )}

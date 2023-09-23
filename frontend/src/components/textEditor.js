@@ -238,6 +238,7 @@ const TextEditor = ({
       } else if (error.response.status === 422) {
         setInvalidInput(true);
       }
+      console.log(error)
     }
   };
 

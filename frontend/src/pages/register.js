@@ -31,6 +31,7 @@ const validate = (values) => {
 
 function Register() {
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const formik = useFormik({
     initialValues: {
@@ -40,7 +41,8 @@ function Register() {
     },
     validate,
     onSubmit: async (values) => {
-
+      console.log(values)
+      setIsLoading(true);
       try {
         const response = await axios.post(
           `https://api-cookoff-prod.codechefvit.com/auth/create`,
@@ -49,6 +51,7 @@ function Register() {
 
         if (response.status >= 200 && response.status < 300) {
           setError(false);
+          alert("Password has been sent to the entered email.")
           router.push("/login");
         }
       } catch (error) {
@@ -59,6 +62,7 @@ function Register() {
           }
         }
       }
+      setIsLoading(false);
     },
   });
 
@@ -158,8 +162,9 @@ function Register() {
               <button
                 className="uppercase text-[#D9D9D9] font-semibold py-[16px] px-[26px] text-[22px] border-[3px] border-[#D9D9D9] rounded-full hover:bg-[#D9D9D9] hover:text-black mt-5"
                 type="submit"
+                disabled={isLoading}
               >
-                Register to cook!
+                {isLoading?"Registering...":"Register as a chef"}
               </button>
             </div>
           </form>
