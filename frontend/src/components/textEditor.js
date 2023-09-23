@@ -75,6 +75,7 @@ const TextEditor = ({
   };
 
   // const initialTime = useTimerStore((state) => state.Time);
+  const maxLines = 1000;
 
   const [selectedLanguages, setSelectedLanguages] = useState({});
   const [langCode, setLangCode] = useState(null);
@@ -84,6 +85,7 @@ const TextEditor = ({
   const [codeValue, setCodeValue] = useState(file.value);
   const [showMore, setShowMore] = useState(false);
   const [selectedOption, setSelectedOption] = useState({});
+  const [isInputDisabled, setIsInputDisabled] = useState(false);
 
   const options = [
     "script.java",
@@ -98,6 +100,13 @@ const TextEditor = ({
   // const [isChecked, setIsChecked] = useState(false);
 
   const handleEditorChange = (value, event) => {
+    setCodeValue(value);
+    const currentLines = value.split("\n").length;
+    if (currentLines > maxLines) {
+      setIsInputDisabled(true);
+      return;
+    }
+    setIsInputDisabled(false);
     setCodeValue(value);
 
     const existingCodeData = JSON.parse(localStorage.getItem("codeData")) || {};
@@ -278,7 +287,9 @@ const TextEditor = ({
         handleClickSubmit();
       } else if (error.response.status === 400) {
         setSubLoading(false);
-        setErrorMessage(error.response.data.Error || error.response.data.message);
+        setErrorMessage(
+          error.response.data.Error || error.response.data.message
+        );
         setQuestionQuestionRunArray((prev) => {
           const newSet = new Set(prev);
           newSet.delete(questionId);
@@ -392,6 +403,7 @@ const TextEditor = ({
         onChange={handleEditorChange}
         options={{
           scrollBeyondLastLine: false,
+          readOnly: isInputDisabled,
         }}
       />
       <div className="bg-[#0d0d0d] relative mt-4">
