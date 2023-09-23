@@ -16,7 +16,6 @@ function CompilationError(props) {
     ? Buffer.from(stderrBase64, "base64").toString("utf-8")
     : "";
   const containerRef = useRef(null);
-  console.log(runData[0]);
   useEffect(() => {
     containerRef.current.scrollIntoView();
   }, [runData]);
