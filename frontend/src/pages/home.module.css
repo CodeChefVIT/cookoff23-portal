@@ -1,0 +1,33 @@
+.main .body {
+  height: 96vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: default;
+  padding-bottom: 130px;
+}
+
+.mask {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  -webkit-mask-image: url(../assets/circle.svg);
+  mask-image: url(../assets/circle.svg);
+  background: #eb5939;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  color: black;
+}
+
+.scroll-up-animation {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: white; /* Change this to match your background color */
+  z-index: 9999; /* Make sure it's above other elements */
+}
