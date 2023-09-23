@@ -59,13 +59,15 @@ const CompleteTest = () => {
       }
     }
   }
-  let jsonData = localStorage.getItem("codeData");
-  const jsonObject = JSON.parse(jsonData);
-  const codeDataLength = Object.keys(jsonObject).length;
 
+  const [codeDataLength, setCodeDataLenth] = useState(0);
   useEffect(() => {
     const lengthFromLocalStorage = Number(localStorage.getItem("QueArrlength"));
     setLength(lengthFromLocalStorage);
+    let jsonData = localStorage.getItem("codeData");
+    const jsonObject = JSON.parse(jsonData);
+    const codeDataLength = Object.keys(jsonObject).length;
+    setCodeDataLenth(codeDataLength);
   }, []);
 
   const computeArrayValue = (array) => {
