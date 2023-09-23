@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import eye from "./../assets/normaleye.svg";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -6,7 +7,9 @@ import RefreshToken from "@/utils/RefreshToken";
 function RoundWise(props) {
   const { round, score, qArr, roundActive } = props;
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
   async function startTest() {
+    setIsLoading(true);
     await RefreshToken();
     const fullPath = `/user/testPortal`;
     router.push(fullPath);
@@ -46,7 +49,7 @@ function RoundWise(props) {
                 id="font_proxima"
               >
                 Round Score:&nbsp;
-                {Math.floor(score * (1/3) * 10)}
+                {Math.floor(score * (1 / 3) * 10)}
               </div>
             </div>
           </div>
@@ -54,13 +57,17 @@ function RoundWise(props) {
       </div>
 
       <div className="flex items-center justify-center mt-16">
-        {roundActive && (
-          <button
-            className="uppercase text-[#D9D9D9] font-semibold py-[16px] px-[26px] text-[22px] border-[3px] border-[#D9D9D9] rounded-full hover:bg-[#D9D9D9] hover:text-black mb-12"
-            onClick={startTest}
-          >
-            Start Test
-          </button>
+        {isLoading ? (
+          <div className="loader text-[#D9D9D9] text-xl">Starting Test...</div>
+        ) : (
+          roundActive && (
+            <button
+              className="uppercase text-[#D9D9D9] font-semibold py-[16px] px-[26px] text-[22px] border-[3px] border-[#D9D9D9] rounded-full hover:bg-[#D9D9D9] hover:text-black mb-12"
+              onClick={startTest}
+            >
+              Start Test
+            </button>
+          )
         )}
       </div>
     </div>
