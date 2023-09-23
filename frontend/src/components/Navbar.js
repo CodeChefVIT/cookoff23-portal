@@ -48,7 +48,10 @@ const Navbar = () => {
         document.cookie.split(";").forEach((c) => {
           document.cookie = c
             .replace(/^ +/, "")
-            .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+            .replace(
+              /=.*/,
+              "=;expires=" + new Date().toUTCString() + ";path=/"
+            );
         });
         router.push("/login");
       }
@@ -63,11 +66,10 @@ const Navbar = () => {
     if (userConfirmed) {
       await RefreshToken();
       updateTimer(2 * 60 * 60);
-      localStorage.removeItem("codeData");
+
       await router.push("/user/FinalTaskCheck");
     }
   }
-  
 
   return (
     <>

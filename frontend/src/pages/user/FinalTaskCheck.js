@@ -27,6 +27,7 @@ const CompleteTest = () => {
   }, []);
   async function handleButtonClick() {
     try {
+      localStorage.removeItem("codeData");
       await RefreshToken();
       const access_token = localStorage.getItem("access_token");
       const response = await axios.get(
@@ -58,14 +59,14 @@ const CompleteTest = () => {
       }
     }
   }
-  let codeData = {};
+  let jsonData = localStorage.getItem("codeData");
+  const jsonObject = JSON.parse(jsonData);
+  const codeDataLength = Object.keys(jsonObject).length;
 
   useEffect(() => {
     const lengthFromLocalStorage = Number(localStorage.getItem("QueArrlength"));
     setLength(lengthFromLocalStorage);
   }, []);
-
-  const codeDataLength = Object.keys(codeData).length;
 
   const computeArrayValue = (array) => {
     let sum = 0;
