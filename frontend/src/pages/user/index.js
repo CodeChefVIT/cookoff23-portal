@@ -85,7 +85,7 @@ function Dashboard() {
   return (
     <>
       <Head>
-        <title>Dashboard</title>
+        <title>CookOff | Dashboard</title>
         <link
           rel="apple-touch-icon"
           sizes="180x180"
