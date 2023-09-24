@@ -14,7 +14,7 @@ function SubmitCode(props) {
   const subRes = [
     "No Runtime error",
     "Within time limit",
-    "ALl test cases have passed",
+    "All test cases have passed",
   ];
   useEffect(() => {
     setTestCaseClicked(0);
