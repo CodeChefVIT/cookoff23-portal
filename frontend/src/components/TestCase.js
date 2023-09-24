@@ -274,7 +274,7 @@ const TestCase = ({ clickedButton, runData, code, program }) => {
                       className="bg-[#0d0d0d] text-white py-5 px-7 whitespace-pre"
                     >
                       <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                        {atob(runData[testCaseIndex].stdout)}
+                        {runData[testCaseIndex].stdout === null || runData[testCaseIndex].stdout === undefined ? (null):(atob(runData[testCaseIndex].stdout))}
                       </ReactMarkdown>
                     </div>
                   </div>
