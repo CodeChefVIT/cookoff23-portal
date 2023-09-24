@@ -104,13 +104,13 @@ function Register() {
               !error ? "mb-12" : ""
             }`}
           >
-            <Image src={cookoff} quality={100} alt="Cook-Off 8.0" />
+            <Image src={cookoff} quality={100} alt="Cook-Off 8.0" className="ml-28 mt-32 md:ml-0 sm:ml-12 md:mt-0"/>
           </div>
           {error && (
             <div className="text-[#D9D9D999] my-10 text-center">{error}</div>
           )}
           <form
-            className="w-[400px] self-center"
+            className="w-[400px] self-center ml-48 sm:ml-16 md:ml-0"
             onSubmit={formik.handleSubmit}
           >
             <div className="mb-6">
