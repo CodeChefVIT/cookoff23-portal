@@ -37,7 +37,7 @@ const TestCase = ({ clickedButton, runData, code, program }) => {
     async function fetchSubmit() {
       try {
         const response = await axios.get(
-          process.env.JUDGE0_URI+"submissions/" +
+          process.env.NEXT_PUBLIC_JUDGE0_URI+"submissions/" +
             runToken +
             "?base64_encoded=true&fields=stdout,stderr,status_id,language_id"
         );
@@ -75,7 +75,7 @@ const TestCase = ({ clickedButton, runData, code, program }) => {
 
     try {
       const response = await axios.post(
-        process.env.JUDGE0_URI+"submissions/?base64_encoded=false",
+        process.env.NEXT_PUBLIC_JUDGE0_URI+"submissions/?base64_encoded=false",
         {
           language_id: code,
           source_code: program,

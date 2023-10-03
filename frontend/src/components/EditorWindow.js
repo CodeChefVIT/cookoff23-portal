@@ -92,7 +92,7 @@ function EditorWindow(props) {
     async function fetchSubmissionStatus(string) {
       try {
         const response = await axios.get(
-          process.env.JUDGE0_URI+"submissions/batch?tokens=" +
+          process.env.NEXT_PUBLIC_JUDGE0_URI+"submissions/batch?tokens=" +
             string.toString() +
             "&base64_encoded=true&fields=status_id,stdout,expected_output,stdin,stderr,compile_output,source_code"
         );

@@ -20,7 +20,7 @@ const Navbar = () => {
     const access_token = localStorage.getItem("access_token");
     try {
       const response = await axios.post(
-        process.env.API_KEY+"auth/logout",
+        process.env.NEXT_PUBLIC_API_KEY+"auth/logout",
         {},
         {
           headers: {
@@ -66,7 +66,7 @@ const Navbar = () => {
         await RefreshToken();
         const access_token = localStorage.getItem("access_token");
         const response = await axios.get(
-          process.env.API_KEY+"submit/endtest",
+          process.env.NEXT_PUBLIC_API_KEY+"submit/endtest",
           {
             headers: {
               Authorization: `Bearer ${access_token}`,

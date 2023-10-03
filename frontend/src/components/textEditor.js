@@ -204,7 +204,7 @@ const TextEditor = ({
     setCode(langCode);
     try {
       const response = await axios.post(
-        process.env.JUDGE0_URI+"submissions/batch?base64_encoded=false",
+        process.env.NEXT_PUBLIC_JUDGE0_URI+"submissions/batch?base64_encoded=false",
         {
           submissions: inputs.map((input, index) => ({
             language_id: langCode,
@@ -253,7 +253,7 @@ const TextEditor = ({
       const langCode = file.code;
       const q_ID = qArr[questionId]._id;
       const response = await axios.post(
-        process.env.API_KEY+"submit/eval/",
+        process.env.NEXT_PUBLIC_API_KEY+"submit/eval/",
         {
           question_id: q_ID,
           code: codeValue,

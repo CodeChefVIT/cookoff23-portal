@@ -5,7 +5,7 @@ export default async function RefreshToken() {
   try {
     const refresh_token = localStorage.getItem("refresh_token");
     const response = await axios.post(
-      process.env.API_KEY+"auth/refresh",
+      process.env.NEXT_PUBLIC_API_KEY+"auth/refresh",
       {
         refreshToken: refresh_token,
       }

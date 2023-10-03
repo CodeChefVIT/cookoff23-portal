@@ -41,7 +41,7 @@ function Login() {
       setIsLoading(true)
       try {
         const response = await axios.post(
-          process.env.API_KEY+"auth/login",
+          process.env.NEXT_PUBLIC_API_KEY+"auth/login",
           values
         );
 

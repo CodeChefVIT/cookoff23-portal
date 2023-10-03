@@ -20,7 +20,7 @@ function Dashboard() {
       const access_token = localStorage.getItem("access_token");
       try {
         const response = await axios.get(
-          process.env.API_KEY+"auth/dashboard",
+          process.env.NEXT_PUBLIC_API_KEY+"auth/dashboard",
           {
             headers: {
               Authorization: `Bearer ${access_token}`,
@@ -47,7 +47,7 @@ function Dashboard() {
       const access_token = localStorage.getItem("access_token");
       try {
         const response = await axios.post(
-          process.env.API_KEY+"ques/get/dashboard",
+          process.env.NEXT_PUBLIC_API_KEY+"ques/get/dashboard",
           { round_no: round },
           {
             headers: {
