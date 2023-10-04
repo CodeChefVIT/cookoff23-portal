@@ -45,7 +45,7 @@ function Register() {
       setIsLoading(true);
       try {
         const response = await axios.post(
-          `https://api-cookoff-prod.codechefvit.com/auth/create`,
+          process.env.NEXT_PUBLIC_API_KEY+`auth/create`,
           values
         );
 

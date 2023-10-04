@@ -30,7 +30,7 @@ To get started, fork your own copy and clone the brnach of your choice. To clone
 git clone -b test https://github.com/<Your username>/cookoff23-portal.git
 
 #Typescript hosted
-git clone -b typescript https://github.com/<Your username>/cookoff23-portal.git
+git clone -b ts https://github.com/<Your username>/cookoff23-portal.git
 
 ```
 
