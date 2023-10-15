@@ -14,7 +14,7 @@ function SubmitCode(props) {
   const subRes = [
     "No Runtime error",
     "Within time limit",
-    "ALl test cases have passed",
+    "All test cases have passed",
   ];
   useEffect(() => {
     setTestCaseClicked(0);
@@ -22,7 +22,7 @@ function SubmitCode(props) {
   }, [clickedButton]);
   return (
     <>
-      {submissionArray.error[0] ? (
+      {submissionArray.error1[0] ? (
         <div
           className="bg-[#1f1f1f] w-[95%] h-fit mb-10 mx-5"
           ref={containerRef}
@@ -67,7 +67,154 @@ function SubmitCode(props) {
                 <div>Task #</div>
                 <div>Result</div>
               </div>
-              {submissionArray.error.slice(-3).map((value, index) => {
+              {submissionArray.error1[1] && (
+                <div>
+                  <div className="flex text-xl text-[#EB3939] font-semibold justify-around my-7 ml-8">
+                    <div>{1}</div>
+                    <div className="flex-col ml-10">
+                      <div>Not Accepted</div>
+                      <div className="text-xs text-center">{subData[0]}</div>
+                    </div>
+                  </div>
+                </div>
+              )}
+              {!submissionArray.error1[1] && submissionArray.error1[2] && (
+                <div>
+                  <div className="flex text-xl text-[#EB3939] font-semibold justify-around my-7 ml-8">
+                    <div>{1}</div>
+                    <div className="flex-col ml-10">
+                      <div>Not Accepted</div>
+                      <div className="text-xs text-center">{subData[1]}</div>
+                    </div>
+                  </div>
+                </div>
+              )}
+              {!submissionArray.error1[1] &&
+                !submissionArray.error1[2] &&
+                submissionArray.error1[3] && (
+                  <div>
+                    
+                    <div className="flex text-xl text-[#EB3939] font-semibold justify-around my-7 ml-10">
+                      <div>{1}</div>
+                      <div className="flex-col ml-10">
+                        <div>Not Accepted</div>
+                        <div className="text-xs text-center">{subData[2]}</div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              {!submissionArray.error1[1] &&
+                !submissionArray.error1[2] &&
+                !submissionArray.error1[3] && (
+                  <div>
+                    <div className="flex text-xl text-[#1ba94c] font-semibold justify-around my-7 ml-8">
+                      <div>{1}</div>
+                      <div className="flex-col text-center ml-10">
+                        <div>Accepted</div>
+                        <div className="text-xs text-center">{subRes[2]}</div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+                {submissionArray.error2[1] && (
+                <div>
+                  <div className="flex text-xl text-[#EB3939] font-semibold justify-around my-7 ml-8">
+                    <div>{2}</div>
+                    <div className="flex-col ml-10">
+                      <div>Not Accepted</div>
+                      <div className="text-xs text-center">{subData[0]}</div>
+                    </div>
+                  </div>
+                </div>
+              )}
+              {!submissionArray.error2[1] && submissionArray.error2[2] && (
+                <div>
+                  <div className="flex text-xl text-[#EB3939] font-semibold justify-around my-7 ml-8">
+                    <div>{2}</div>
+                    <div className="flex-col ml-10">
+                      <div>Not Accepted</div>
+                      <div className="text-xs text-center">{subData[1]}</div>
+                    </div>
+                  </div>
+                </div>
+              )}
+              {!submissionArray.error2[1] &&
+                !submissionArray.error2[2] &&
+                submissionArray.error2[3] && (
+                  <div>
+                    
+                    <div className="flex text-xl text-[#EB3939] font-semibold justify-around my-7 ml-10">
+                      <div>{2}</div>
+                      <div className="flex-col ml-10">
+                        <div>Not Accepted</div>
+                        <div className="text-xs text-center">{subData[2]}</div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              {!submissionArray.error2[1] &&
+                !submissionArray.error2[2] &&
+                !submissionArray.error2[3] && (
+                  <div>
+                    <div className="flex text-xl text-[#1ba94c] font-semibold justify-around my-7 ml-8">
+                      <div>{2}</div>
+                      <div className="flex-col text-center ml-10">
+                        <div>Accepted</div>
+                        <div className="text-xs text-center">{subRes[2]}</div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+                {submissionArray.error3[1] && (
+                <div>
+                  <div className="flex text-xl text-[#EB3939] font-semibold justify-around my-7 ml-8">
+                    <div>{3}</div>
+                    <div className="flex-col ml-10">
+                      <div>Not Accepted</div>
+                      <div className="text-xs text-center">{subData[0]}</div>
+                    </div>
+                  </div>
+                </div>
+              )}
+              {!submissionArray.error3[1] && submissionArray.error3[2] && (
+                <div>
+                  <div className="flex text-xl text-[#EB3939] font-semibold justify-around my-7 ml-8">
+                    <div>{3}</div>
+                    <div className="flex-col ml-10">
+                      <div>Not Accepted</div>
+                      <div className="text-xs text-center">{subData[1]}</div>
+                    </div>
+                  </div>
+                </div>
+              )}
+              {!submissionArray.error3[1] &&
+                !submissionArray.error3[2] &&
+                submissionArray.error3[3] && (
+                  <div>
+                    
+                    <div className="flex text-xl text-[#EB3939] font-semibold justify-around my-7 ml-10">
+                      <div>{3}</div>
+                      <div className="flex-col ml-10">
+                        <div>Not Accepted</div>
+                        <div className="text-xs text-center">{subData[2]}</div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              {!submissionArray.error3[1] &&
+                !submissionArray.error3[2] &&
+                !submissionArray.error3[3] && (
+                  <div>
+                    <div className="flex text-xl text-[#1ba94c] font-semibold justify-around my-7 ml-8">
+                      <div>{3}</div>
+                      <div className="flex-col text-center ml-10">
+                        <div>Accepted</div>
+                        <div className="text-xs text-center">{subRes[2]}</div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              {/* {submissionArray.error.slice(-3).map((value, index) => {
                 if (value) {
                   return (
                     <div
@@ -101,7 +248,7 @@ function SubmitCode(props) {
                     </div>
                   );
                 }
-              })}
+              })} */}
             </div>
           </div>
         </div>

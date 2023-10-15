@@ -31,6 +31,7 @@ const validate = (values) => {
 
 function Register() {
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const formik = useFormik({
     initialValues: {
@@ -40,15 +41,17 @@ function Register() {
     },
     validate,
     onSubmit: async (values) => {
-
+      console.log(values)
+      setIsLoading(true);
       try {
         const response = await axios.post(
-          `https://api-cookoff-prod.codechefvit.com/auth/create`,
+          process.env.NEXT_PUBLIC_API_KEY+`auth/create`,
           values
         );
 
         if (response.status >= 200 && response.status < 300) {
           setError(false);
+          alert("Password has been sent to the entered email.")
           router.push("/login");
         }
       } catch (error) {
@@ -59,6 +62,7 @@ function Register() {
           }
         }
       }
+      setIsLoading(false);
     },
   });
 
@@ -100,13 +104,13 @@ function Register() {
               !error ? "mb-12" : ""
             }`}
           >
-            <Image src={cookoff} quality={100} alt="Cook-Off 8.0" />
+            <Image src={cookoff} quality={100} alt="Cook-Off 8.0" className="ml-28 mt-32 md:ml-0 sm:ml-12 md:mt-0"/>
           </div>
           {error && (
             <div className="text-[#D9D9D999] my-10 text-center">{error}</div>
           )}
           <form
-            className="w-[400px] self-center"
+            className="w-[400px] self-center ml-48 sm:ml-16 md:ml-0"
             onSubmit={formik.handleSubmit}
           >
             <div className="mb-6">
@@ -158,8 +162,9 @@ function Register() {
               <button
                 className="uppercase text-[#D9D9D9] font-semibold py-[16px] px-[26px] text-[22px] border-[3px] border-[#D9D9D9] rounded-full hover:bg-[#D9D9D9] hover:text-black mt-5"
                 type="submit"
+                disabled={isLoading}
               >
-                Register to cook!
+                {isLoading?"Registering...":"Register as a chef"}
               </button>
             </div>
           </form>

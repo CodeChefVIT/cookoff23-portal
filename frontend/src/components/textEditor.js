@@ -204,7 +204,7 @@ const TextEditor = ({
     setCode(langCode);
     try {
       const response = await axios.post(
-        "https://judge0.codechefvit.com/submissions/batch?base64_encoded=false",
+        process.env.NEXT_PUBLIC_JUDGE0_URI+"submissions/batch?base64_encoded=false",
         {
           submissions: inputs.map((input, index) => ({
             language_id: langCode,
@@ -238,6 +238,7 @@ const TextEditor = ({
       } else if (error.response.status === 422) {
         setInvalidInput(true);
       }
+      console.log(error)
     }
   };
 
@@ -252,7 +253,7 @@ const TextEditor = ({
       const langCode = file.code;
       const q_ID = qArr[questionId]._id;
       const response = await axios.post(
-        "https://api-cookoff-prod.codechefvit.com/submit/eval/",
+        process.env.NEXT_PUBLIC_API_KEY+"submit/eval/",
         {
           question_id: q_ID,
           code: codeValue,
@@ -283,6 +284,7 @@ const TextEditor = ({
         setQuestionSubmit((prev) => new Set(prev.add(questionId)));
       }
     } catch (error) {
+      console.log(error);
       if (error.response && error.response.status === 401) {
         await RefreshToken();
         handleClickSubmit();

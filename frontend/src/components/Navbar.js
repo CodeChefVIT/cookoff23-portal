@@ -20,7 +20,7 @@ const Navbar = () => {
     const access_token = localStorage.getItem("access_token");
     try {
       const response = await axios.post(
-        "https://api-cookoff-prod.codechefvit.com/auth/logout",
+        process.env.NEXT_PUBLIC_API_KEY+"auth/logout",
         {},
         {
           headers: {
@@ -66,7 +66,7 @@ const Navbar = () => {
         await RefreshToken();
         const access_token = localStorage.getItem("access_token");
         const response = await axios.get(
-          "https://api-cookoff-prod.codechefvit.com/submit/endtest",
+          process.env.NEXT_PUBLIC_API_KEY+"submit/endtest",
           {
             headers: {
               Authorization: `Bearer ${access_token}`,
@@ -111,9 +111,7 @@ const Navbar = () => {
                 End Test
               </button>
 
-              <button>
                 <Image src={profile} quality={100} alt="user" />
-              </button>
             </div>
           </div>
         ) : (
@@ -130,9 +128,7 @@ const Navbar = () => {
                 Logout
               </button>
 
-              <button>
                 <Image src={profile} quality={100} alt="user" />
-              </button>
             </div>
           </div>
         )}

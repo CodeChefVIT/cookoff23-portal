@@ -29,7 +29,7 @@ export default function TestPortal() {
   return (
     <>
       <Head>
-        <title>Portal</title>
+        <title>CookOff | Portal</title>
         <link
           rel="apple-touch-icon"
           sizes="180x180"

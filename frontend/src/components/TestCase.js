@@ -37,7 +37,7 @@ const TestCase = ({ clickedButton, runData, code, program }) => {
     async function fetchSubmit() {
       try {
         const response = await axios.get(
-          "https://judge0.codechefvit.com/submissions/" +
+          process.env.NEXT_PUBLIC_JUDGE0_URI+"submissions/" +
             runToken +
             "?base64_encoded=true&fields=stdout,stderr,status_id,language_id"
         );
@@ -75,7 +75,7 @@ const TestCase = ({ clickedButton, runData, code, program }) => {
 
     try {
       const response = await axios.post(
-        "https://judge0.codechefvit.com/submissions/?base64_encoded=false",
+        process.env.NEXT_PUBLIC_JUDGE0_URI+"submissions/?base64_encoded=false",
         {
           language_id: code,
           source_code: program,
@@ -274,7 +274,7 @@ const TestCase = ({ clickedButton, runData, code, program }) => {
                       className="bg-[#0d0d0d] text-white py-5 px-7 whitespace-pre"
                     >
                       <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                        {atob(runData[testCaseIndex].stdout)}
+                        {runData[testCaseIndex].stdout === null || runData[testCaseIndex].stdout === undefined ? (null):(atob(runData[testCaseIndex].stdout))}
                       </ReactMarkdown>
                     </div>
                   </div>

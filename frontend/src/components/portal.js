@@ -27,7 +27,7 @@ export default function Portal(props) {
         const access_token = localStorage.getItem("access_token");
         axios
           .post(
-            "https://api-cookoff-prod.codechefvit.com/ques/getRound",
+            process.env.NEXT_PUBLIC_API_KEY+"ques/getRound",
             { round: round },
             {
               headers: {

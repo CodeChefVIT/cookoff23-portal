@@ -20,7 +20,7 @@ function Dashboard() {
       const access_token = localStorage.getItem("access_token");
       try {
         const response = await axios.get(
-          "https://api-cookoff-prod.codechefvit.com/auth/dashboard",
+          process.env.NEXT_PUBLIC_API_KEY+"auth/dashboard",
           {
             headers: {
               Authorization: `Bearer ${access_token}`,
@@ -47,7 +47,7 @@ function Dashboard() {
       const access_token = localStorage.getItem("access_token");
       try {
         const response = await axios.post(
-          "https://api-cookoff-prod.codechefvit.com/ques/get/dashboard",
+          process.env.NEXT_PUBLIC_API_KEY+"ques/get/dashboard",
           { round_no: round },
           {
             headers: {
@@ -85,7 +85,7 @@ function Dashboard() {
   return (
     <>
       <Head>
-        <title>Dashboard</title>
+        <title>CookOff | Dashboard</title>
         <link
           rel="apple-touch-icon"
           sizes="180x180"
